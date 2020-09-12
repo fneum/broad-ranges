@@ -1,0 +1,22 @@
+name:
+  pypsa-eur-surrogate
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - python
+  - pip
+  - ipython
+  - pre-commit
+  - yaml
+  - pypsa
+  - scikit-learn
+  - snakemake-minimal
+  - matplotlib
+  - seaborn
+  - cartopy
+
+  - pip:
+    - chaospy
