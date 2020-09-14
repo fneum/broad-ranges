@@ -17,4 +17,4 @@ rule solve_network:
 
 rule collect_samples:
     input: samples
-    output: "results/sampled_mappings/" + config['sampling']['space'] + ".csv"
+    output: "results/training_set.csv"
