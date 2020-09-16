@@ -1,6 +1,13 @@
-sampling:
-  order: 250
-  method: halton
+scenarios:
+  clusters: [100]
+  opts: [3H]
+  order: [1,2,3,4,5]
+  sobol: [t, m]
+
+experimental_design:
+  size: 100
+  rule: halton
+  round: 3
 
 uncertainties:
     onwind:
@@ -18,3 +25,22 @@ uncertainties:
     battery:
       type: Uniform
       args: [0.5,1.5]
+
+train_test_split:
+  train_size: 0.8
+  shuffle: true
+
+neural_network:
+  solver: adam
+  hidden_layer_sizes: [50,]
+  max_iter: 100000
+  early_stopping: false
+  tol: 1.e-4
+  n_iter_no_change: 10
+
+with_sklearn:
+  method: Lars
+  fit_intercept: false
+
+csvargs:
+  fmt: ".4f"
