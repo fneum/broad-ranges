@@ -1,12 +1,11 @@
 """[summary]"""
 
-__author__ = "Fabian Neumann (KIT)"
-__copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
-
-
 import multiprocessing as mp
 import pandas as pd
 import pypsa
+
+__author__ = "Fabian Neumann (KIT)"
+__copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
 
 
 def assign_carriers(n):
