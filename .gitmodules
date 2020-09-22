@@ -1,3 +1,6 @@
 [submodule "pypsa-eur"]
 	path = subworkflows/pypsa-eur
 	url = https://github.com/pypsa/pypsa-eur
+[submodule "subworkflows/pypsa-eur-mga"]
+	path = subworkflows/pypsa-eur-mga
+	url = https://github.com/pypsa/pypsa-eur-mga
