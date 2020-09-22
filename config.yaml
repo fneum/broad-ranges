@@ -4,6 +4,9 @@ scenarios:
   order: [1,2,3,4,5]
   sobol: [t, m]
 
+enable:
+  collect_samples: false
+
 experimental_design:
   size: 100
   rule: halton

@@ -8,7 +8,7 @@ include: "rules/common.smk"
 
 
 wildcard_constraints:
-    order="^\d+$",
+    order="[0-9]*",
     sobol="(t|m|m2)"
 
 
@@ -19,18 +19,18 @@ rule solve_network:
     resources: mem=memory
     script: "scripts/solve.py"
 
-
-rule collect_samples:
-    input: experimental_design
-    output:
-        data="results/dataset.csv"
-    threads: 1
-    resources: mem=8000
-    script: "scripts/collect.py"
+if config["enable"]["collect_samples"]:
+    rule collect_samples:
+        input: experimental_design
+        output:
+            data="results/dataset.csv"
+        threads: 1
+        resources: mem=8000
+        script: "scripts/collect.py"
 
 
 rule analyse_full:
-    input: rules.collect_samples.output.data
+    input: "results/dataset.csv"
     output: [] # TODO
     threads: 1
     resources: mem=8000
@@ -38,7 +38,7 @@ rule analyse_full:
 
 
 rule build_surrogate_model:
-    input: rules.collect_samples.output.data
+    input: "results/dataset.csv"
     output:
         polynomial="results/pce/polynomial-{order}.txt",
         train_errors="results/pce/train-errors-{order}.csv",
@@ -60,7 +60,7 @@ rule calculate_sensitivity_indices:
 
 
 rule build_neural_network:
-    input: rules.collect_samples.output.data
+    input: "results/dataset.csv"
     output:
         ann="results/ann/neural_network.pickle",
         train_errors="results/ann/train-errors.csv",
