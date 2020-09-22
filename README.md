@@ -21,13 +21,15 @@ What makes good policy advice?
 Where in parameter space is it cheap?
 
 - What's the danger zone?
-- Or are 90% of the uncertainty space withing 10% of the least cost solutions?
+- Or are 90% of the uncertainty space within 10% of the least cost solutions?
 
 Whats the relation between GSA and stochastic and robust optimisation?
 
 Look at measure of robustness: given a cost-optimal solution for one parameter set, how expensive would it be for other cost realisations?
 
 non-differentiality, non-continuity, penny switching (in different regions), lifting the degeneracy
+
+Relation between complexity and uncertainty. Structural uncertainty vs parametric uncertainty.
 
 ## Uncertainty
 
@@ -153,42 +155,6 @@ If we are interested in those, we can reconstruct these selectively
 by adding the aggregate outcomes as `extra_functionality` constraints (e.g. onwind p_nom_opt = XXX GW) and run the full optimisation.
 
 Caveat: due to inaccuracies of the surrogate model, one may need load shedding or other forms of slack.
-
-## Results
-
-### Output range and distribution
-
-![](notebooks/graphics/capacity-range-50halton.png)
-
-![](notebooks/graphics/matrix-50.png)
-
-### Sobol Sensitivity Indices
-
-| First-order Sobol Heatmap | First-order Sobol Bar |
-| -- | -- |
-|![](notebooks/graphics/sobol-m.png) | ![](notebooks/graphics/sobol-m-bar.png) |
-
-
-| Second-order Sobol TSC | Second-order Sobol Transmission |
-| -- | -- |
-|![](notebooks/graphics/sobol-tsc-m2.png) | ![](notebooks/graphics/sobol-transmission-m2.png) |
-
-### 2D Plots
-
-| System Cost | System Cost | System Cost |
-| -- | -- | -- |
-| ![](notebooks/graphics/2D/selection/2D-tsc-H2-battery-1.0.png) | ![](notebooks/graphics/2D/selection/2D-tsc-offwind-H2-1.0.png) | ![](notebooks/graphics/2D/selection/2D-tsc-onwind-H2-1.0.png) |
-| ![](notebooks/graphics/2D/selection/2D-tsc-onwind-offwind-0.5.png) | ![](notebooks/graphics/2D/selection/2D-tsc-onwind-offwind-1.0.png) | ![](notebooks/graphics/2D/selection/2D-tsc-solar-battery-1.0.png) |
-
-### 1D Plots
-
-| Self Capacity | System Cost | Misc |
-| -- | -- | -- |
-| ![](notebooks/graphics/1D/selection/1D-solar-solar.png) | ![](notebooks/graphics/1D/selection/1D-tsc-solar.png) | ![](notebooks/graphics/1D/selection/1D-battery-offwind.png) |
-| ![](notebooks/graphics/1D/selection/1D-onwind-onwind.png) | ![](notebooks/graphics/1D/selection/1D-tsc-onwind.png) | ![](notebooks/graphics/1D/selection/1D-transmission-H2.png) |
-| ![](notebooks/graphics/1D/selection/1D-offwind-offwind.png) | ![](notebooks/graphics/1D/selection/1D-tsc-offwind.png) | ![](notebooks/graphics/1D/selection/1D-battery-solar.png) |
-| ![](notebooks/graphics/1D/selection/1D-battery-battery.png) | ![](notebooks/graphics/1D/selection/1D-tsc-battery.png) | ![](notebooks/graphics/1D/selection/1D-onwind-offwind.png) |
-| ![](notebooks/graphics/1D/selection/1D-H2-H2.png) | ![](notebooks/graphics/1D/selection/1D-tsc-H2.png) | ![](notebooks/graphics/1D/selection/1D-offwind-onwind.png) |
 
 ## Conclusions
 

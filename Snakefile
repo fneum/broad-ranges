@@ -1,7 +1,7 @@
 configfile: "config.yaml"
 
 subworkflow pypsaeur:
-    workdir: "pypsa-eur"
+    workdir: "subworkflows/pypsa-eur"
     configfile: "config.pypsaeur.yaml"
 
 include: "rules/common.smk"
