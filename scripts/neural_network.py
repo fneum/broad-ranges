@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     cf = snakemake.config
 
-    dataset = h.load_data(datafile)
+    dataset = h.load_dataset(snakemake.input[0])
     distribution = h.NamedJ(cf["uncertainties"])
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])

@@ -33,8 +33,9 @@ def build_sklearn_model(cf):
 if __name__ == "__main__":
 
     cf = snakemake.config
+    order = int(snakemake.wildcards.order)
 
-    dataset = h.load_data(datafile)
+    dataset = h.load_dataset(snakemake.input[0])
     distribution = h.NamedJ(cf["uncertainties"])
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     # Evaluation
 
     train_samples = h.multiindex2df(train_set.index)
-    train_predictions = h.build_pce_prediction(neural_network, train_samples)
+    train_predictions = h.build_pce_prediction(model, train_samples)
 
     test_samples = h.multiindex2df(test_set.index)
     test_predictions = h.build_pce_prediction(model, test_samples)
@@ -63,5 +64,5 @@ if __name__ == "__main__":
         snakemake.output.train_errors, **cf["csvargs"]
     )
     h.calculate_errors(test_predictions, test_set).to_csv(
-        snakemake.output.train_errors, **cf["csvargs"]
+        snakemake.output.test_errors, **cf["csvargs"]
     )

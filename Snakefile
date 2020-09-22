@@ -19,6 +19,7 @@ rule solve_network:
     resources: mem=memory
     script: "scripts/solve.py"
 
+
 if config["enable"]["collect_samples"]:
     rule collect_samples:
         input: experimental_design

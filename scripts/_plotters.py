@@ -5,8 +5,14 @@ Plotting functions.
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
-plt.style.use(["bmh", "../matplotlibrc"])
+# to access from inside and outside snakemake
+rc = "matplotlibrc"
+if not os.path.isfile(rc):
+    rc = "../" + rc
+
+plt.style.use(["bmh", rc])
 
 
 __author__ = "Fabian Neumann (KIT)"

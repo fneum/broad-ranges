@@ -64,8 +64,8 @@ class NamedPoly:
         poly = numpoly.loadtxt(fn)
         return cls(poly, names)
 
-    def to_txt(self, fn, kwargs={}):
-        numpoly.savetxt(fn, self.poly, header=" ".join(self.names), **kwargs)
+    def to_txt(self, fn, fmt="%.8f"):
+        numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
 def load_dataset(fn):

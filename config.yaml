@@ -46,4 +46,4 @@ with_sklearn:
   fit_intercept: false
 
 csvargs:
-  fmt: ".4f"
+  float_format: "%.4f"
