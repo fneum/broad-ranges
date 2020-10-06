@@ -14,6 +14,8 @@ Few parameters are really relevant, what determines the cost structure (Moret, 2
 
 Focus on cost inputs and constraints affecting outputs relevant to public acceptance.
 
+Explorative analysis.
+
 Guiding robust and comprehensive policy.
 
 What makes good policy advice?
@@ -27,9 +29,27 @@ Whats the relation between GSA and stochastic and robust optimisation?
 
 Look at measure of robustness: given a cost-optimal solution for one parameter set, how expensive would it be for other cost realisations?
 
-non-differentiality, non-continuity, penny switching (in different regions), lifting the degeneracy
+non-differentiality, non-continuity, penny switching (in different regions), lifting the degeneracy, flipping points
 
 Relation between complexity and uncertainty. Structural uncertainty vs parametric uncertainty.
+
+complex models are often no better than simple models, when it comes to prediction
+
+decision making under deep uncertainty: what are available strategies? what are vulnerabilities? what strategy reduces vulnerabilities.
+
+explore more, communicate better
+
+Models can (from Tom's lecture):
+
+- easily give a false sense of exactness
+- under- or overestimate rates of change
+- underestimate social factors (concerns about nuclear, transmission, wind)
+- extrapolate based on uncertain data (learning curves PV)
+- focus on easy-to-solve rather than policy-relevant problems
+- neglect uncertainty (short: weather forecasts, long: technology cost)
+- neglect need for robustness (contingencies, attack)
+- neglect complex interactions of markets and incentive structures (market power, lumpiness)
+- neglect non-linearities and non-convexities (power flow, learning curves, behaviour)
 
 ## Uncertainty
 
@@ -44,9 +64,33 @@ Origin of cost uncertainty:
 - would be useful to identify regions in the parameter space which are very cheap
 - can aim for them with policy; "controllable uncertainty"
 
+Better to exclude discount rate in a capital intensive system (just a pre-factor to the objective).
+
+There are many hidden assumptions!
+
+Sources of uncertainty (a la Chris Dent):
+
+- parametric (cost)
+- condition (boundary, initial)
+- functional (full feasible space not known)
+- stochastic (randomness)
+- solution (solver tolerance)
+- structural (power flow)
+- multi-model (across models)
+- decision (what can be influenced)
+
 ## Cost Data
 
-distributions of technology cost projections
+What are the distributions of technology cost projections?
+
+- uniform:
+- normal: (Mavromatidis, 2018)
+- check sensitivity towards different distributions; e.g. normal vs uniform
+
+Locate the status of learning curves for different technologies (fit learning parameter)
+
+- upper limit: capacity to supply the whole world
+- lower limit: today's capacity
 
 Main challenge is quantifying the input uncertainties! (Moret, 2017)
 
@@ -58,6 +102,10 @@ Danish Energy Agency
 
 Use uniform distribution due to lack of better data (Moret, 2017)
 
+Costs all the way to zero? E.g. what happens with very cheap solar?
+
+Check how sensitive uncertainty propagation is wrt to the choice of distribution (e.g. normal vs uniform). What changes?
+
 ## Sensitivity Analysis
 
 Difference between uncertainty and sensitivity:
@@ -68,6 +116,8 @@ Difference between uncertainty and sensitivity:
 scenario-based sensitivity analysis
 
 - crude, local, subjective (Usher, 2015)
+- more qualified and contextual description possible
+- storyline with narrative elements (DeCarolis, 2017)
 
 local sensitivity analysis
 
@@ -85,6 +135,12 @@ global sensitivity analysis
 - "quantifying the effects of random input variables onto the variance of the response of a mathematical model" (Sudret, 2008)
 
 a good overview: https://uncertainpy.readthedocs.io/en/latest/theory.html
+
+## Local Sensitivity Analysis
+
+- repeat cost-optimal scenarios for thesis
+- argument: more nodes, 100% renewable, leads up to global sensitivity analysis
+- redo with PyPSA-Eur-Sec
 
 ## Experimental Design
 
@@ -108,6 +164,11 @@ consider only simplified/aggregated outputs, junk complicated models
 
 only input/output behaviour is important (link to machine learning)
 
+scaling
+
+- number of inputs: adds more dimensions to uncertainty space, curse of dimensionality
+- number of outputs: should scale well as each output has its own polynomial, are independent
+
 Use PCE to build surrogate models for calculating Sobol sensitivity indices analytically as a post-processing (Sudret, 2008)
 
 computational cost of sensitivity indices reduces to that of estimating PCE coefficients, 2-3 orders of magnitude faster than traditional MC evaluation (Sudret, 2008)
@@ -122,18 +183,21 @@ implement multifidelity approach
 
 - Tröndle paper: high fidelity: 10 samples, 400 nodes, 4-hourly; low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
 
+add transmission volume limit to input parameters
+
 Are LHS/Halton/Sobol sampling better than gridded sampling?
 
 Validation
 
 - benchmark: model error <5% (Tröndle, 2020)
 
+The mixture of distributions is not a distribution itself: https://en.wikipedia.org/wiki/Mixture_distribution
+
 Talk to People
 
 - Tim Tröndle, https://github.com/timtroendle/geographic-scale/
 - Stefano Marelli, UQLab
 - Till, PCE
-
 
 ## Surrogate Modelling with Neural Networks
 
@@ -160,6 +224,8 @@ Caveat: due to inaccuracies of the surrogate model, one may need load shedding o
 
 one of the best ways to make system cheaper is just to make offshore wind cheaper, which has high acceptance and big cost reduction potentials AND it has one of the biggest impacts on TSC.
 
+by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band
+
 # Near-Optimal
 
 ## Regional Analysis
@@ -180,9 +246,35 @@ do C-Plots in 2D (or even 3D) with isolines corresponding to $\epsilon$ based on
 
 redo with sector-coupling version
 
+## Twitter Comments
+
+- "if we accept very slightly higher costs - insignificantly so in the big scheme of things - the flexibility to build an energy network that is politically acceptable increases substantially" @jmkorhon_en
+
+- "Spanning a space of options for society and politics to work in instead of single least-cost-model-oitcomes. Should be a benchmark method for every study in my opinion." @alxrdk
+
+- "bridging optimization modeling and actual, messy real-world decision making" @EmilDimanchev
+
+- "running an optimizer to get the One True Solution can be really misleading" @ThatcherUlrich
+
+- "Getting it done is more important than getting it right!" @BurkeKB
+
+- "Sometimes people write a paper that is just begging to be written." @KenCaldeira
+
+- "It excites and scares me because it’s a double edge sword. This is because something has to replace something. Usually the two are not mutually exclusive." @DrChrisClack
+
+- "A whole new diverse world exists beyond the cost-optimal solution!" @neha__25
+
+- "it dispells the myth of a unique path to cost-efficiency, legitimising attending other decision criteria *also* from cost perspective" @anunezjimenez
+
+- "The idea of "optimality" is a seductive one, but in the real world (and especially in the real world of climate mitigation) almost NOTHING is optimal. It's very important to explore sensitivities to modest shifts in key drivers as this article does." @jgkoomey
+
+- "the idea of an "optimal" energy system that "can be found" through modelling both appeals and repulses me. It's a major reason I remain sceptical about usefulness of optimization. This kind of papers, IMHO, boost these models policy relevance." @anunezjimenez
+
 # Near-Optimal and Parametric Uncertainty
 
-how to use surrogate model for near-optimal analysis?
+build surrogate including $\epsilon$ and sense as uncertain parameter
+
+- higher sampling rate for low $\epsilon$ (0.5,1,2,4,8,12,16)
 
 heatmap of tsc in c-plots? fix capacity of n-1 components, sweep the other?
 
