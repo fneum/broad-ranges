@@ -1,33 +1,72 @@
 scenarios:
-  clusters: [100]
-  opts: [3H]
+  clusters: [37]
+  opts: [168H]
+  epsilon: [0.01] # skips nearoptimal if empty
+  objective:
+    - Generator+offwind+min
+    #- Generator+offwind+max
+    - Generator+onwind+min
+    #- Generator+onwind+max
+    - Generator+wind+min
+    #- Generator+wind+max
+    - Generator+solar+min
+    #- Generator+solar+max
+    - StorageUnit+H2+min
+    #- StorageUnit+H2+max
+    - StorageUnit+battery+min
+    #- StorageUnit+battery+max
+    - StorageUnit++min
+    #- StorageUnit++max
+    - Transmission++min
+    #- Transmission++max
   order: [1,2,3,4,5]
   sobol: [t, m]
 
 enable:
-  collect_samples: false
+  collect_samples: true
+
+nearoptimal:
+  with_fix: true
+
+solving:
+  options:
+    formulation: kirchhoff
+    load_shedding: false
+    noisy_costs: true
+    clip_p_max_pu: 0.01
+    skip_iterations: true
+  solver:
+    name: gurobi
+    threads: 4
+    method: 2 # barrier
+    crossover: 0
+    BarConvTol: 1.e-4
+    FeasibilityTol: 1.e-4
+    AggFill: 0
+    PreDual: 0
+    GURO_PAR_BARDENSETHRESH: 200
 
 experimental_design:
-  size: 100
+  size: 5
   rule: halton
   round: 3
 
 uncertainties:
     onwind:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.2,1.5]
     offwind:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.2,1.5]
     solar:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.2,1.5]
     H2:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.2,1.5]
     battery:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.2,1.5]
 
 train_test_split:
   train_size: 0.8

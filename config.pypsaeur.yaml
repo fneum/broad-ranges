@@ -27,9 +27,9 @@ snapshots:
 
 enable:
   prepare_links_p_nom: false
-  retrieve_databundle: true
+  retrieve_databundle: false
   build_cutout: false
-  retrieve_cutout: true
+  retrieve_cutout: false
   build_natura_raster: false
   retrieve_natura_raster: true
 

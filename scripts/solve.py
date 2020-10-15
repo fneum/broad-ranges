@@ -8,16 +8,24 @@ import sys
 import os
 
 # Add pypsa-eur scripts to path for import
-sys.path.insert(0, os.getcwd() + "/pypsa-eur/scripts")
+sys.path.insert(0, os.getcwd() + "/subworkflows/pypsa-eur/scripts")
 
 from solve_network import solve_network, prepare_network
 
-pypsa.pf.logger.setLevel(logging.WARNING)
+
+def override_network(n):
+
+    # need unique naming between links and lines
+    # when objective includes lines and links
+    n.lines.index = ["LN{}".format(i) for i in n.lines.index]
+    n.links.index = ["LK{}".format(i) for i in n.links.index]
 
 
 if __name__ == "__main__":
 
     n = pypsa.Network(snakemake.input[0])
+
+    override_network(n)
 
     solve_opts = snakemake.config["solving"]["options"]
     opts = snakemake.wildcards.opts.split("-")

@@ -38,4 +38,12 @@ def experimental_design(w):
 
     scenarios["opts"] = new_opts
 
-    return expand("results/networks/elec_s_{clusters}_ec_lcopt_{opts}.nc", **scenarios)
+    filename = "results/networks/elec_s_{clusters}_ec_lcopt_{opts}.nc"
+    inputs = expand(filename, **scenarios)
+
+    if scenarios["epsilon"]:
+        filename = "results/networks/nearoptimal/elec_s_{clusters}_ec_lcopt_{opts}_E{epsilon}_O{objective}.nc"
+        inputs += expand(filename, **scenarios)
+
+    return inputs
+

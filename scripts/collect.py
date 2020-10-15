@@ -67,6 +67,8 @@ def aggregate_costs(n, by_carrier=True):
 
 def retrieve_data(fn):
 
+    print(fn)
+
     n = pypsa.Network(fn)
 
     stats = pd.concat(
@@ -98,12 +100,30 @@ def retrieve_data(fn):
 def parse2multiindex(df):
     def parse(fn):
         data = {}
-        for o in fn[:-3].split("-"):
+        fn_split = fn[:-3].split("_E")
+
+        for o in fn_split[0].split("-"):
             s = o.split("+")
             if len(s) > 1:
-                carrier = s[0]
+                carrier = s[0] + "-cost"
                 value = float(s[1])
                 data[carrier] = value
+
+        if len(fn_split) == 1:
+            data["sense"] = "min"
+            data["objective"] = "cost"
+            data["epsilon"] = 0.0
+
+        elif len(fn_split) == 2:
+            eps_raw, obj_raw = fn_split[1].split("_")
+            o = obj_raw.split("+")
+            data["sense"] = o[2]
+            data["objective"] = o[1] if o[1] else o[0][1:].lower()
+            data["epsilon"] = float(eps_raw)
+
+        else:
+            raise NotImplementedError("Invalid filename.")
+
         return pd.Series(data)
 
     df.columns = pd.MultiIndex.from_frame(pd.concat(map(parse, df.columns), axis=1).T)
@@ -116,7 +136,7 @@ if __name__ == "__main__":
     nprocesses = mp.cpu_count()
 
     with mp.Pool(processes=nprocesses) as pool:
-        data = pool.map(retrieve_data, snakemake.input[0])
+        data = pool.map(retrieve_data, snakemake.input)
 
     df = parse2multiindex(pd.concat(data, axis=1))
 

@@ -8,6 +8,7 @@ include: "rules/common.smk"
 
 
 wildcard_constraints:
+    epsilon="[0-9\.]*",
     order="[0-9]*",
     sobol="(t|m|m2)"
 
@@ -16,8 +17,16 @@ rule solve_network:
     input: pypsaeur("networks/elec_s_{clusters}_ec_lcopt_{opts}.nc")
     output: "results/networks/elec_s_{clusters}_ec_lcopt_{opts}.nc"
     threads: 4
-    resources: mem=memory
+    resources: mem=10000#memory
     script: "scripts/solve.py"
+
+
+rule solve_nearoptimal_network:
+    input: rules.solve_network.output[0]
+    output: "results/networks/nearoptimal/elec_s_{clusters}_ec_lcopt_{opts}_E{epsilon}_O{objective}.nc"
+    threads: 4
+    resources: mem=10000#memory
+    script: "scripts/nearoptimal.py"
 
 
 if config["enable"]["collect_samples"]:
