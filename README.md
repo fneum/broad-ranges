@@ -10,7 +10,7 @@ Flat directions near the optimum are very important for policymakers, because th
 
 First approach could be parameter sweeps in the space of costs and constraint constants (Schlachtberger, 2018)
 
-Few parameters are really relevant, what determines the cost structure (Moret, 2017)
+Few parameters are really relevant, what determines the cost structure (Moret, 2017) (Usher, 2015)
 
 Focus on cost inputs and constraints affecting outputs relevant to public acceptance.
 
@@ -22,12 +22,23 @@ What makes good policy advice?
 
 Where in parameter space is it cheap?
 
-- What's the danger zone?
+- Or conversely: What's the danger zone?
 - Or are 90% of the uncertainty space within 10% of the least cost solutions?
+- These cheap areas should then be targeted with policy (e.g. drive technology learning by subsidies)
+- smoothly leads up to future work with endogenous learning in multi-horizon investment planning!
 
-Whats the relation between GSA and stochastic and robust optimisation?
+Do I need a richer set of technologies? solar thermal, nuclear, CAES, separate hydrogen storage to fuel cell, electrolysis, gas turbine, cavern storage, steel tank?
 
-Look at measure of robustness: given a cost-optimal solution for one parameter set, how expensive would it be for other cost realisations?
+What is the relation between sensitivity analysis and stochastic and robust optimisation?
+
+- sensitivity analysis: uncertainty wrapped around optimisation
+- stochastic/robust optimisation: uncertainty embedded in optimisation
+
+Alternative to sensitivity analysis? Embed technological learning in optimisation (Heuberger, 2017) (Lopion, 2019)
+
+- remaining uncertainty of learning rate, but "learning by doing" included
+
+Look at measure of robustness: given a cost-optimal solution for one parameter set, how expensive would it be for other cost realisations? A form of hedging against uncertainty.
 
 non-differentiality, non-continuity, penny switching (in different regions), lifting the degeneracy, flipping points
 
@@ -53,9 +64,37 @@ Models can (from Tom's lecture):
 
 ## Uncertainty
 
-Difference between parametric and structural uncertainty
+Sources of uncertainty (a la Chris Dent):
 
-- parametric: technology cost, useable potentials, discount rate, weather year
+- parametric (cost)
+- condition (boundary, initial)
+- functional (full feasible space not known)
+- stochastic (randomness)
+- solution (solver tolerance)
+- structural (power flow)
+- multi-model (across models)
+- decision (what can be influenced)
+
+Dimensions of uncertainty (Pye, 2018)
+
+- technical (inexactness)
+- methodological (unreliability)
+- epistemological (ignorance)
+- societal (social robustness)
+
+Different time domains of uncertainty:
+
+- short-term: operation
+- long-term: planning
+
+Difference between epistemic and aleatory uncertainty (Pfenninger, 2014)
+
+- epistemic: more data/better models will reduce uncertainty
+- aleatory:  more data/better models will **not** reduce uncertainty
+
+Difference between parametric and structural uncertainty (extended from (DeCarolis, 2017))
+
+- parametric: technology cost, useable potentials, discount rate, weather year, climate change, electricity demand, (behavioural/social)
 - structural: power flow approximation, spatial and temporal aggregation, technology simplification (e.g. UC)
 
 Origin of cost uncertainty:
@@ -68,49 +107,121 @@ Better to exclude discount rate in a capital intensive system (just a pre-factor
 
 There are many hidden assumptions!
 
-Sources of uncertainty (a la Chris Dent):
+"Uncertainty characterization" (Fraiture, 2020)
 
-- parametric (cost)
-- condition (boundary, initial)
-- functional (full feasible space not known)
-- stochastic (randomness)
-- solution (solver tolerance)
-- structural (power flow)
-- multi-model (across models)
-- decision (what can be influenced)
+"Although the task of uncertainty characterization can itself
+be seen as uncertain, exploring the nature of uncertainty is significantly more valuable than using deterministic, best-guess values." (Fraiture, 2020)
+
+"the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" (Yue, 2018)
 
 ## Cost Data
 
-What are the distributions of technology cost projections?
+Main challenge is quantifying the input uncertainties! (Moret, 2017)
 
-- uniform:
-- normal: (Mavromatidis, 2018)
-- check sensitivity towards different distributions; e.g. normal vs uniform
+Two main sources of uncertainty wrt technological learning (Tröndle, 2020)
+
+- future deployment rates unknown
+- learning rate unknown
+
+### Via Learning Curves
 
 Locate the status of learning curves for different technologies (fit learning parameter)
 
 - upper limit: capacity to supply the whole world
 - lower limit: today's capacity
 
-Main challenge is quantifying the input uncertainties! (Moret, 2017)
+models "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" (Mattssen, 2019)
 
-take cost assumptions from https://github.com/PyPSA/pypsa-eur/pull/184
+### Maximum-Entropy Method
 
-Tröndle paper
+mentioned in (Tröndle, 2020)
 
-Danish Energy Agency
+https://de.wikipedia.org/wiki/Maximum-Entropie-Methode
 
-Use uniform distribution due to lack of better data (Moret, 2017)
+https://en.wikipedia.org/wiki/Principle_of_maximum_entropy
 
-Costs all the way to zero? E.g. what happens with very cheap solar?
+from Bayesian statistics
+
+"assign an a-priori probability despite insufficient problem-specific information" (wiki)
+
+take samples; among the set of all trial probability distributions take the one with maximal information entropy (wiki)
+
+"the one that makes fewest assumptions about the true distribution of data" (wiki)
+
+"entropy maximization with no testable information respects the universal constraint that the sum of the probabilities is one. Under this constraint, the maximum entropy probability distribution is the uniform distribution" (wiki)
+
+### Distributions
+
+What are the distributions of technology cost projections?
+
+- uniform: (Moret, 2017) (Moret, 2016) (Shirizadeh, 2019) (Tröndle, 2020) (Pilpola, 2020) (Pizarro-Alonso, 2019) (Li, 2017) (Trutnevyte, 2013)
+- normal: (Mavromatidis, 2018)
+- triangle: (Li, 2020)
+
+always independently sampled
+
+The current spread of recent documented investment costs is close to uniform (Lopin, 2019)
+
+"difficult and possibly misleading to associate a PDF to a parameter with unknown PDF" (Moret, 2016)
+
+"The variance [..] was set according to the maturity of technologies" (Li, 2020)"
+
+"To date, a general methodology for uncertainty characterization, assessing parameter uncertainty by type and degree [..] is missing." (Moret, 2016)
+
+"Following a maximum entropy approach, we model [...] uncertainty with uniform distributions over ranges taken from the literature" (Tröndle, 2020)
 
 Check how sensitive uncertainty propagation is wrt to the choice of distribution (e.g. normal vs uniform). What changes?
 
+### Ranges
+
+"it is crucial to avoid an arbitrary a priori exclusion of parameters from the analysis" (Moret, 2017)
+
+take cost assumptions from https://github.com/PyPSA/pypsa-eur/pull/184
+
+(Tröndle, 2020) supplementary material:
+
+| name           | min  | max  | unit      |
+|----------------|------|------|-----------|
+| discount       | 1.6  | 13.8 | % p.a.    |
+| utility PV     | 280  | 580  | EUR/kW    |
+| rooftop PV     | 760  | 1000 | EUR/kW    |
+| onwind         | 800  | 1700 | EUR/kW    |
+| offwind        | 1790 | 3270 | EUR/kW    |
+| battery power  | 31   | 141  | EUR/kW    |
+| battery energy | 36   | 166  | EUR/kWh   |
+| H2 power       | 1123 | 2100 | EUR/kW    |
+| H2 energy      | 6    | 12   | EUR/kWh   |
+| transmission   | 700  | 1080 | EUR/MW/km |
+
+JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators)
+
+Danish Energy Agency technology cost database:
+
+- lower and higher bounds "shall be interpreted as representing probabilities corresponding to a 90% confidence interval"
+
+To derive learning rates:
+
+- IRENA renewable cost database
+- www.energystorage.ninja
+
+plus/minus 50% (Shirizadeh, 2019)
+
+mostly less than plus/minus 25% (Pizarro-Alonso, 2019)
+
+plus/minus 20% (Moret, 2017)
+
+previous studies have considered "relatively narrow range[s] of uncertainties" (Li, 2017)
+
+Costs all the way to zero? E.g. what happens with very cheap solar?
+
 ## Sensitivity Analysis
 
-Difference between uncertainty and sensitivity:
+no sensitivity analysis -> point-estimate method (Souroudi, 2013)
 
-- uncertainty analysis: to what extent does uncertainty exist in the outputs
+Difference between uncertainty and sensitivity analsis following (Usher, 2016):
+
+- uncertainty characterization (analysis): which parameters are uncertain and to what extent
+- uncertainty propagation: to what extent does uncertainty exist in the outputs
 - sensitivity analysis: what input parameters influence the outputs the most
 
 scenario-based sensitivity analysis
@@ -122,35 +233,38 @@ scenario-based sensitivity analysis
 local sensitivity analysis
 
 - parameter sweeps one dimension at a time (Schlachtberger, 2018)
-- multi-dimensional sensitivity analysis analyse more dimensions at once
 - main interdependencies may already be covered by single-parameter variation (Schlachtberger, 2018)
 - "desirable to develop analytic results from simplified models that maintain the original model's sensitivities" (Schachtberger, 2018)
 - use partial derivatives
+- multi-dimensional sensitivity analysis analyse more dimensions at once
 - drawback: only small fraction of uncertainty space is sampled
+- repeat (Schlachtberger, 2018) for thesis: more nodes, 100% renewable, lead up to GSA, possibly with PyPSA-Eur-Sec
+- LSA "may not identify influential parameters in planning (Pizarro-Alonso, 2019)
 
 global sensitivity analysis
 
 - changing multiple paramters at a time; co-varying inputs; multi-parameter variations
 - to identify interesting scenarios (Usher, 2015)
 - "quantifying the effects of random input variables onto the variance of the response of a mathematical model" (Sudret, 2008)
+- elementary effects method (Morris screening, one-at-a-time) to counteract high computational requirements (Usher, 2015) (Pizarro-Alonso, 2019) (Moret, 2016)
 
 a good overview: https://uncertainpy.readthedocs.io/en/latest/theory.html
 
-## Local Sensitivity Analysis
-
-- repeat cost-optimal scenarios for thesis
-- argument: more nodes, 100% renewable, leads up to global sensitivity analysis
-- redo with PyPSA-Eur-Sec
-
 ## Experimental Design
 
-low-discrepancy MC sampling
+low-discrepancy Monte-Carlo (MC) sampling
 
 - https://chaospy.readthedocs.io/en/master/sampling/sequences.html
 - https://en.wikipedia.org/wiki/Low-discrepancy_sequence
 - https://en.wikipedia.org/wiki/Quasi-Monte_Carlo_method
 
 using halton sequence
+
+alternatives are Latin hypercube sampling (Tröndle, 2020) and Method of Morris (Usher, 2015)
+
+all these are intendended to achieve "efficient coverage" (Usher, 2015)
+
+
 
 ## Surrogate Modelling with Polynomical Chaos Expansion
 
@@ -166,10 +280,12 @@ only input/output behaviour is important (link to machine learning)
 
 scaling
 
-- number of inputs: adds more dimensions to uncertainty space, curse of dimensionality
+- number of inputs: adds more dimensions to uncertainty space, curse of dimensionality [12 in (Tröndle, 2020), 36 in (Pilpola, 2020)]
 - number of outputs: should scale well as each output has its own polynomial, are independent
 
 Use PCE to build surrogate models for calculating Sobol sensitivity indices analytically as a post-processing (Sudret, 2008)
+
+separate influential from non-influential parameters
 
 computational cost of sensitivity indices reduces to that of estimating PCE coefficients, 2-3 orders of magnitude faster than traditional MC evaluation (Sudret, 2008)
 
@@ -183,7 +299,10 @@ implement multifidelity approach
 
 - Tröndle paper: high fidelity: 10 samples, 400 nodes, 4-hourly; low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
 
-add transmission volume limit to input parameters
+further uncertain input parameters:
+
+- rountrip efficiency of hydrogen storage
+- allowed transmission volume
 
 Are LHS/Halton/Sobol sampling better than gridded sampling?
 
@@ -224,7 +343,7 @@ Caveat: due to inaccuracies of the surrogate model, one may need load shedding o
 
 one of the best ways to make system cheaper is just to make offshore wind cheaper, which has high acceptance and big cost reduction potentials AND it has one of the biggest impacts on TSC.
 
-by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band
+by reducing  capital cost of wind, not only expected costs decrease, but also the uncertainty band
 
 # Near-Optimal
 
@@ -238,7 +357,6 @@ add additional search directions based on face normal of convex hull (Pedersen, 
 
 - https://github.com/TimToernes/MGA-PyPSA
 - https://github.com/tulip-control/polytope
-
 
 do C-Plots in 2D (or even 3D) with isolines corresponding to $\epsilon$ based on the convex hulls for all combinations of investment groups (do multiple dimensions at once)
 
@@ -283,6 +401,11 @@ interpretation of marrying near-optimal analysis with parametric uncertainty (wh
 - tilt of (1-$\epsilon$) constraint by varying parameters changes near-optimal feasible space
 - could also represent different objectives rather than costs, e.g. area used etc. to represent social aspects
 
+"resilient SPORES" (Lombardi, 2020)
+
+"SPORES are relatively insensitive to technology cost" (Lombardi, 2020)
+
+Trutnevyte's EXPANSE combines MGA-type and MC-type uncertainty analysis in total 800 solutions (Li, 2017)
 
 # Software
 
@@ -291,20 +414,20 @@ Chaospy
 - https://github.com/jonathf/chaospy
 - https://chaospy.readthedocs.io/en/master/
 
+SAlib
+
+- https://github.com/SALib/SALib
+- https://salib.readthedocs.io/en/latest/index.html
+
 Uncertainpy
 
 - https://uncertainpy.readthedocs.io/en/latest/
 - https://github.com/simetenn/uncertainpy
 
-Polychaos
+Polychaos.jl
 
 - https://github.com/timueh/PolyChaos.jl
 - https://timueh.github.io/PolyChaos.jl/dev/
-
-SAlib
-
-- https://github.com/SALib/SALib
-- https://salib.readthedocs.io/en/latest/index.html
 
 SMT
 
