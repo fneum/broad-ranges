@@ -24,9 +24,9 @@ def plot_histograms(truth, predictions, fn=None):
     if not isinstance(predictions, list):
         predictions = [predictions]
 
-    fig, axes = plt.subplots(2, 4, figsize=(10, 5))
+    fig, axes = plt.subplots(3, 3, figsize=(8, 8))
     for i, c in enumerate(truth.columns):
-        ax = axes[int(i / 4)][i % 4]
+        ax = axes[int(i / 3)][i % 3]
         ax.set_title(c)
         ax.set_ylim([0, 0.1])
         bins = np.arange(-70, 71, 5)
@@ -46,7 +46,7 @@ def plot_histograms(truth, predictions, fn=None):
                 ax=ax, label=f"pred. {j}", alpha=0.4, bins=bins, density=True
             )
     plt.tight_layout()
-    axes[1, 0].legend()
+    axes[2, 2].legend()
     if fn is not None:
         plt.savefig(fn, bbox_inches="tight")
 

@@ -8,6 +8,39 @@ __author__ = "Fabian Neumann (KIT)"
 __copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
 
 
+def cumulative_share(n, by="bus"):
+    # adapted from pypsa-eur-mga/scripts/extract_results.py
+
+    n.loads["load"] = n.loads_t.p.multiply(n.snapshot_weightings, axis=0).sum()
+    n.generators["energy"] = n.snapshot_weightings @ n.generators_t.p
+    n.storage_units["energy"] = n.snapshot_weightings @ n.storage_units_t.inflow
+
+    if by == "country":
+
+        def bus2country(x):
+            return x.bus[:2]
+
+        n.loads["country"] = n.loads.apply(bus2country, axis=1)
+        n.generators["country"] = n.generators.apply(bus2country, axis=1)
+        n.storage_units["country"] = n.storage_units.apply(bus2country, axis=1)
+
+    energy = (
+        n.generators.groupby(by).energy.sum() + n.storage_units.groupby(by).energy.sum()
+    )
+    load = n.loads.groupby(by).load.sum()
+
+    df = pd.concat([(energy / energy.sum()), (load / load.sum())], axis=1)
+    df.sort_values(by="energy", inplace=True)
+
+    return df.cumsum()
+
+
+def get_gini(n):
+    # adapted from pypsa-eur-mga/scripts/extract_results.py
+    dfc = cumulative_share(n)
+    return 1 - dfc.load.diff().multiply(dfc.energy.rolling(2).sum(), axis=0).sum()
+
+
 def assign_carriers(n):
 
     if "Load" in n.carriers.index:
@@ -87,7 +120,9 @@ def retrieve_data(fn):
 
     stats["tsc"] = aggregate_costs(n).sum()
 
-    to_drop = ["ror", "hydro", "PHS"]
+    stats["gini"] = get_gini(n)
+
+    to_drop = ["ror", "hydro", "PHS", "offwind-ac", "offwind-dc"]
     stats.drop(to_drop, inplace=True)
 
     stats.name = fn

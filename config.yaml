@@ -1,11 +1,11 @@
 scenarios:
   clusters: [37]
   opts: [168H]
-  epsilon: [0.01] # skips nearoptimal if empty
+  epsilon: [0.005, 0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
   objective:
-    - Generator+offwind+min
+    #- Generator+offwind+min
     #- Generator+offwind+max
-    - Generator+onwind+min
+    #- Generator+onwind+min
     #- Generator+onwind+max
     - Generator+wind+min
     #- Generator+wind+max
@@ -15,11 +15,11 @@ scenarios:
     #- StorageUnit+H2+max
     - StorageUnit+battery+min
     #- StorageUnit+battery+max
-    - StorageUnit++min
+    #- StorageUnit++min
     #- StorageUnit++max
     - Transmission++min
     #- Transmission++max
-  order: [1,2,3,4,5]
+  order: [3]
   sobol: [t, m]
 
 enable:
@@ -47,26 +47,26 @@ solving:
     GURO_PAR_BARDENSETHRESH: 200
 
 experimental_design:
-  size: 5
+  size: 100
   rule: halton
   round: 3
 
 uncertainties:
     onwind:
       type: Uniform
-      args: [0.2,1.5]
+      args: [0,1]
     offwind:
       type: Uniform
-      args: [0.2,1.5]
+      args: [0,1]
     solar:
       type: Uniform
-      args: [0.2,1.5]
+      args: [0,1]
     H2:
       type: Uniform
-      args: [0.2,1.5]
+      args: [0,1]
     battery:
       type: Uniform
-      args: [0.2,1.5]
+      args: [0,1]
 
 train_test_split:
   train_size: 0.8

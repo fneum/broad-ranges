@@ -1,0 +1,13 @@
+,,DEA lower,DEA 2050,DEA upper,tröndle lower,tröndle upper,PyPSA-Eur /budischak2013,JRC low,JRC 2050,JRC high
+fuel cell,investment,500,800,900,673.8,1260,339,,,
+electrolysis,investment,350,500,700,449.2,840,350,,,
+steel tank,investment,21,21,35,6,12,8,,,
+battery inverter,investment,40,60,250,31,141,350,110,140,160
+battery storage,investment,46,75,176,36,166,160,245,245,245
+transmission,investment,,,,700,1080,400,700,900,1080
+utility PV,investment,250,300,350,280,580,425,420,520,580
+rooftop PV,investment,590,590,590,760,1000,725,760,880,1000
+offwind,investment,1420,1780,1950,1790,3270,1640,1790,2280,3270
+onwind,investment,800,960,1190,800,1700,1040,800,1100,1700
+fuel cell,efficiency,46,50,53,,,58,,,
+electrolysis,efficiency,66,69,70,,,80,,,

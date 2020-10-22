@@ -20,9 +20,17 @@ def build_neural_network(train_set, params):
 if __name__ == "__main__":
 
     cf = snakemake.config
+    uncertainties = cf["uncertainties"]
+    epsilons = cf["scenarios"]["epsilon"]
 
-    dataset = h.load_dataset(snakemake.input[0])
-    distribution = h.NamedJ(cf["uncertainties"])
+    dimension = snakemake.wildcards.dimension
+    sense = snakemake.wildcards.sense
+
+    dataset = h.load_dataset(snakemake.input[0], dimension, sense)
+
+    if dimension != "cost":
+        uncertainties["epsilon"] = dict(type="Uniform", args=[0, max(epsilons)])
+    distribution = h.NamedJ(uncertainties)
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])
 

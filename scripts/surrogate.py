@@ -1,5 +1,5 @@
 """
-[description]
+Build surrogate model.
 """
 
 from sklearn.model_selection import train_test_split
@@ -33,10 +33,18 @@ def build_sklearn_model(cf):
 if __name__ == "__main__":
 
     cf = snakemake.config
-    order = int(snakemake.wildcards.order)
+    uncertainties = cf["uncertainties"]
+    epsilons = cf["scenarios"]["epsilon"]
 
-    dataset = h.load_dataset(snakemake.input[0])
-    distribution = h.NamedJ(cf["uncertainties"])
+    order = int(snakemake.wildcards.order)
+    dimension = snakemake.wildcards.dimension
+    sense = snakemake.wildcards.sense
+
+    dataset = h.load_dataset(snakemake.input[0], dimension, sense)
+
+    if dimension != "cost":
+        uncertainties["epsilon"] = dict(type="Uniform", args=[0, max(epsilons)])
+    distribution = h.NamedJ(uncertainties)
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])
 

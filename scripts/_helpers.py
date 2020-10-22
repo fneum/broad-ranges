@@ -68,19 +68,32 @@ class NamedPoly:
         numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
-def load_dataset(fn):
-    df = pd.read_csv(fn, index_col=0, header=list(range(5))).T
+def load_dataset(fn, obj="cost", sense="min"):
 
-    # TODO: remove
-    df["offwind"] = df["offwind-ac"] + df["offwind-dc"]
-    df["wind"] = df["onwind"] + df["offwind"]
-    df["transmission"] = df["lines"] + df["links"] + 290
-    df.drop(
-        ["ror", "hydro", "PHS", "offwind-ac", "offwind-dc", "lines", "links"],
-        axis=1,
-        inplace=True,
-    )
+    raw_df = pd.read_csv(fn, index_col=0, header=list(range(8))).T
+
+    df = raw_df.xs([obj, sense], level=["objective", "sense"], axis=0).copy()
+
+    if obj == "cost":
+        df.index = df.index.droplevel(level="epsilon")
+    else:
+        df = df.append(raw_df.xs(["cost", "min"], level=["objective", "sense"]))
+
     return df
+
+
+# def load_dataset_old(fn):
+#     df = pd.read_csv(fn, index_col=0, header=list(range(5))).T
+
+#     df["offwind"] = df["offwind-ac"] + df["offwind-dc"]
+#     df["wind"] = df["onwind"] + df["offwind"]
+#     df["transmission"] = df["lines"] + df["links"] + 290
+#     df.drop(
+#         ["ror", "hydro", "PHS", "offwind-ac", "offwind-dc", "lines", "links"],
+#         axis=1,
+#         inplace=True,
+#     )
+#     return df
 
 
 def multiindex2df(multiindex):

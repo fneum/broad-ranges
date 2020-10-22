@@ -16,7 +16,9 @@ def memory(w):
         if m is not None:
             factor /= int(m.group(1))
             break
-    return int(0.5 * factor * (10000 + 195 * int(w.clusters)))
+    request = int(0.5 * factor * (10000 + 195 * int(w.clusters)))
+    minimum = 4000
+    return max(minimum, request)
 
 
 def experimental_design(w):

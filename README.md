@@ -176,9 +176,13 @@ Check how sensitive uncertainty propagation is wrt to the choice of distribution
 
 "it is crucial to avoid an arbitrary a priori exclusion of parameters from the analysis" (Moret, 2017)
 
-take cost assumptions from https://github.com/PyPSA/pypsa-eur/pull/184
+take cost assumptions from `technology-data` with option `expectation: pessimistic`
 
-(Tröndle, 2020) supplementary material:
+- new with continuous updates since 2016
+- no ranges for H2 pipeline, HVAC, HVDC, PHS, hydro, nuclear, ror, rooftop PV
+- also checkout `./costcomparison.csv`
+
+(Tröndle, 2020) supplementary material has almost always more conservative values than pessmisitic DEA database:
 
 | name           | min  | max  | unit      |
 |----------------|------|------|-----------|
@@ -193,7 +197,11 @@ take cost assumptions from https://github.com/PyPSA/pypsa-eur/pull/184
 | H2 energy      | 6    | 12   | EUR/kWh   |
 | transmission   | 700  | 1080 | EUR/MW/km |
 
-JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators)
+JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators) - relatively old from 2014
+
+maybe: add 25% to rooftop PV cost (due to missing uncertainty ranges in DEA, similar to utility PV)
+
+maybe: include transmission cost uncertainty by setting upper bound to 800 EUR/MW/km (which is twice our usual assumptjion; do this because Tröndle cost are much higher!)
 
 Danish Energy Agency technology cost database:
 
