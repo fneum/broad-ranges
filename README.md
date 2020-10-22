@@ -359,6 +359,22 @@ by reducing  capital cost of wind, not only expected costs decrease, but also th
 
 more detailed regional resolution for technology aggregation (e.g. min/max solar in Southern Europe)
 
+6 Regions variant:
+
+Western: GB, IE, FR, NL, BE, LU
+Central: DE, AT, CH
+Eastern: PL, CZ, HU, SK, LT, LV, EE
+Northern: NO, SE, DK, FI
+Southern: PT, ES, IT, GR, MT
+South-Eastern: RO, AL, MK, BG, RS, HR, SI, BA, ME
+
+4 regions variant:
+
+Northern: NO, SE, DK, FI, LT, LV, EE
+Southern: PT, ES, IT, MT, GR, AL, MK, BG, RS, HR, SI, BA, ME
+Western: CH, GB, IE, FR, NL, BE, LU
+Eastern: DE, AT, RO, PL, CZ, HU, SK
+
 ## More Search Directions
 
 add additional search directions based on face normal of convex hull (Pedersen, 2020):
