@@ -159,6 +159,10 @@ def parse2multiindex(df):
         else:
             raise NotImplementedError("Invalid filename.")
 
+        match = re.findall(r"elec(\d+)", fn_split[0])
+        if match:
+            data["year"] = int(match[0])
+
         return pd.Series(data)
 
     df.columns = pd.MultiIndex.from_frame(pd.concat(map(parse, df.columns), axis=1).T)
