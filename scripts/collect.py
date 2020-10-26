@@ -3,6 +3,7 @@
 import multiprocessing as mp
 import pandas as pd
 import pypsa
+import re
 
 __author__ = "Fabian Neumann (KIT)"
 __copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
@@ -104,16 +105,20 @@ def retrieve_data(fn):
 
     n = pypsa.Network(fn)
 
+    hvdc_b = n.links.carrier == "DC"
+
     stats = pd.concat(
         [
             n.generators.groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
             n.storage_units.groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
+            n.links.loc[~hvdc_b].groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
+            n.stores.groupby("carrier").e_nom_opt.sum() / 1e3,  # GWh
         ]
     )
 
-    lines = n.lines.eval("length * s_nom_opt / 1e6").sum()
-    links = n.links.eval("length * p_nom_opt / 1e6").sum()
-    stats["transmission"] = lines + links
+    hvac = n.lines.eval("length * s_nom_opt / 1e6").sum()
+    hvdc = n.links.loc[hvdc_b].eval("length * p_nom_opt / 1e6").sum()
+    stats["transmission"] = hvac + hvdc
 
     stats["offwind"] = stats["offwind-ac"] + stats["offwind-dc"]
     stats["wind"] = stats["onwind"] + stats["offwind"]
