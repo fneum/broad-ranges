@@ -15,8 +15,8 @@ wildcard_constraints:
 
 
 rule solve_network:
-    input: pypsaeur("networks/elec{year}_s_{clusters}_ec_lcopt_{opts}.nc")
-    output: "results/networks/elec{year}_s_{clusters}_ec_lcopt_{opts}.nc"
+    input: pypsaeur("networks/elec_s_{clusters}_ec_lcopt_{opts}.nc")
+    output: "results/networks/elec_s_{clusters}_ec_lcopt_{opts}.nc"
     threads: 4
     resources: mem=memory
     script: "scripts/solve.py"
