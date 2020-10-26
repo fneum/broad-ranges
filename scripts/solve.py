@@ -20,6 +20,18 @@ def override_network(n):
     n.lines.index = ["LN{}".format(i) for i in n.lines.index]
     n.links.index = ["LK{}".format(i) for i in n.links.index]
 
+    ln_config = snakemake.config["lines"]
+    n.lines.s_nom_max = n.lines.apply(
+        lambda line: max(
+            line.s_nom + ln_config["s_nom_add"],
+            line.s_nom * ln_config["s_nom_factor"],
+        ),
+        axis=1,
+    )
+
+    lk_config = snakemake.config["links"]
+    n.links.p_nom_max = float(lk_config["p_nom_max"])
+
 
 if __name__ == "__main__":
 

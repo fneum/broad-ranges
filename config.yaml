@@ -29,6 +29,13 @@ enable:
 nearoptimal:
   with_fix: true
 
+lines:
+  s_nom_add: 8000
+  s_nom_factor: 2
+
+links:
+  p_nom_max: 20000
+
 solving:
   options:
     formulation: kirchhoff
