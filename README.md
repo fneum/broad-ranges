@@ -62,6 +62,25 @@ Models can (from Tom's lecture):
 - neglect complex interactions of markets and incentive structures (market power, lumpiness)
 - neglect non-linearities and non-convexities (power flow, learning curves, behaviour)
 
+## Karush-Kuhn-Tucker Conditions
+
+https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions
+
+strong duality: primal objective = dual objective
+
+Conditions:
+
+- stationarity
+- primal feasibility
+- dual feasibility
+- complementary slackness
+
+Example Applications:
+
+- carbon cap <-> carbon price
+- renewable generation target <-> required subsidy
+- limited potentials <-> scarcity cost (onshore wind, transmission)
+
 ## Uncertainty
 
 Sources of uncertainty (a la Chris Dent):
@@ -353,6 +372,17 @@ one of the best ways to make system cheaper is just to make offshore wind cheape
 
 by reducing  capital cost of wind, not only expected costs decrease, but also the uncertainty band
 
+# Local Sensitivity Analysis
+
+a la (Schlachtberger, 2018), but with higher resolution
+
+use as build-up to global sensitivity analysis
+
+- weather years
+- potentials (offwind, onwind, solar)
+- line expansion (lv1.0 ... lcopt)
+- cost
+
 # Near-Optimal
 
 ## Regional Analysis
@@ -361,19 +391,19 @@ more detailed regional resolution for technology aggregation (e.g. min/max solar
 
 6 Regions variant:
 
-Western: GB, IE, FR, NL, BE, LU
-Central: DE, AT, CH
-Eastern: PL, CZ, HU, SK, LT, LV, EE
-Northern: NO, SE, DK, FI
-Southern: PT, ES, IT, GR, MT
-South-Eastern: RO, AL, MK, BG, RS, HR, SI, BA, ME
+Western: GB|IE|FR|NL|BE|LU
+Central: DE|AT|CH
+Eastern: PL|CZ|HU|SK|LT|LV|EE
+Northern: NO|SE|DK|FI
+Southern: PT|ES|IT|GR|MT
+South-Eastern: RO|AL|MK|BG|RS|HR|SI|BA|ME
 
 4 regions variant:
 
-Northern: NO, SE, DK, FI, LT, LV, EE
-Southern: PT, ES, IT, MT, GR, AL, MK, BG, RS, HR, SI, BA, ME
-Western: CH, GB, IE, FR, NL, BE, LU
-Eastern: DE, AT, RO, PL, CZ, HU, SK
+Northern: NO|SE|DK|FI|LT|LV|EE
+Southern: PT|ES|IT|GR|AL|MK|BG|RS|HR|SI|BA|ME
+Western: CH|GB|IE|FR|NL|BE|LU
+Eastern: DE|AT|RO|PL|CZ|HU|SK
 
 ## More Search Directions
 
