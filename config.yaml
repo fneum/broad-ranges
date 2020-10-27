@@ -2,7 +2,7 @@ scenarios:
   year: [""]
   clusters: [37]
   opts: [168H]
-  epsilon: [0.005, 0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
+  epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
   objective:
     #- Generator+offwind+min
     #- Generator+offwind+max
@@ -55,7 +55,7 @@ solving:
     GURO_PAR_BARDENSETHRESH: 200
 
 experimental_design:
-  size: 100
+  size: 20
   rule: halton
   round: 3
 
