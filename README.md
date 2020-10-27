@@ -382,6 +382,10 @@ use as build-up to global sensitivity analysis
 - potentials (offwind, onwind, solar)
 - line expansion (lv1.0 ... lcopt)
 - cost
+- emission reduction target
+- nodes
+- temporal resolution (averaging, segmentation)
+- equity requirements (done already!)
 
 # Near-Optimal
 
