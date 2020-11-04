@@ -112,9 +112,11 @@ def retrieve_data(fn):
             n.generators.groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
             n.storage_units.groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
             n.links.loc[~hvdc_b].groupby("carrier").p_nom_opt.sum() / 1e3,  # GW
-            n.stores.groupby("carrier").e_nom_opt.sum() / 1e3,  # GWh
         ]
     )
+
+    if not n.stores.empty:
+        stats = pd.concat([stats, n.stores.groupby("carrier").e_nom_opt.sum() / 1e3])  # GWh
 
     hvac = n.lines.eval("length * s_nom_opt / 1e6").sum()
     hvdc = n.links.loc[hvdc_b].eval("length * p_nom_opt / 1e6").sum()
@@ -146,7 +148,7 @@ def parse2multiindex(df):
             s = o.split("+")
             if len(s) > 1:
                 carrier = s[0] + "-cost"
-                value = float(s[1])
+                value = float(s[1][1:])
                 data[carrier] = value
 
         if len(fn_split) == 1:
