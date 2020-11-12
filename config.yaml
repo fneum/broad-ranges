@@ -1,7 +1,7 @@
 scenarios:
   year: [""]
   clusters: [37]
-  opts: [168H]
+  opts: [4H]
   epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
   objective:
     #- Generator+offwind+min
@@ -9,17 +9,17 @@ scenarios:
     #- Generator+onwind+min
     #- Generator+onwind+max
     - Generator+wind+min
-    #- Generator+wind+max
+    - Generator+wind+max
     - Generator+solar+min
-    #- Generator+solar+max
+    - Generator+solar+max
     - StorageUnit+H2+min
-    #- StorageUnit+H2+max
+    - StorageUnit+H2+max
     - StorageUnit+battery+min
-    #- StorageUnit+battery+max
+    - StorageUnit+battery+max
     #- StorageUnit++min
     #- StorageUnit++max
     - Transmission++min
-    #- Transmission++max
+    - Transmission++max
   order: [3]
   sobol: [t, m]
 
@@ -55,7 +55,7 @@ solving:
     GURO_PAR_BARDENSETHRESH: 200
 
 experimental_design:
-  size: 20
+  size: 200
   rule: halton
   round: 3
 

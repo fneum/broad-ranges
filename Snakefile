@@ -35,8 +35,8 @@ if config["enable"]["collect_samples"]:
         input: experimental_design
         output:
             data="results/dataset.csv"
-        threads: 1
-        resources: mem=8000
+        threads: 24
+        resources: mem=20000
         script: "scripts/collect.py"
 
 

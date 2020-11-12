@@ -16,7 +16,7 @@ def memory(w):
         if m is not None:
             factor /= int(m.group(1))
             break
-    request = int(0.5 * factor * (10000 + 195 * int(w.clusters)))
+    request = int(0.35 * factor * (10000 + 195 * int(w.clusters)))
     minimum = 4000
     return max(minimum, request)
 
@@ -35,7 +35,7 @@ def experimental_design(w):
     for opts in scenarios["opts"]:
         for s in samples.T:
             cost_set = dict(zip(uncertainty.names, s))
-            cost_opts = "-".join([f"{c}+{v}" for c, v in cost_set.items()])
+            cost_opts = "-".join([f"{c}+c{v}" for c, v in cost_set.items()])
             new_opts.append(f"{opts}-{cost_opts}")
 
     scenarios["opts"] = new_opts
