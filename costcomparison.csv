@@ -9,5 +9,5 @@ utility PV,investment,250,300,350,280,580,425,420,520,580
 rooftop PV,investment,590,590,590,760,1000,725,760,880,1000
 offwind,investment,1420,1780,1950,1790,3270,1640,1790,2280,3270
 onwind,investment,800,960,1190,800,1700,1040,800,1100,1700
-fuel cell,efficiency,46,50,53,,,58,,,
-electrolysis,efficiency,66,69,70,,,80,,,
+fuel cell,efficiency,53,50,46,,,58,,,
+electrolysis,efficiency,70,69,66,,,80,,,

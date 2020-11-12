@@ -4,9 +4,12 @@
 
 ## Motivation
 
-In optimisation theory the KKT equations can tell us about the sensitivity of the optimal point to small changes in the constraints. However, KKT does not tell us anything about the global behaviour of the objective function on the feasible space, which can be highly non-linear.
+In optimisation theory the KKT equations can tell us about the sensitivity of the optimal point to small changes in the constraints.
+However, KKT does not tell us anything about the global behaviour of the objective function on the feasible space, which can be highly non-linear.
 
-Flat directions near the optimum are very important for policymakers, because they allow them to make decisions based on other, non-economic criteria, without affecting the cost-effectiveness of the system.
+Flat directions near the optimum are very important for policymakers,
+because they allow them to make decisions based on other,
+non-economic criteria, without affecting the cost-effectiveness of the system.
 
 First approach could be parameter sweeps in the space of costs and constraint constants (Schlachtberger, 2018)
 
@@ -27,16 +30,14 @@ Where in parameter space is it cheap?
 - These cheap areas should then be targeted with policy (e.g. drive technology learning by subsidies)
 - smoothly leads up to future work with endogenous learning in multi-horizon investment planning!
 
-Do I need a richer set of technologies? solar thermal, nuclear, CAES, separate hydrogen storage to fuel cell, electrolysis, gas turbine, cavern storage, steel tank?
+Do I need a richer set of technologies?
+solar thermal, nuclear, CAES, separate hydrogen storage to fuel cell, electrolysis, gas turbine, cavern storage, steel tank?
 
 What is the relation between sensitivity analysis and stochastic and robust optimisation?
 
 - sensitivity analysis: uncertainty wrapped around optimisation
 - stochastic/robust optimisation: uncertainty embedded in optimisation
-
-Alternative to sensitivity analysis? Embed technological learning in optimisation (Heuberger, 2017) (Lopion, 2019)
-
-- remaining uncertainty of learning rate, but "learning by doing" included
+- Alternative: embed technological learning in optimisation (Heuberger, 2017) (Lopion, 2019), remaining uncertainty of learning rate, but "learning by doing" included
 
 Look at measure of robustness: given a cost-optimal solution for one parameter set, how expensive would it be for other cost realisations? A form of hedging against uncertainty.
 
@@ -80,6 +81,16 @@ Example Applications:
 - carbon cap <-> carbon price
 - renewable generation target <-> required subsidy
 - limited potentials <-> scarcity cost (onshore wind, transmission)
+
+## Multi-Objective Optimisation
+
+What we really do is calculating Pareto-fronts (e.g. when constraining line expansion) from multi-objective optimisation
+
+https://en.wikipedia.org/wiki/Multi-objective_optimization
+
+https://en.wikipedia.org/wiki/Pareto_efficiency
+
+https://en.wikipedia.org/wiki/Maxima_of_a_point_set
 
 ## Uncertainty
 
@@ -151,6 +162,11 @@ Locate the status of learning curves for different technologies (fit learning pa
 
 models "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" (Mattssen, 2019)
 
+To derive learning rates:
+
+- IRENA renewable cost database
+- www.energystorage.ninja
+
 ### Maximum-Entropy Method
 
 mentioned in (Tröndle, 2020)
@@ -177,7 +193,7 @@ What are the distributions of technology cost projections?
 - normal: (Mavromatidis, 2018)
 - triangle: (Li, 2020)
 
-always independently sampled
+always independently sampled; easy but incorrect: e.g. offshore and onshore wind
 
 The current spread of recent documented investment costs is close to uniform (Lopin, 2019)
 
@@ -201,7 +217,7 @@ take cost assumptions from `technology-data` with option `expectation: pessimist
 - no ranges for H2 pipeline, HVAC, HVDC, PHS, hydro, nuclear, ror, rooftop PV
 - also checkout `./costcomparison.csv`
 
-(Tröndle, 2020) supplementary material has almost always more conservative values than pessmisitic DEA database:
+(Tröndle, 2020) supplementary material has almost always more conservative values than pessmisitic DEA database; data mostly from ETIP
 
 | name           | min  | max  | unit      |
 |----------------|------|------|-----------|
@@ -216,20 +232,14 @@ take cost assumptions from `technology-data` with option `expectation: pessimist
 | H2 energy      | 6    | 12   | EUR/kWh   |
 | transmission   | 700  | 1080 | EUR/MW/km |
 
-JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators) - relatively old from 2014
+JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators)
 
-maybe: add 25% to rooftop PV cost (due to missing uncertainty ranges in DEA, similar to utility PV)
+- relatively old and conservative from 2014
 
-maybe: include transmission cost uncertainty by setting upper bound to 800 EUR/MW/km (which is twice our usual assumptjion; do this because Tröndle cost are much higher!)
 
 Danish Energy Agency technology cost database:
 
 - lower and higher bounds "shall be interpreted as representing probabilities corresponding to a 90% confidence interval"
-
-To derive learning rates:
-
-- IRENA renewable cost database
-- www.energystorage.ninja
 
 plus/minus 50% (Shirizadeh, 2019)
 
@@ -239,7 +249,11 @@ plus/minus 20% (Moret, 2017)
 
 previous studies have considered "relatively narrow range[s] of uncertainties" (Li, 2017)
 
-Costs all the way to zero? E.g. what happens with very cheap solar?
+maybe: include transmission cost uncertainty by setting upper bound to 800 EUR/MW/km (which is twice our usual assumption; do this because Tröndle cost are much higher!)
+
+maybe: add 25% to rooftop PV cost (due to missing uncertainty ranges in DEA, similar to utility PV)
+
+Costs all the way to zero? E.g. what happens with very cheap solar? Yes!
 
 ## Sensitivity Analysis
 
@@ -265,7 +279,6 @@ local sensitivity analysis
 - use partial derivatives
 - multi-dimensional sensitivity analysis analyse more dimensions at once
 - drawback: only small fraction of uncertainty space is sampled
-- repeat (Schlachtberger, 2018) for thesis: more nodes, 100% renewable, lead up to GSA, possibly with PyPSA-Eur-Sec
 - LSA "may not identify influential parameters in planning (Pizarro-Alonso, 2019)
 
 global sensitivity analysis
@@ -285,13 +298,15 @@ low-discrepancy Monte-Carlo (MC) sampling
 - https://en.wikipedia.org/wiki/Low-discrepancy_sequence
 - https://en.wikipedia.org/wiki/Quasi-Monte_Carlo_method
 
+all these are intendended to achieve "efficient coverage" (Usher, 2015)
+
 using halton sequence
 
 alternatives are Latin hypercube sampling (Tröndle, 2020) and Method of Morris (Usher, 2015)
 
-all these are intendended to achieve "efficient coverage" (Usher, 2015)
+Are LHS/Halton/Sobol sampling better than gridded sampling?
 
-
+Discuss which are attractive and why!
 
 ## Surrogate Modelling with Polynomical Chaos Expansion
 
@@ -330,8 +345,7 @@ further uncertain input parameters:
 
 - rountrip efficiency of hydrogen storage
 - allowed transmission volume
-
-Are LHS/Halton/Sobol sampling better than gridded sampling?
+- cost of transmission?
 
 Validation
 
@@ -368,24 +382,25 @@ Caveat: due to inaccuracies of the surrogate model, one may need load shedding o
 
 ## Conclusions
 
-one of the best ways to make system cheaper is just to make offshore wind cheaper, which has high acceptance and big cost reduction potentials AND it has one of the biggest impacts on TSC.
+one of the best ways to make system cheaper is just to make offshore wind cheaper,
+which has high acceptance and big cost reduction potentials AND it has one of the biggest impacts on TSC.
 
-by reducing  capital cost of wind, not only expected costs decrease, but also the uncertainty band
+by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band (this is as expected)
 
 # Local Sensitivity Analysis
 
-a la (Schlachtberger, 2018), but with higher resolution
+a la (Schlachtberger, 2018), but with higher resolution and 100% renewable
 
 use as build-up to global sensitivity analysis
 
-- weather years
-- potentials (offwind, onwind, solar)
-- line expansion (lv1.0 ... lcopt)
-- cost
-- emission reduction target
 - nodes
 - temporal resolution (averaging, segmentation)
+- cost
+- potentials (offwind, onwind, solar)
+- line expansion (lv1.0 ... lcopt)
+- weather years
 - equity requirements (done already!)
+- emission reduction target
 
 # Near-Optimal
 
@@ -408,6 +423,10 @@ Northern: NO|SE|DK|FI|LT|LV|EE
 Southern: PT|ES|IT|GR|AL|MK|BG|RS|HR|SI|BA|ME
 Western: CH|GB|IE|FR|NL|BE|LU
 Eastern: DE|AT|RO|PL|CZ|HU|SK
+
+## More Weather Years
+
+get a fuzzy boundary of c-plots based on repeated mga analysis for weather years 1979-2018
 
 ## More Search Directions
 
@@ -451,8 +470,6 @@ redo with sector-coupling version
 build surrogate including $\epsilon$ and sense as uncertain parameter
 
 - higher sampling rate for low $\epsilon$ (0.5,1,2,4,8,12,16)
-
-heatmap of tsc in c-plots? fix capacity of n-1 components, sweep the other?
 
 interpretation of marrying near-optimal analysis with parametric uncertainty (what's the relation?)
 
