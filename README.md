@@ -337,8 +337,6 @@ polynomial regression = linear regression
 
 - https://scikit-learn.org/stable/modules/linear_model.html#polynomial-regression-extending-linear-models-with-basis-functions
 
-implement multifidelity approach
-
 - Tröndle paper: high fidelity: 10 samples, 400 nodes, 4-hourly; low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
 
 further uncertain input parameters:
@@ -369,6 +367,68 @@ Kaleb ML hints
 - number of nodes = 2 * number of inputs
 - normally 2-3 hidden layers
 - 1000 samples could work, 100 could be too low
+
+## Multi-fidelity Approach
+
+following Jiant et al., 2019
+
+only high-fidelity for surrogate model is time-consuming, but only low-fidelity may result in distorted/inaccurate surrogate models
+
+integrate both with multi-fidelity approach
+
+Via space-mapping
+
+- map HF parameter space to LF parameter space
+- map LS output space to HF output space
+
+Via co-kriging
+
+- sounds complicated
+
+Via scaling function
+
+- multiplicative, additive, both
+- multiplicative may be invalid if some values are 0
+
+__Multiplicative scaling approach__
+
+Correct for the *ratio* between HF samples and LF surrogate at HF sample points
+
+$$
+\hat{f}_{MF}(x) = \hat{f}_{LF} \cdot \hat{\beta}(x)
+$$
+
+where $\hat{\beta}(x)$ is the scaling function. The sampled scaling factors are calculated with
+
+$$
+\beta(x) = \frac{ f_{HF}(x) }{ \hat{f}_{LF}(x) }
+$$
+
+Construct scaling function $\hat{\beta}(x)$ from scaling factors $\beta(x)$ via some regression fit.
+
+__Additive scaling approach__
+
+Correct for the *difference* between HF samples and LF surrogate at HF sample points
+
+$$
+\hat{f}_{MF}(x) = \hat{f}_{LF} + \hat{C}(x)
+$$
+
+where $\hat{C}(x)$ is the additive scaling function. The sampled scaling factors are calculated with
+
+$$
+C(x) = f_{HF}(x) - \hat{f}_{LF}(x)
+$$
+
+Construct scaling function $\hat{C}(x)$ from scaling factors $C(x)$ via some regression fit.
+
+__Hybrid scaling approach__
+
+Combine both additively via weighting factor $\omega$:
+
+$$
+\hat{f}_{MF}(x) = \alpha \left( \hat(f)_{LF} \cdot \hat{\beta}(x) \right) + (1-\omega) \left( \hat(f)_{LF} + \hat{C}(x) \right)
+$$
 
 ## Reconstruction
 
