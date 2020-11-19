@@ -12,6 +12,7 @@ logging:
 summary_dir: results
 
 scenario:
+  year: [""]
   sectors: [E]
   simpl: ['']
   ll: ['copt']

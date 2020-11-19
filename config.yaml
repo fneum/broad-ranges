@@ -1,7 +1,12 @@
 scenarios:
-  year: [""]
-  clusters: [37]
-  opts: [4H]
+  low:
+    clusters: 37
+    opts: 4H
+  high:
+    clusters: 100
+    opts: 1H
+
+nearoptimal:
   epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
   objective:
     #- Generator+offwind+min
@@ -20,14 +25,39 @@ scenarios:
     #- StorageUnit++max
     - Transmission++min
     - Transmission++max
-  order: [3]
-  sobol: [t, m]
+
+experimental_design:
+  low:
+    size: 20
+    rule: halton
+    round: 3
+  high:
+    size: 5
+    rule: halton
+    round: 3
+
+uncertainties:
+    onwind:
+      type: Uniform
+      args: [0,1]
+    offwind:
+      type: Uniform
+      args: [0,1]
+    solar:
+      type: Uniform
+      args: [0,1]
+    H2:
+      type: Uniform
+      args: [0,1]
+    battery:
+      type: Uniform
+      args: [0,1]
+
+multifidelity:
+  approach: "hybrid"
 
 enable:
   collect_samples: true
-
-nearoptimal:
-  with_fix: true
 
 lines:
   s_nom_add: 8000
@@ -53,28 +83,6 @@ solving:
     AggFill: 0
     PreDual: 0
     GURO_PAR_BARDENSETHRESH: 200
-
-experimental_design:
-  size: 200
-  rule: halton
-  round: 3
-
-uncertainties:
-    onwind:
-      type: Uniform
-      args: [0,1]
-    offwind:
-      type: Uniform
-      args: [0,1]
-    solar:
-      type: Uniform
-      args: [0,1]
-    H2:
-      type: Uniform
-      args: [0,1]
-    battery:
-      type: Uniform
-      args: [0,1]
 
 train_test_split:
   train_size: 0.8

@@ -30,6 +30,20 @@ def build_sklearn_model(cf):
     return getattr(lm, method)(**with_sklearn)
 
 
+def apply_multifidelity(model, filename, dimension, sense, order, distribution):
+    if filename is None:
+        return
+
+    hf_dataset = h.load_dataset(filename, dimension, sense)
+    hf_samples = h.multiindex2df(hf_dataset.index)
+    lf_dataset = h.build_pce_prediction(model, hf_samples)
+
+    scaling_factors = hf_dataset - lf_dataset
+    scaling_function = build_surrogate(order, distribution, scaling_factors)
+
+    model += scaling_function
+
+
 if __name__ == "__main__":
 
     cf = snakemake.config
@@ -40,7 +54,7 @@ if __name__ == "__main__":
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
 
-    dataset = h.load_dataset(snakemake.input[0], dimension, sense)
+    dataset = h.load_dataset(snakemake.input["low"], dimension, sense)
 
     if dimension != "cost":
         uncertainties["epsilon"] = dict(type="Uniform", args=[0, max(epsilons)])
@@ -55,6 +69,11 @@ if __name__ == "__main__":
     model = build_surrogate(order, distribution, train_set, sklearn_model)
 
     model.to_txt(snakemake.output.polynomial, fmt="%.4f")
+
+    # Correct with high fidelity model runs
+
+    filename = snakemake.input.get("high", None)
+    apply_multifidelity(model, filename, dimension, sense, order, distribution)
 
     # Evaluation
 

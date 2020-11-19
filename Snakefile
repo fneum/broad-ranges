@@ -8,6 +8,7 @@ include: "rules/common.smk"
 
 
 wildcard_constraints:
+    fidelity="(high|low)",
     epsilon="[0-9\.]*",
     order="[0-9]*",
     sobol="(t|m|m2)",
@@ -33,24 +34,24 @@ rule solve_nearoptimal_network:
 if config["enable"]["collect_samples"]:
     rule collect_samples:
         input: experimental_design
-        output:
-            data="results/dataset.csv"
+        output: "results/dataset_{fidelity}.csv"
         threads: 24
         resources: mem=20000
         script: "scripts/collect.py"
 
 
 # TODO placeholder for analysis
-rule analyse_full:
-    input: "results/dataset.csv"
-    output: []
-    threads: 1
-    resources: mem=8000
-    script: "scripts/analyse_full.py"
+# rule analyse_full:
+#     input: "results/dataset.csv"
+#     output: []
+#     threads: 1
+#     resources: mem=8000
+#     script: "scripts/analyse_full.py"
 
 
 rule build_surrogate_model:
-    input: "results/dataset.csv"
+    input:
+        **{fidelity: "results/dataset_" + fidelity +".csv" for fidelity in config["scenarios"].keys()}
     output:
         polynomial="results/pce/polynomial-{order}-{sense}-{dimension}.txt",
         train_errors="results/pce/train-errors-{order}-{sense}-{dimension}.csv",

@@ -25,12 +25,11 @@ def to_mga_model(n, sns):
 
     obj_wc = snakemake.wildcards.objective.split("+")
     epsilon = float(snakemake.wildcards.epsilon)
-    with_fix = snakemake.config["nearoptimal"]["with_fix"]
     opts = snakemake.wildcards.opts.split("-")
 
     process_objective_wildcard(n, obj_wc)
     define_mga_objective(n)
-    define_mga_constraint(n, sns, epsilon=epsilon, with_fix=with_fix)
+    define_mga_constraint(n, sns, epsilon=epsilon, with_fix=True)
 
     add_battery_constraints(n)
     if "CCL" in opts and n.generators.p_nom_extendable.any():

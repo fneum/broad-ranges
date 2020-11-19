@@ -116,7 +116,9 @@ def retrieve_data(fn):
     )
 
     if not n.stores.empty:
-        stats = pd.concat([stats, n.stores.groupby("carrier").e_nom_opt.sum() / 1e3])  # GWh
+        stats = pd.concat(
+            [stats, n.stores.groupby("carrier").e_nom_opt.sum() / 1e3]
+        )  # GWh
 
     hvac = n.lines.eval("length * s_nom_opt / 1e6").sum()
     hvdc = n.links.loc[hvdc_b].eval("length * p_nom_opt / 1e6").sum()
@@ -186,4 +188,4 @@ if __name__ == "__main__":
 
     df = parse2multiindex(pd.concat(data, axis=1))
 
-    df.to_csv(snakemake.output.data)
+    df.to_csv(snakemake.output[0])

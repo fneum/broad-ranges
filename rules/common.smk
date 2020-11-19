@@ -23,20 +23,21 @@ def memory(w):
 
 def experimental_design(w):
 
-    scenarios = config["scenarios"]
+    scenarios = config["scenarios"][w.fidelity]
+    scenarios.update(config["nearoptimal"])
+
+    exp_design = config["experimental_design"][w.fidelity]
+    fmt = exp_design.pop("round")
 
     uncertainty = h.NamedJ(config["uncertainties"])
-
-    exp_design = config["experimental_design"]
-    fmt = exp_design.pop("round")
     samples = uncertainty.J.sample(**exp_design).round(fmt)
 
+    opts = scenarios["opts"]
     new_opts = []
-    for opts in scenarios["opts"]:
-        for s in samples.T:
-            cost_set = dict(zip(uncertainty.names, s))
-            cost_opts = "-".join([f"{c}+c{v}" for c, v in cost_set.items()])
-            new_opts.append(f"{opts}-{cost_opts}")
+    for s in samples.T:
+        cost_set = dict(zip(uncertainty.names, s))
+        cost_opts = "-".join([f"{c}+c{v}" for c, v in cost_set.items()])
+        new_opts.append(f"{opts}-{cost_opts}")
 
     scenarios["opts"] = new_opts
 

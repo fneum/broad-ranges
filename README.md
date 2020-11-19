@@ -327,6 +327,10 @@ scaling
 
 Use PCE to build surrogate models for calculating Sobol sensitivity indices analytically as a post-processing (Sudret, 2008)
 
+Relation of Polynomial Chaos and Principal Component Analysis:
+
+- PCE is like PCA over an orthogonal vector space of polynomials
+
 separate influential from non-influential parameters
 
 computational cost of sensitivity indices reduces to that of estimating PCE coefficients, 2-3 orders of magnitude faster than traditional MC evaluation (Sudret, 2008)
