@@ -2,6 +2,164 @@
 
 # Parametric Uncertainty
 
+## Uncertainty
+
+Sources of uncertainty (a la Chris Dent):
+
+- parametric (cost)
+- condition (boundary, initial)
+- functional (full feasible space not known)
+- stochastic (randomness)
+- solution (solver tolerance)
+- structural (power flow)
+- multi-model (across models)
+- decision (what can be influenced)
+
+Dimensions of uncertainty (Pye, 2018)
+
+- technical (inexactness)
+- methodological (unreliability)
+- epistemological (ignorance)
+- societal (social robustness)
+
+Different time domains of uncertainty:
+
+- short-term: operation
+- long-term: planning
+
+Difference between epistemic and aleatory uncertainty (Pfenninger, 2014)
+
+- epistemic: more data/better models will reduce uncertainty
+- aleatory:  more data/better models will **not** reduce uncertainty
+
+Difference between parametric and structural uncertainty (extended from (DeCarolis, 2017))
+
+- parametric: technology cost, useable potentials, discount rate, weather year, climate change, electricity demand, (behavioural/social)
+- structural: power flow approximation, spatial and temporal aggregation, technology simplification (e.g. UC)
+
+Origin of cost uncertainty:
+
+- technological learning and rate of deployment are unknown
+- would be useful to identify regions in the parameter space which are very cheap
+- can aim for them with policy; "controllable uncertainty"
+
+Better to exclude discount rate in a capital intensive system (just a pre-factor to the objective).
+
+There are many hidden assumptions!
+
+"Although the task of uncertainty characterization can itself
+be seen as uncertain, exploring the nature of uncertainty is significantly more valuable than using deterministic, best-guess values." (Fraiture, 2020)
+
+"the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" (Yue, 2018)
+
+## Cost Data
+
+Main challenge is quantifying the input uncertainties! (Moret, 2017)
+
+Two main sources of uncertainty wrt technological learning (Tröndle, 2020)
+
+- future deployment rates unknown
+- learning rate unknown
+
+### Via Learning Curves
+
+Locate the status of learning curves for different technologies (fit learning parameter)
+
+- upper limit: capacity to supply the whole world
+- lower limit: today's capacity
+
+models "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" (Mattssen, 2019)
+
+To derive learning rates:
+
+- IRENA renewable cost database
+- www.energystorage.ninja
+
+### Maximum-Entropy Approach
+
+used in (Tröndle, 2020)
+
+https://de.wikipedia.org/wiki/Maximum-Entropie-Methode
+
+https://en.wikipedia.org/wiki/Principle_of_maximum_entropy
+
+from Bayesian statistics
+
+"assign an a-priori probability despite insufficient problem-specific information" (wiki)
+
+take samples; among the set of all trial probability distributions take the one with maximal information entropy (wiki)
+
+"the one that makes fewest assumptions about the true distribution of data" (wiki)
+
+"entropy maximization with no testable information respects the universal constraint that the sum of the probabilities is one. Under this constraint, the maximum entropy probability distribution is the uniform distribution" (wiki)
+
+### Distributions
+
+What are the distributions of technology cost projections?
+
+- uniform: (Moret, 2017) (Moret, 2016) (Shirizadeh, 2019) (Tröndle, 2020) (Pilpola, 2020) (Pizarro-Alonso, 2019) (Li, 2017) (Trutnevyte, 2013)
+- normal: (Mavromatidis, 2018)
+- triangle: (Li, 2020)
+
+always independently sampled; easy but incorrect: e.g. offshore and onshore wind
+
+The current spread of recent documented investment costs is close to uniform (Lopin, 2019)
+
+"difficult and possibly misleading to associate a PDF to a parameter with unknown PDF" (Moret, 2016)
+
+"The variance [..] was set according to the maturity of technologies" (Li, 2020)"
+
+"To date, a general methodology for uncertainty characterization, assessing parameter uncertainty by type and degree [..] is missing." (Moret, 2016)
+
+"Following a maximum entropy approach, we model [...] uncertainty with uniform distributions over ranges taken from the literature" (Tröndle, 2020)
+
+### Ranges
+
+"it is crucial to avoid an arbitrary a priori exclusion of parameters from the analysis" (Moret, 2017)
+
+take pessimistic cost assumptions from `technology-data` with option `expectation: pessimistic`
+
+- new with continuous updates since 2016
+- no ranges for H2 pipeline, HVAC, HVDC, PHS, hydro, nuclear, ror, rooftop PV
+- also checkout `./costcomparison.csv`
+
+(Tröndle, 2020) supplementary material has almost always more conservative values than pessmisitic DEA database; data mostly from ETIP
+
+| name           | min  | max  | unit      |
+|----------------|------|------|-----------|
+| discount       | 1.6  | 13.8 | % p.a.    |
+| utility PV     | 280  | 580  | EUR/kW    |
+| rooftop PV     | 760  | 1000 | EUR/kW    |
+| onwind         | 800  | 1700 | EUR/kW    |
+| offwind        | 1790 | 3270 | EUR/kW    |
+| battery power  | 31   | 141  | EUR/kW    |
+| battery energy | 36   | 166  | EUR/kWh   |
+| H2 power       | 1123 | 2100 | EUR/kW    |
+| H2 energy      | 6    | 12   | EUR/kWh   |
+| transmission   | 700  | 1080 | EUR/MW/km |
+
+JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators) is relatively old and conservative from 2014
+
+Danish Energy Agency technology cost database:
+
+- lower and higher bounds "shall be interpreted as representing probabilities corresponding to a 90% confidence interval"
+
+plus/minus 50% (Shirizadeh, 2019)
+
+mostly less than plus/minus 25% (Pizarro-Alonso, 2019)
+
+plus/minus 20% (Moret, 2017)
+
+previous studies have considered "relatively narrow range[s] of uncertainties" (Li, 2017)
+
+maybe: include transmission cost uncertainty by setting upper bound to 800 EUR/MW/km (which is twice our usual assumption; do this because Tröndle cost are much higher!)
+
+maybe: add 25% to rooftop PV cost (due to missing uncertainty ranges in DEA, similar to utility PV)
+
+Costs all the way to zero!
+
+# Senstivity Analysis
+
 ## Motivation
 
 In optimisation theory the KKT equations can tell us about the sensitivity of the optimal point to small changes in the constraints.
@@ -21,7 +179,7 @@ Explorative analysis.
 
 Guiding robust and comprehensive policy.
 
-What makes good policy advice?
+But what makes good policy advice?
 
 Where in parameter space is it cheap?
 
@@ -30,7 +188,7 @@ Where in parameter space is it cheap?
 - These cheap areas should then be targeted with policy (e.g. drive technology learning by subsidies)
 - smoothly leads up to future work with endogenous learning in multi-horizon investment planning!
 
-Do I need a richer set of technologies?
+Do I need a richer set of technologies? E.g.
 solar thermal, nuclear, CAES, separate hydrogen storage to fuel cell, electrolysis, gas turbine, cavern storage, steel tank?
 
 What is the relation between sensitivity analysis and stochastic and robust optimisation?
@@ -92,170 +250,7 @@ https://en.wikipedia.org/wiki/Pareto_efficiency
 
 https://en.wikipedia.org/wiki/Maxima_of_a_point_set
 
-## Uncertainty
-
-Sources of uncertainty (a la Chris Dent):
-
-- parametric (cost)
-- condition (boundary, initial)
-- functional (full feasible space not known)
-- stochastic (randomness)
-- solution (solver tolerance)
-- structural (power flow)
-- multi-model (across models)
-- decision (what can be influenced)
-
-Dimensions of uncertainty (Pye, 2018)
-
-- technical (inexactness)
-- methodological (unreliability)
-- epistemological (ignorance)
-- societal (social robustness)
-
-Different time domains of uncertainty:
-
-- short-term: operation
-- long-term: planning
-
-Difference between epistemic and aleatory uncertainty (Pfenninger, 2014)
-
-- epistemic: more data/better models will reduce uncertainty
-- aleatory:  more data/better models will **not** reduce uncertainty
-
-Difference between parametric and structural uncertainty (extended from (DeCarolis, 2017))
-
-- parametric: technology cost, useable potentials, discount rate, weather year, climate change, electricity demand, (behavioural/social)
-- structural: power flow approximation, spatial and temporal aggregation, technology simplification (e.g. UC)
-
-Origin of cost uncertainty:
-
-- technological learning and rate of deployment are unknown
-- would be useful to identify regions in the parameter space which are very cheap
-- can aim for them with policy; "controllable uncertainty"
-
-Better to exclude discount rate in a capital intensive system (just a pre-factor to the objective).
-
-There are many hidden assumptions!
-
-"Uncertainty characterization" (Fraiture, 2020)
-
-"Although the task of uncertainty characterization can itself
-be seen as uncertain, exploring the nature of uncertainty is significantly more valuable than using deterministic, best-guess values." (Fraiture, 2020)
-
-"the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" (Yue, 2018)
-
-## Cost Data
-
-Main challenge is quantifying the input uncertainties! (Moret, 2017)
-
-Two main sources of uncertainty wrt technological learning (Tröndle, 2020)
-
-- future deployment rates unknown
-- learning rate unknown
-
-### Via Learning Curves
-
-Locate the status of learning curves for different technologies (fit learning parameter)
-
-- upper limit: capacity to supply the whole world
-- lower limit: today's capacity
-
-models "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" (Mattssen, 2019)
-
-To derive learning rates:
-
-- IRENA renewable cost database
-- www.energystorage.ninja
-
-### Maximum-Entropy Method
-
-mentioned in (Tröndle, 2020)
-
-https://de.wikipedia.org/wiki/Maximum-Entropie-Methode
-
-https://en.wikipedia.org/wiki/Principle_of_maximum_entropy
-
-from Bayesian statistics
-
-"assign an a-priori probability despite insufficient problem-specific information" (wiki)
-
-take samples; among the set of all trial probability distributions take the one with maximal information entropy (wiki)
-
-"the one that makes fewest assumptions about the true distribution of data" (wiki)
-
-"entropy maximization with no testable information respects the universal constraint that the sum of the probabilities is one. Under this constraint, the maximum entropy probability distribution is the uniform distribution" (wiki)
-
-### Distributions
-
-What are the distributions of technology cost projections?
-
-- uniform: (Moret, 2017) (Moret, 2016) (Shirizadeh, 2019) (Tröndle, 2020) (Pilpola, 2020) (Pizarro-Alonso, 2019) (Li, 2017) (Trutnevyte, 2013)
-- normal: (Mavromatidis, 2018)
-- triangle: (Li, 2020)
-
-always independently sampled; easy but incorrect: e.g. offshore and onshore wind
-
-The current spread of recent documented investment costs is close to uniform (Lopin, 2019)
-
-"difficult and possibly misleading to associate a PDF to a parameter with unknown PDF" (Moret, 2016)
-
-"The variance [..] was set according to the maturity of technologies" (Li, 2020)"
-
-"To date, a general methodology for uncertainty characterization, assessing parameter uncertainty by type and degree [..] is missing." (Moret, 2016)
-
-"Following a maximum entropy approach, we model [...] uncertainty with uniform distributions over ranges taken from the literature" (Tröndle, 2020)
-
-Check how sensitive uncertainty propagation is wrt to the choice of distribution (e.g. normal vs uniform). What changes?
-
-### Ranges
-
-"it is crucial to avoid an arbitrary a priori exclusion of parameters from the analysis" (Moret, 2017)
-
-take cost assumptions from `technology-data` with option `expectation: pessimistic`
-
-- new with continuous updates since 2016
-- no ranges for H2 pipeline, HVAC, HVDC, PHS, hydro, nuclear, ror, rooftop PV
-- also checkout `./costcomparison.csv`
-
-(Tröndle, 2020) supplementary material has almost always more conservative values than pessmisitic DEA database; data mostly from ETIP
-
-| name           | min  | max  | unit      |
-|----------------|------|------|-----------|
-| discount       | 1.6  | 13.8 | % p.a.    |
-| utility PV     | 280  | 580  | EUR/kW    |
-| rooftop PV     | 760  | 1000 | EUR/kW    |
-| onwind         | 800  | 1700 | EUR/kW    |
-| offwind        | 1790 | 3270 | EUR/kW    |
-| battery power  | 31   | 141  | EUR/kW    |
-| battery energy | 36   | 166  | EUR/kWh   |
-| H2 power       | 1123 | 2100 | EUR/kW    |
-| H2 energy      | 6    | 12   | EUR/kWh   |
-| transmission   | 700  | 1080 | EUR/MW/km |
-
-JRC Energy Technology Reference Indicators (https://setis.ec.europa.eu/setis-output/energy-technology-reference-indicators)
-
-- relatively old and conservative from 2014
-
-
-Danish Energy Agency technology cost database:
-
-- lower and higher bounds "shall be interpreted as representing probabilities corresponding to a 90% confidence interval"
-
-plus/minus 50% (Shirizadeh, 2019)
-
-mostly less than plus/minus 25% (Pizarro-Alonso, 2019)
-
-plus/minus 20% (Moret, 2017)
-
-previous studies have considered "relatively narrow range[s] of uncertainties" (Li, 2017)
-
-maybe: include transmission cost uncertainty by setting upper bound to 800 EUR/MW/km (which is twice our usual assumption; do this because Tröndle cost are much higher!)
-
-maybe: add 25% to rooftop PV cost (due to missing uncertainty ranges in DEA, similar to utility PV)
-
-Costs all the way to zero? E.g. what happens with very cheap solar? Yes!
-
-## Sensitivity Analysis
+## Categories of Sensitivity Analysis
 
 no sensitivity analysis -> point-estimate method (Souroudi, 2013)
 
@@ -287,10 +282,30 @@ global sensitivity analysis
 - to identify interesting scenarios (Usher, 2015)
 - "quantifying the effects of random input variables onto the variance of the response of a mathematical model" (Sudret, 2008)
 - elementary effects method (Morris screening, one-at-a-time) to counteract high computational requirements (Usher, 2015) (Pizarro-Alonso, 2019) (Moret, 2016)
+- surrogate models using polynomial chaos expansion
 
 a good overview: https://uncertainpy.readthedocs.io/en/latest/theory.html
 
+## Local Sensitivity Analysis
+
+a la (Schlachtberger, 2018), but with higher resolution and 100% renewable
+
+use as build-up to global sensitivity analysis
+
+- nodes
+- temporal resolution (averaging, segmentation)
+- cost
+- potentials (offwind, onwind, solar)
+- line expansion (lv1.0 ... lcopt)
+- weather years
+- equity requirements (done already!)
+- emission reduction target
+
 ## Experimental Design
+
+improvements to random sampling!
+
+intendended to achieve "efficient coverage" (Usher, 2015)
 
 low-discrepancy Monte-Carlo (MC) sampling
 
@@ -298,17 +313,20 @@ low-discrepancy Monte-Carlo (MC) sampling
 - https://en.wikipedia.org/wiki/Low-discrepancy_sequence
 - https://en.wikipedia.org/wiki/Quasi-Monte_Carlo_method
 
-all these are intendended to achieve "efficient coverage" (Usher, 2015)
-
 using halton sequence
 
 alternatives are Latin hypercube sampling (Tröndle, 2020) and Method of Morris (Usher, 2015)
 
-Are LHS/Halton/Sobol sampling better than gridded sampling?
+Categories of sampling methods (following Palar, 2016):
+
+- structured: orthogonal polynomial roots, Newton-Cotes, sparse grid
+- unstructured: random, LHS, low-discrepancy
+
+unstructured types typically used for uniform distributions
 
 Discuss which are attractive and why!
 
-## Surrogate Modelling with Polynomical Chaos Expansion
+## Global Sensitivity Analysis with PCE Surrogates
 
 premise: outcome of original model cannot be obtained easily (e.g. computational constraints)
 
@@ -318,6 +336,8 @@ use cases: design space exploration, sensitivity analysis, what-if analyis
 
 consider only simplified/aggregated outputs, junk complicated models
 
+"reduce the number of deterministic evaluations while retaining accuracy" (Palar, 2016)
+
 only input/output behaviour is important (link to machine learning)
 
 scaling
@@ -325,7 +345,33 @@ scaling
 - number of inputs: adds more dimensions to uncertainty space, curse of dimensionality [12 in (Tröndle, 2020), 36 in (Pilpola, 2020)]
 - number of outputs: should scale well as each output has its own polynomial, are independent
 
+### Polynomial Chaos Expansion (PCE)
+
 Use PCE to build surrogate models for calculating Sobol sensitivity indices analytically as a post-processing (Sudret, 2008)
+
+- Hilbert space technique
+- idea: "expand random variables as a linear combination of orthogonal basis functions weighted by deterministic coefficients." (Mühlpfordt, 2019)
+- "A polynomial chaos expansion for a random variable is what a classic Fourier series is for a periodic signal" (Mühlpfordt, 2019)
+- "In practice the truncated PCE is used, meaning that only finitely many coefficients represent the random variable" (Mühlpford, 2019)
+- steps: find polynomial basis, calculate polynomial coefficients
+- techniques for finding coefficients:
+
+  - spectral projection: project response onto basis functions using inner products and orthogonal polynomials (Palar, 2016)
+  - point collocation: obtain coefficients by performing  regression (Palar, 2016)
+
+want to do non-intrusive (i.e. wrapping around model) point collocation (i.e. MC sampling) based on regression
+
+sparsity-of-effects principle:
+
+- "system can be represented using a small number or statistically significant effects" (Berchier, 2016)
+- in PCE: use only small number of polynomials from polynomial basis
+- achieved by adding regularisation/penalty term to regression to favour sparse solutions (e.g. LARS regression)
+
+over-sampling ratio (OSR):
+
+- ratio between number of samples and polynomial basis (Palar, 2016)
+- recommended is a value of 2 (Hoser, Walters, Balch via Palar, 2016)
+- too high OSR: very coarse approximation; too low OSR: risk of over-fitting (Palar, 2016)
 
 Relation of Polynomial Chaos and Principal Component Analysis:
 
@@ -359,11 +405,86 @@ Talk to People
 
 - Tim Tröndle, https://github.com/timtroendle/geographic-scale/
 - Stefano Marelli, UQLab
-- Till, PCE
+- Tillmann, PCE
+
+### Multi-Fidelity Approach
+
+following Jiant et al., 2019
+
+only high-fidelity for surrogate model is time-consuming,
+but only low-fidelity may result in distorted/inaccurate surrogate models
+
+"If LF model is much cheaper to evaluate than the HF model, then significant
+computational savings will be obtained" (Ng, 2012)
+
+integrate both with multi-fidelity approach: correct LF model such that LF output matches HF values
+
+build an own surrogate model for the correction function (i.e. "correction expansion") with identical polynomial basis
+
+rule: "polynomial term in the correction expansion has to e a subset of the LF expansion" (Palar, 2016)
+
+model fusion by joining both into a single expansion
+
+here another advantage of low-discrepancy sampling: HF sample is subset of LF sample
+
+"in cases with high correlation between LF an HF ($R^2 \geq 0.9$) the MF will very likely
+increase the approximation accuracy relative to single HF" (Palar, 2016)
+
+__Additive scaling approach__
+
+Correct for the *difference* between HF samples and LF surrogate at HF sample points
+
+$$
+\tilde{f}_{MF}(\xi) = \tilde{f}_{LF} + \tilde{\alpha}(\xi)
+$$
+
+where $\tilde{\alpha}(\xi)$ is the additive scaling function. The sampled scaling factors are calculated with
+
+$$
+\alpha(\xi) = f_{HF}(\xi) - \tilde{f}_{LF}(\xi)
+$$
+
+Construct scaling function $\tilde{\alpha}(\xi)$ from scaling factors $\alpha(\xi)$ via some regression fit.
+
+__Multiplicative scaling approach__
+
+Correct for the *ratio* between HF samples and LF surrogate at HF sample points
+
+$$
+\tilde{f}_{MF}(\xi) = \tilde{f}_{LF} \cdot \tilde{\beta}(\xi)
+$$
+
+where $\tilde{\beta}(\xi)$ is the scaling function. The sampled scaling factors are calculated with
+
+$$
+\beta(\xi) = \frac{ f_{HF}(\xi) }{ \tilde{f}_{LF}(\xi) }
+$$
+
+Construct scaling function $\tilde{\beta}(\xi)$ from scaling factors $\beta(\xi)$ via some regression fit.
+
+__Hybrid scaling approach__
+
+Combine both additively via weighting factor $\omega$ as convex combination:
+
+$$
+\tilde{f}_{MF}(\xi) = \omega \left( \tilde{f}_{LF}(\xi) + \tilde{\alpha}(\xi) \right) + (1-\omega) \left( \tilde{f}_{LF}(\xi) \cdot \tilde{\beta}(\xi) \right)
+$$
+
+There is flexibility in the choice of $\omega$. Idea: compute $\omega$ "based on a regularisation of the combined correction function to prevent overfitting" (Ng, 2012); "minimise mean-square magnitude of add/mul correction
+
+$$
+\min_{\omega\in[0,1]} \lang\: \omega^2 \alpha^2(\xi),\: \omega^2 \beta^2(\xi) \:\rang
+$$
+
+leading to a balance between add/mul correction
+
+$$
+\omega = \frac{\lang \beta^2(\xi) \rang}{\lang \alpha^2(\xi) \rang + \lang \beta^2(\xi) \rang}
+$$
 
 ## Surrogate Modelling with Neural Networks
 
-as a simple benchmark case
+as a simple benchmark case? rather not.
 
 Kaleb ML hints
 
@@ -372,77 +493,6 @@ Kaleb ML hints
 - normally 2-3 hidden layers
 - 1000 samples could work, 100 could be too low
 
-## Multi-fidelity Approach
-
-following Jiant et al., 2019
-
-only high-fidelity for surrogate model is time-consuming, but only low-fidelity may result in distorted/inaccurate surrogate models
-
-integrate both with multi-fidelity approach
-
-Via space-mapping
-
-- map HF parameter space to LF parameter space
-- map LS output space to HF output space
-
-Via co-kriging
-
-- sounds complicated
-
-Via scaling function
-
-- multiplicative, additive, both
-- multiplicative may be invalid if some values are 0
-
-__Multiplicative scaling approach__
-
-Correct for the *ratio* between HF samples and LF surrogate at HF sample points
-
-$$
-\hat{f}_{MF}(x) = \hat{f}_{LF} \cdot \hat{\beta}(x)
-$$
-
-where $\hat{\beta}(x)$ is the scaling function. The sampled scaling factors are calculated with
-
-$$
-\beta(x) = \frac{ f_{HF}(x) }{ \hat{f}_{LF}(x) }
-$$
-
-Construct scaling function $\hat{\beta}(x)$ from scaling factors $\beta(x)$ via some regression fit.
-
-__Additive scaling approach__
-
-Correct for the *difference* between HF samples and LF surrogate at HF sample points
-
-$$
-\hat{f}_{MF}(x) = \hat{f}_{LF} + \hat{C}(x)
-$$
-
-where $\hat{C}(x)$ is the additive scaling function. The sampled scaling factors are calculated with
-
-$$
-C(x) = f_{HF}(x) - \hat{f}_{LF}(x)
-$$
-
-Construct scaling function $\hat{C}(x)$ from scaling factors $C(x)$ via some regression fit.
-
-__Hybrid scaling approach__
-
-Combine both additively via weighting factor $\omega$:
-
-$$
-\hat{f}_{MF}(x) = \alpha \left( \hat(f)_{LF} \cdot \hat{\beta}(x) \right) + (1-\omega) \left( \hat(f)_{LF} + \hat{C}(x) \right)
-$$
-
-## Reconstruction
-
-When using the surrogate model to determine the optimised system capacities
-from a particular set of cost assumptions, we do not get the full original model outputs.
-
-If we are interested in those, we can reconstruct these selectively
-by adding the aggregate outcomes as `extra_functionality` constraints (e.g. onwind p_nom_opt = XXX GW) and run the full optimisation.
-
-Caveat: due to inaccuracies of the surrogate model, one may need load shedding or other forms of slack.
 
 ## Conclusions
 
@@ -450,21 +500,6 @@ one of the best ways to make system cheaper is just to make offshore wind cheape
 which has high acceptance and big cost reduction potentials AND it has one of the biggest impacts on TSC.
 
 by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band (this is as expected)
-
-# Local Sensitivity Analysis
-
-a la (Schlachtberger, 2018), but with higher resolution and 100% renewable
-
-use as build-up to global sensitivity analysis
-
-- nodes
-- temporal resolution (averaging, segmentation)
-- cost
-- potentials (offwind, onwind, solar)
-- line expansion (lv1.0 ... lcopt)
-- weather years
-- equity requirements (done already!)
-- emission reduction target
 
 # Near-Optimal
 
@@ -474,19 +509,19 @@ more detailed regional resolution for technology aggregation (e.g. min/max solar
 
 6 Regions variant:
 
-Western: GB|IE|FR|NL|BE|LU
-Central: DE|AT|CH
-Eastern: PL|CZ|HU|SK|LT|LV|EE
-Northern: NO|SE|DK|FI
-Southern: PT|ES|IT|GR|MT
-South-Eastern: RO|AL|MK|BG|RS|HR|SI|BA|ME
+- Western: GB|IE|FR|NL|BE|LU
+- Central: DE|AT|CH
+- Eastern: PL|CZ|HU|SK|LT|LV|EE
+- Northern: NO|SE|DK|FI
+- Southern: PT|ES|IT|GR|MT
+- South-Eastern: RO|AL|MK|BG|RS|HR|SI|BA|ME
 
 4 regions variant:
 
-Northern: NO|SE|DK|FI|LT|LV|EE
-Southern: PT|ES|IT|GR|AL|MK|BG|RS|HR|SI|BA|ME
-Western: CH|GB|IE|FR|NL|BE|LU
-Eastern: DE|AT|RO|PL|CZ|HU|SK
+- Northern: NO|SE|DK|FI|LT|LV|EE
+- Southern: PT|ES|IT|GR|AL|MK|BG|RS|HR|SI|BA|ME
+- Western: CH|GB|IE|FR|NL|BE|LU
+- Eastern: DE|AT|RO|PL|CZ|HU|SK
 
 ## More Weather Years
 
@@ -545,6 +580,16 @@ interpretation of marrying near-optimal analysis with parametric uncertainty (wh
 "SPORES are relatively insensitive to technology cost" (Lombardi, 2020)
 
 Trutnevyte's EXPANSE combines MGA-type and MC-type uncertainty analysis in total 800 solutions (Li, 2017)
+
+# Reconstruction and Disaggregation
+
+When using the surrogate model to determine the optimised system capacities
+from a particular set of cost assumptions, we do not get the full original model outputs.
+
+If we are interested in those, we can reconstruct these selectively
+by adding the aggregate outcomes as `extra_functionality` constraints (e.g. onwind p_nom_opt = XXX GW) and run the full optimisation.
+
+Caveat: due to inaccuracies of the surrogate model, one may need load shedding or other forms of slack.
 
 # Software
 
