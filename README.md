@@ -473,7 +473,7 @@ $$
 There is flexibility in the choice of $\omega$. Idea: compute $\omega$ "based on a regularisation of the combined correction function to prevent overfitting" (Ng, 2012); "minimise mean-square magnitude of add/mul correction
 
 $$
-\min_{\omega\in[0,1]} \lang\: \omega^2 \alpha^2(\xi),\: \omega^2 \beta^2(\xi) \:\rang
+\min_{\omega\in[0,1]} \lang\: \omega^2 \alpha^2(\xi),\: (1-\omega)^2 \beta^2(\xi) \:\rang
 $$
 
 leading to a balance between add/mul correction
