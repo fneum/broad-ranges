@@ -503,6 +503,8 @@ by reducing capital cost of wind, not only expected costs decrease, but also the
 
 # Near-Optimal
 
+- https://en.wikipedia.org/wiki/Multi-objective_optimization epsilon-constraint method!
+
 ## Regional Analysis
 
 more detailed regional resolution for technology aggregation (e.g. min/max solar in Southern Europe)
@@ -544,7 +546,7 @@ redo with sector-coupling version
 
 - "if we accept very slightly higher costs - insignificantly so in the big scheme of things - the flexibility to build an energy network that is politically acceptable increases substantially" @jmkorhon_en
 
-- "Spanning a space of options for society and politics to work in instead of single least-cost-model-oitcomes. Should be a benchmark method for every study in my opinion." @alxrdk
+- "Spanning a space of options for society and politics to work in instead of single least-cost-model-outcomes. Should be a benchmark method for every study in my opinion." @alxrdk
 
 - "bridging optimization modeling and actual, messy real-world decision making" @EmilDimanchev
 
