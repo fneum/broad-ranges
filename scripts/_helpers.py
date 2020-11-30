@@ -56,6 +56,16 @@ class NamedPoly:
     def __call__(self, *args):
         return pd.Series(self.poly(*args), index=self.names)
 
+    def __add__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly + other.poly
+        return NamedPoly(poly, self.names)
+
+    def __sub__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly - other.poly
+        return NamedPoly(poly, self.names)
+
     @classmethod
     def from_txt(cls, fn):
         text = open(fn).read()

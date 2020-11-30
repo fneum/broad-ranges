@@ -10,7 +10,11 @@ __copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
 sys.path.insert(0, os.getcwd() + "/subworkflows/pypsa-eur/scripts")
 sys.path.insert(0, os.getcwd() + "/subworkflows/pypsa-eur-mga/scripts")
 
-from solve_network import add_battery_constraints
+from solve_network import (
+    add_battery_constraints,
+    add_EQ_constraints,
+    add_CCL_constraints,
+)
 
 from generate_alternative import (
     process_objective_wildcard,
@@ -19,8 +23,10 @@ from generate_alternative import (
     solve_network,
 )
 
+import logging
+logger = logging.getLogger(__name__)
 
-def to_mga_model(n, sns):
+def make_mga_model(n, sns):
     """Calls extra functionality modules."""
 
     obj_wc = snakemake.wildcards.objective.split("+")
@@ -38,6 +44,8 @@ def to_mga_model(n, sns):
         if "EQ" in o:
             add_EQ_constraints(n, o)
 
+    logger.info("finished extra functionality")
+
 
 if __name__ == "__main__":
 
@@ -46,11 +54,16 @@ if __name__ == "__main__":
     solve_opts = snakemake.config["solving"]["options"]
     opts = snakemake.wildcards.opts.split("-")
 
+    # clip marginal cost
+    threshold = 0.05
+    n.generators.loc[n.generators.marginal_cost<=threshold, "marginal_cost"] = 0.
+    n.storage_units.loc[n.storage_units.marginal_cost<=threshold, "marginal_cost"] = 0.
+
     n = solve_network(
         n,
         config=snakemake.config,
         opts=opts,
-        extra_functionality=to_mga_model,
+        extra_functionality=make_mga_model,
         skip_objective=True,
     )
 

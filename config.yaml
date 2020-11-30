@@ -3,8 +3,8 @@ scenarios:
     clusters: 37
     opts: 4H
   high:
-    clusters: 100
-    opts: 1H
+    clusters: 128
+    opts: 2H
 
 nearoptimal:
   epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
@@ -28,11 +28,11 @@ nearoptimal:
 
 experimental_design:
   low:
-    size: 20
+    size: 300
     rule: halton
     round: 3
   high:
-    size: 5
+    size: 10
     rule: halton
     round: 3
 
@@ -78,11 +78,15 @@ solving:
     threads: 4
     method: 2 # barrier
     crossover: 0
-    BarConvTol: 1.e-4
-    FeasibilityTol: 1.e-4
+    BarConvTol: 1.e-3
+    FeasibilityTol: 1.e-3
     AggFill: 0
     PreDual: 0
     GURO_PAR_BARDENSETHRESH: 200
+    BarHomogeneous: 1
+    #NumericFocus: 2 # for numeric
+    #Presolve: 0 # for numeric
+    #Aggregate: 0 # for numeric
 
 train_test_split:
   train_size: 0.8

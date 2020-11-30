@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     cf = snakemake.config
     uncertainties = cf["uncertainties"]
-    epsilons = cf["scenarios"]["epsilon"]
+    epsilons = cf["nearoptimal"]["epsilon"]
 
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
