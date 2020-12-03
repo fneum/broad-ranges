@@ -28,18 +28,23 @@ def plot_histograms(truth, predictions, fn=None):
     for i, c in enumerate(truth.columns):
         ax = axes[int(i / 3)][i % 3]
         ax.set_title(c)
-        ax.set_ylim([0, 0.1])
-        bins = np.arange(-70, 71, 5)
+        ax.set_ylim([0, 0.025])
+        bins = np.arange(-200, 201, 10)
         if c == "tsc":
-            ax.set_xlim([-2.5, 2.5])
+            ax.set_xlim([-5.5, 5.5])
             ax.set_ylim([0, 0.7])
             ax.set_xlabel("bn EUR p.a.")
-            bins = np.arange(-2.5, 2.6, 0.25)
+            bins = np.arange(-5.5, 5.6, 0.25)
         elif c == "transmission":
             ax.set_xlim([-75, 75])
             ax.set_xlabel("TWkm")
+        elif c == "gini":
+            ax.set_xlim([-0.2, 0.2])
+            ax.set_xlabel("gini index [-]")
+            ax.set_ylim([0, 20])
+            bins = np.arange(-0.2, 0.25, 0.01)
         else:
-            ax.set_xlim([-75, 75])
+            ax.set_xlim([-200, 200])
             ax.set_xlabel("GW")
         for j, p in enumerate(predictions):
             (p - truth)[c].plot.hist(
