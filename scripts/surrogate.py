@@ -100,7 +100,9 @@ if __name__ == "__main__":
     model = build_surrogate(order, distribution, train_set, sklearn_model)
 
     filename = snakemake.input.get("high", None)
-    model = apply_multifidelity(model, filename, dimension, sense, order, distribution)
+    model = apply_multifidelity(
+        model, "additive", filename, dimension, sense, order, distribution
+    )
 
     model.to_txt(snakemake.output.polynomial, fmt="%.4f")
 
