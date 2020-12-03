@@ -21,8 +21,6 @@ nearoptimal:
     - StorageUnit+H2+max
     - StorageUnit+battery+min
     - StorageUnit+battery+max
-    #- StorageUnit++min
-    #- StorageUnit++max
     - Transmission++min
     - Transmission++max
 
@@ -39,19 +37,19 @@ experimental_design:
 uncertainties:
     onwind:
       type: Uniform
-      args: [0,1]
+      args: [0.670,1]
     offwind:
       type: Uniform
-      args: [0,1]
+      args: [0.726,1]
     solar:
       type: Uniform
-      args: [0,1]
+      args: [0.679,1]
     H2:
       type: Uniform
-      args: [0,1]
+      args: [0.429,1]
     battery:
       type: Uniform
-      args: [0,1]
+      args: [0.240,1]
 
 multifidelity:
   approach: "hybrid"
@@ -92,17 +90,9 @@ train_test_split:
   train_size: 0.8
   shuffle: true
 
-neural_network:
-  solver: adam
-  hidden_layer_sizes: [50,]
-  max_iter: 100000
-  early_stopping: false
-  tol: 1.e-4
-  n_iter_no_change: 10
-
-with_sklearn:
-  method: Lars
-  fit_intercept: false
+# with_sklearn:
+#   method: Lasso
+#   fit_intercept: true
 
 csvargs:
   float_format: "%.4f"

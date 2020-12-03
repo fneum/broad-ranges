@@ -83,16 +83,3 @@ rule calculate_nearoptimal_sensitivity_indices:
     threads: 1
     resources: mem=8000
     script: "scripts/nearoptimal_sobol.py"
-
-
-rule build_neural_network:
-    input: "results/dataset.csv"
-    output:
-        ann="results/ann/neural_network-{sense}-{dimension}.pickle",
-        train_errors="results/ann/train-errors-{sense}-{dimension}.csv",
-        test_errors="results/ann/test-errors-{sense}-{dimension}.csv",
-        plot="results/ann/histogram-{sense}-{dimension}.pdf"
-    threads: 1
-    resources: mem=8000
-    script: "scripts/neural_network.py"
-
