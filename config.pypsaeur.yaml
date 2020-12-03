@@ -171,8 +171,15 @@ load:
 
 costs:
   year: 2030
-  discountrate: 0.07 # From a Lion Hirth paper, also reflects average of Noothout et al 2016
-  USD2013_to_EUR2013: 0.7532 # [EUR/USD] ECB: https://www.ecb.europa.eu/stats/exchange/eurofxref/html/eurofxref-graph-usd.en.html
+  version: v0.1.0
+  rooftop_share: 0.5
+  fill_values:
+    FOM: 0
+    VOM: 0
+    efficiency: 1
+    investment: 0
+    lifetime: 25
+    "discount rate": 0.07
   marginal_cost:
     solar: 0.01
     onwind: 0.015
@@ -330,6 +337,7 @@ plotting:
     "HVDC links" : "#8a1caf"
     "DC-DC" : "#8a1caf"
     "DC link" : "#8a1caf"
+    "gini" : "#ababab"
   nice_names:
     OCGT: "Open-Cycle Gas"
     CCGT: "Combined-Cycle Gas"
@@ -347,6 +355,7 @@ plotting:
     transmission: "Transmission"
     tsc: "Total System Cost"
     wind: "Any Wind"
+    gini: "Gini Index"
   nice_names_n:
     OCGT: "Open-Cycle\nGas"
     CCGT: "Combined-Cycle\nGas"
