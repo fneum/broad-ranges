@@ -136,6 +136,8 @@ def build_ann_prediction(model, samples, mirror):
 
 
 def build_pce_prediction(model, samples):
-    prediction = samples.apply(lambda s: model(*s), result_type="expand")
+    prediction = samples.apply(lambda s: model(*s), result_type="expand").clip(
+        lower=0.0
+    )
     prediction.columns = pd.MultiIndex.from_frame(samples.astype(str).T)
     return prediction.T
