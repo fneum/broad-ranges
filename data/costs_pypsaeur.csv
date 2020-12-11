@@ -105,3 +105,4 @@ solar-utility,FOM,3.0,%/year,ETIP PV
 solar-utility,investment,425.0,EUR/kWel,ETIP PV
 solar-utility,lifetime,25.0,years,IEA2010
 uranium,fuel,3.0,EUR/MWhth,DIW DataDoc http://hdl.handle.net/10419/80348
+gas,fuel,21.6,EUR/MWhth,NA,NA

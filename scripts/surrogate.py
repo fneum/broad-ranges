@@ -55,16 +55,16 @@ def apply_multifidelity(model, kind, filename, dimension, sense, order, distribu
         return omega
 
     if kind == "additive":
-        model += additive_correction()
+        corrected_model = model + additive_correction()
 
     elif kind == "multiplicative":
-        model *= multiplicative_correction()
+        corrected_model = model * multiplicative_correction()
 
     elif kind == "hybrid":
         add_correction = additive_correction()
         mul_correction = multiplicative_correction()
         omega = optimal_balance(add_correction, mul_correction)
-        model = omega * (model + add_correction) + (1 - omega) * (
+        corrected_model = omega * (model + add_correction) + (1 - omega) * (
             model * mul_correction
         )
 
@@ -73,7 +73,7 @@ def apply_multifidelity(model, kind, filename, dimension, sense, order, distribu
             f"Multifidelity kind must be in ['additive', 'multiplicative', 'hybrid']. Is {kind}"
         )
 
-    return model
+    return corrected_model
 
 
 if __name__ == "__main__":
@@ -82,9 +82,13 @@ if __name__ == "__main__":
     uncertainties = cf["uncertainties"]
     epsilons = cf["nearoptimal"]["epsilon"]
 
-    order = int(snakemake.wildcards.order)
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
+
+    if dimension == "cost":
+        cf_surrogate = cf["surrogate"]["cost"]
+    else:
+        cf_surrogate = cf["surrogate"]["epsilon"]
 
     dataset = h.load_dataset(snakemake.input["low"], dimension, sense)
 
@@ -96,17 +100,13 @@ if __name__ == "__main__":
 
     # Model
 
+    order = cf_surrogate["order"]
+
     sklearn_model = build_sklearn_model(cf)
     model = build_surrogate(order, distribution, train_set, sklearn_model)
+    model.to_txt(snakemake.output.low_polynomial, fmt="%.4f")
 
-    filename = snakemake.input.get("high", None)
-    model = apply_multifidelity(
-        model, "additive", filename, dimension, sense, order, distribution
-    )
-
-    model.to_txt(snakemake.output.polynomial, fmt="%.4f")
-
-    # Evaluation
+    # Evaluation (based on low-fidelity data)
 
     train_samples = h.multiindex2df(train_set.index)
     train_predictions = h.build_pce_prediction(model, train_samples)
@@ -124,3 +124,16 @@ if __name__ == "__main__":
     h.calculate_errors(test_predictions, test_set).to_csv(
         snakemake.output.test_errors, **cf["csvargs"]
     )
+
+    # Multifidelity
+
+    filename = snakemake.input.get("high", None)
+    cf_correction = cf_surrogate["correction"]
+    approach = cf_correction["approach"]
+    order = cf_correction["order"]
+
+    model = apply_multifidelity(
+        model, approach, filename, dimension, sense, order, distribution
+    )
+
+    model.to_txt(snakemake.output.high_polynomial, fmt="%.4f")

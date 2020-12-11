@@ -51,11 +51,20 @@ uncertainties:
       type: Uniform
       args: [0.240,1]
 
-multifidelity:
-  approach: "hybrid"
-
 enable:
-  collect_samples: true
+  collect_samples: false
+
+surrogate:
+  cost:
+    order: 3
+    correction:
+      approach: "additive"
+      order: 2
+  epsilon:
+    order: 5
+    correction:
+      approach: "additive"
+      order: 3
 
 lines:
   s_nom_add: 8000
@@ -91,8 +100,8 @@ train_test_split:
   shuffle: true
 
 # with_sklearn:
-#   method: Lasso
-#   fit_intercept: true
+#   method: Lars
+#   fit_intercept: false
 
 csvargs:
   float_format: "%.4f"
