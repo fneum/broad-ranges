@@ -52,11 +52,11 @@ rule build_surrogate_model:
     input:
         **{fidelity: "results/dataset_" + fidelity +".csv" for fidelity in config["scenarios"].keys()}
     output:
-        low_polynomial="results/pce/polynomial-low-{sense}-{dimension}.txt",
-        high_polynomial="results/pce/polynomial-high-{sense}-{dimension}.txt",
-        train_errors="results/pce/train-errors-{sense}-{dimension}.csv",
-        test_errors="results/pce/test-errors-{sense}-{dimension}.csv",
-        plot="results/pce/histogram-{sense}-{dimension}.pdf"
+        low_polynomial="results/pce/polynomial-low-{sense}-{dimension}-{epsilon}.txt",
+        high_polynomial="results/pce/polynomial-high-{sense}-{dimension}-{epsilon}.txt",
+        train_errors="results/pce/train-errors-{sense}-{dimension}-{epsilon}.csv",
+        test_errors="results/pce/test-errors-{sense}-{dimension}-{epsilon}.csv",
+        plot="results/pce/histogram-{sense}-{dimension}-{epsilon}.pdf"
     threads: 1
     resources: mem=8000
     script: "scripts/surrogate.py"
@@ -64,10 +64,11 @@ rule build_surrogate_model:
 
 rule build_all_surrogates:
     input:
-        epsilon=expand("results/pce/polynomial-high-{sense}-{dimension}.txt",
+        epsilon=expand("results/pce/polynomial-high-{sense}-{dimension}-{epsilon}.txt",
                dimension=["onwind", "offwind", "wind", "solar", "transmission", "H2", "battery"],
-               sense=["min", "max"]),
-        cost="results/pce/polynomial-high-min-cost.txt"
+               sense=["min", "max"],
+               epsilon=config["nearoptimal"]["epsilon"]),
+        cost="results/pce/polynomial-high-min-cost-0.0.txt"
 
 
 # ruleorder: calculate_sensitivity_indices > calculate_nearoptimal_sensitivity_indices

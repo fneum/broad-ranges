@@ -30,13 +30,21 @@ def build_sklearn_model(cf):
     return getattr(lm, method)(**with_sklearn)
 
 
-def apply_multifidelity(model, kind, filename, dimension, sense, order, distribution):
+def apply_multifidelity(
+    model, kind, filename, dimension, sense, epsilon, order, distribution
+):
     if filename is None:
-        return
+        return model
 
-    hf_dataset = h.load_dataset(filename, dimension, sense)
+    hf_dataset = h.load_dataset(filename, dimension, sense, epsilon)
     hf_samples = h.multiindex2df(hf_dataset.index)
     lf_dataset = h.build_pce_prediction(model, hf_samples)
+
+    # check for solutions with numerical trouble
+    if dimension != "cost":
+        hf_opt_dataset = h.load_dataset(filename, "cost", "min")
+        sel = hf_dataset[dimension] == hf_opt_dataset[dimension]
+        hf_dataset.loc[sel] = 0.0  # empirical
 
     def additive_correction():
         scaling_factors = hf_dataset - lf_dataset
@@ -78,29 +86,22 @@ def apply_multifidelity(model, kind, filename, dimension, sense, order, distribu
 
 if __name__ == "__main__":
 
-    cf = snakemake.config
-    uncertainties = cf["uncertainties"]
-    epsilons = cf["nearoptimal"]["epsilon"]
-
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
+    epsilon = snakemake.wildcards.epsilon
 
-    if dimension == "cost":
-        cf_surrogate = cf["surrogate"]["cost"]
-    else:
-        cf_surrogate = cf["surrogate"]["epsilon"]
+    cf = snakemake.config
+    uncertainties = cf["uncertainties"]
+    surrogate_opts = cf["surrogate"]
+    order = surrogate_opts["order"]
 
-    dataset = h.load_dataset(snakemake.input["low"], dimension, sense)
+    dataset = h.load_dataset(snakemake.input["low"], dimension, sense, epsilon)
 
-    if dimension != "cost":
-        uncertainties["epsilon"] = dict(type="Uniform", args=[0, max(epsilons)])
     distribution = h.NamedJ(uncertainties)
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])
 
     # Model
-
-    order = cf_surrogate["order"]
 
     sklearn_model = build_sklearn_model(cf)
     model = build_surrogate(order, distribution, train_set, sklearn_model)
@@ -128,12 +129,11 @@ if __name__ == "__main__":
     # Multifidelity
 
     filename = snakemake.input.get("high", None)
-    cf_correction = cf_surrogate["correction"]
-    approach = cf_correction["approach"]
-    order = cf_correction["order"]
+    c_kind = surrogate_opts["correction"]["kind"]
+    c_order = surrogate_opts["correction"]["order"]
 
     model = apply_multifidelity(
-        model, approach, filename, dimension, sense, order, distribution
+        model, c_kind, filename, dimension, sense, epsilon, c_order, distribution
     )
 
     model.to_txt(snakemake.output.high_polynomial, fmt="%.4f")

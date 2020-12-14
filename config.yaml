@@ -55,16 +55,10 @@ enable:
   collect_samples: false
 
 surrogate:
-  cost:
-    order: 3
-    correction:
-      approach: "additive"
-      order: 2
-  epsilon:
-    order: 4
-    correction:
-      approach: "additive"
-      order: 3
+  order: 3
+  correction:
+    kind: "additive"
+    order: 2
 
 lines:
   s_nom_add: 8000

@@ -93,7 +93,7 @@ class NamedPoly:
         numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
-def load_dataset(fn, obj="cost", sense="min"):
+def load_dataset(fn, obj="cost", sense="min", eps=None):
 
     raw_df = pd.read_csv(fn, index_col=0, header=list(range(8))).T
 
@@ -103,6 +103,10 @@ def load_dataset(fn, obj="cost", sense="min"):
         df.index = df.index.droplevel(level="epsilon")
     else:
         df = df.append(raw_df.xs(["cost", "min"], level=["objective", "sense"]))
+        if eps is not None:
+            if not isinstance(eps, str):
+                eps = str(eps)
+            df = df.xs(eps, level="epsilon")
 
     return df
 
