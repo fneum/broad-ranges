@@ -61,7 +61,7 @@ surrogate:
       approach: "additive"
       order: 2
   epsilon:
-    order: 5
+    order: 4
     correction:
       approach: "additive"
       order: 3
