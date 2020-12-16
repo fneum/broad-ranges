@@ -62,21 +62,3 @@ def plot_histograms(truth, predictions, fn=None):
     axes[2, 2].legend()
     if fn is not None:
         plt.savefig(fn, bbox_inches="tight")
-
-
-def plot_sobol(data, fn=None):
-    fig, ax = plt.subplots(figsize=(5, 8))
-    sns.heatmap(
-        data,
-        square=True,
-        cmap="Blues",
-        vmax=1,
-        vmin=0,
-        annot=True,
-        fmt=".2f",
-        cbar=False,
-    )
-    plt.ylabel("inputs")
-    plt.xlabel("outputs")
-    if fn is not None:
-        plt.savefig(fn, bbox_inches="tight")

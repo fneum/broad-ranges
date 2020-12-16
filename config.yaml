@@ -7,7 +7,7 @@ scenarios:
     opts: 2H
 
 nearoptimal:
-  epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
+  epsilon: [0.01, 0.02, 0.04, 0.06, 0.08] # skips nearoptimal if empty
   objective:
     #- Generator+offwind+min
     #- Generator+offwind+max
@@ -58,7 +58,7 @@ surrogate:
   order: 3
   correction:
     kind: "additive"
-    order: 2
+    order: 1
 
 lines:
   s_nom_add: 8000
