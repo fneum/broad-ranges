@@ -31,12 +31,21 @@ def build_sklearn_model(cf):
 
 
 def apply_multifidelity(
-    model, kind, filename, dimension, sense, epsilon, order, distribution
+    model,
+    kind,
+    filename,
+    dimension,
+    sense,
+    epsilon,
+    fixed,
+    position,
+    order,
+    distribution,
 ):
     if filename is None:
         return model
 
-    hf_dataset = h.load_dataset(filename, dimension, sense, epsilon)
+    hf_dataset = h.load_dataset(filename, dimension, sense, epsilon, fixed, position)
     hf_samples = h.multiindex2df(hf_dataset.index)
     lf_dataset = h.build_pce_prediction(model, hf_samples)
 
@@ -89,13 +98,21 @@ if __name__ == "__main__":
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
     epsilon = snakemake.wildcards.epsilon
+    fixed = snakemake.wildcards.fixed
+    position = snakemake.wildcards.position
+
+    if not fixed:
+        fixed = "none"
+        position = None
 
     cf = snakemake.config
     uncertainties = cf["uncertainties"]
     surrogate_opts = cf["surrogate"]
     order = surrogate_opts["order"]
 
-    dataset = h.load_dataset(snakemake.input["low"], dimension, sense, epsilon)
+    dataset = h.load_dataset(
+        snakemake.input["low"], dimension, sense, epsilon, fixed, position
+    )
 
     distribution = h.NamedJ(uncertainties)
 
@@ -133,7 +150,16 @@ if __name__ == "__main__":
     c_order = surrogate_opts["correction"]["order"]
 
     model = apply_multifidelity(
-        model, c_kind, filename, dimension, sense, epsilon, c_order, distribution
+        model,
+        c_kind,
+        filename,
+        dimension,
+        sense,
+        epsilon,
+        fixed,
+        position,
+        c_order,
+        distribution,
     )
 
     model.to_txt(snakemake.output.high_polynomial, fmt="%.4f")

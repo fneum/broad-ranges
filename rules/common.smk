@@ -1,9 +1,11 @@
 """Helper functions that are called from within the workflow definitions."""
 
 import sys, os
+
 sys.path.insert(0, os.getcwd() + "/scripts")
 
 import _helpers as h
+
 
 def memory(w):
     """
@@ -48,5 +50,45 @@ def experimental_design(w):
         filename = "results/networks/nearoptimal/elec_s_{clusters}_ec_lcopt_{opts}_E{epsilon}_O{objective}.nc"
         inputs += expand(filename, **scenarios)
 
+    if "dependencies" in config.keys():
+        dependencies = config["dependencies"]
+        filename = "results/networks/dependencies/elec_s_{clusters}_ec_lcopt_{opts}_E{epsilon}_O{objective}_F{fixedcarrier}_P{position}.nc"
+        partial = expand(
+            filename,
+            clusters=scenarios["clusters"],
+            opts=scenarios["opts"],
+            epsilon=dependencies["epsilon"],
+            position=dependencies["position"],
+            allow_missing=True,
+        )
+        for objective, fixedcarrier in dependencies["combinations"]:
+            inputs += [
+                fn.format(objective=objective, fixedcarrier=fixedcarrier)
+                for fn in partial
+            ]
+
     return inputs
 
+
+def dependency_surrogates(w):
+    if not "dependencies" in config.keys():
+        return []
+
+    dependencies = config["dependencies"]
+    filename = (
+        "results/pce/polynomial-high-{sense}-{dimension}-{epsilon}{fixed}{position}.txt"
+    )
+    partial = expand(
+        filename,
+        epsilon=dependencies["epsilon"],
+        position=dependencies["position"],
+        sense=["min", "max"],
+        allow_missing=True
+    )
+    inputs = []
+    for objective, fixedcarrier in dependencies["combinations"]:
+        swept = objective.split("+")[1]
+        fixed = fixedcarrier.split("+")[1]
+        inputs += [fn.format(dimension=swept, fixed=fixed) for fn in partial]
+
+    return inputs
