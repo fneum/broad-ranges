@@ -24,13 +24,25 @@ nearoptimal:
     - Transmission++min
     - Transmission++max
 
+dependencies:
+  epsilon: [0.06]
+  position: [0.0, 0.25 ,0.5 ,0.75 ,1.0]
+  combinations:
+    # [{objective}, {fixedcarrier}]
+    - [Generator+wind+min, Generator+solar]
+    - [Generator+wind+max, Generator+solar]
+    - [StorageUnit+H2+min, StorageUnit+battery]
+    - [StorageUnit+H2+max, StorageUnit+battery]
+    - [Generator+offwind+min, Generator+onwind]
+    - [Generator+offwind+max, Generator+onwind]
+
 experimental_design:
   low:
-    size: 300
+    size: 2
     rule: halton
     round: 3
   high:
-    size: 10
+    size: 1
     rule: halton
     round: 3
 
@@ -52,7 +64,7 @@ uncertainties:
       args: [0.240,1]
 
 enable:
-  collect_samples: false
+  collect_samples: true
 
 surrogate:
   order: 3
