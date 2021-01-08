@@ -7,12 +7,12 @@ scenarios:
     opts: 2H
 
 nearoptimal:
-  epsilon: [0.01, 0.02, 0.04, 0.08] # skips nearoptimal if empty
+  epsilon: [0.01, 0.02, 0.04, 0.06, 0.08] # skips nearoptimal if empty
   objective:
-    #- Generator+offwind+min
-    #- Generator+offwind+max
-    #- Generator+onwind+min
-    #- Generator+onwind+max
+    - Generator+offwind+min
+    - Generator+offwind+max
+    - Generator+onwind+min
+    - Generator+onwind+max
     - Generator+wind+min
     - Generator+wind+max
     - Generator+solar+min
@@ -26,7 +26,7 @@ nearoptimal:
 
 experimental_design:
   low:
-    size: 300
+    size: 500
     rule: halton
     round: 3
   high:
@@ -52,7 +52,7 @@ uncertainties:
       args: [0.240,1]
 
 multifidelity:
-  approach: "hybrid"
+  approach: "additive"
 
 enable:
   collect_samples: true
@@ -77,7 +77,8 @@ solving:
     method: 2 # barrier
     crossover: 0
     BarConvTol: 1.e-3
-    FeasibilityTol: 1.e-3
+    FeasibilityTol: 1.e-4
+    OptimalityTol: 1.e-4
     AggFill: 0
     PreDual: 0
     GURO_PAR_BARDENSETHRESH: 200

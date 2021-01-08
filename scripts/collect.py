@@ -1,5 +1,12 @@
 """[summary]"""
 
+import os
+os.environ["NUMEXPR_MAX_THREADS"] = "1"
+os.environ["OPENBLAS_MAIN_FREE"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["NUMPY_NUM_THREADS"] = "1"
+
 import multiprocessing as mp
 import pandas as pd
 import pypsa
@@ -101,8 +108,6 @@ def aggregate_costs(n, by_carrier=True):
 
 def retrieve_data(fn):
 
-    print(fn)
-
     n = pypsa.Network(fn)
 
     hvdc_b = n.links.carrier == "DC"
@@ -142,6 +147,7 @@ def retrieve_data(fn):
 
 
 def parse2multiindex(df):
+    print("start parse")
     def parse(fn):
         data = {}
         fn_split = fn[:-3].split("_E")
@@ -182,10 +188,22 @@ def parse2multiindex(df):
 if __name__ == "__main__":
 
     nprocesses = mp.cpu_count()
+    print(f"processes: {nprocesses}")
 
-    with mp.Pool(processes=nprocesses) as pool:
-        data = pool.map(retrieve_data, snakemake.input)
+    with mp.get_context("fork").Pool(processes=nprocesses) as pool:
+        files = snakemake.input
+        chunksize = int(len(files) / nprocesses)
+        print(f"chunks: {chunksize}")
+        data = pool.map(retrieve_data, files, chunksize)
 
+    #data = []
+    #for i in snakemake.input:
+    #    data.append(retrieve_data(i))
+    print("list done")
+
+    print("start concat")
     df = parse2multiindex(pd.concat(data, axis=1))
+    print("parse done")
 
     df.to_csv(snakemake.output[0])
+    print("csv done")
