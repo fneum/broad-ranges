@@ -159,11 +159,18 @@ def parse2multiindex(df):
             data["epsilon"] = 0.0
 
         elif len(fn_split) == 2:
-            eps_raw, obj_raw = fn_split[1].split("_")
-            o = obj_raw.split("+")
+            s = fn_split[1]
+            eps_raw = re.findall(r"([0-9.]+)_O", s)
+            obj_raw = re.findall(r"_O([A-Za-z0-9+ ]+)", s)
+            fix_raw = re.findall(r"_F([A-Za-z0-9+ ]+)", s)
+            pos_raw = re.findall(r"_P(\d*\.?\d*)$", s)
+            o = obj_raw[0].split("+")
+
             data["sense"] = o[2]
             data["objective"] = o[1] if o[1] else o[0][1:].lower()
-            data["epsilon"] = float(eps_raw)
+            data["epsilon"] = float(eps_raw[0])
+            data["fixed"] = fix_raw[0].split("+")[1] if fix_raw else "none"
+            data["position"] = float(pos_raw[0]) if pos_raw else "none"
 
         else:
             raise NotImplementedError("Invalid filename.")
@@ -172,7 +179,7 @@ def parse2multiindex(df):
         if match:
             data["year"] = int(match[0])
 
-        return pd.Series(data)
+        x = pd.Series(data)
 
     df.columns = pd.MultiIndex.from_frame(pd.concat(map(parse, df.columns), axis=1).T)
 

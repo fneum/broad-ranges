@@ -93,11 +93,22 @@ class NamedPoly:
         numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
-def load_dataset(fn, obj="cost", sense="min", eps=None):
+def load_dataset(fn, obj="cost", sense="min", eps=None, fixed="none", pos=None):
 
-    raw_df = pd.read_csv(fn, index_col=0, header=list(range(8))).T
+    assert not (obj == "cost" and fixed != "none"), "Incompatible choice!"
 
-    df = raw_df.xs([obj, sense], level=["objective", "sense"], axis=0).copy()
+    raw_df = pd.read_csv(fn, index_col=0, header=list(range(10))).T
+
+    levels = ["objective", "sense", "fixed"]
+    df = raw_df.xs([obj, sense, fixed], level=levels, axis=0).copy()
+
+    if fixed == "none":
+        df.index = df.index.droplevel(level="position")
+    else:
+        if pos is not None:
+            if not isinstance(pos, str):
+                pos = str(pos)
+            df = df.xs(pos, level="position")
 
     if obj == "cost":
         df.index = df.index.droplevel(level="epsilon")
