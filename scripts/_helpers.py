@@ -35,6 +35,11 @@ class NamedJ:
             DD.append(D(*v["args"]))
         return chaospy.J(*DD)
 
+    def sample(self, size=100, rule="halton", fmt=3):
+        samples = self.J.sample(size=size, rule=rule).round(fmt)
+        index = [f"{n}-cost" for n in self.names]
+        return pd.DataFrame(samples, index=index)
+
 
 class NamedPoly:
     """Dictionary-like wrapper for vector numpoly polynomials with names."""
@@ -53,8 +58,8 @@ class NamedPoly:
             [f"{k}: {r(self.poly[i])}" for i, k in enumerate(self.names)]
         )
 
-    def __call__(self, *args):
-        return pd.Series(self.poly(*args), index=self.names)
+    def __call__(self, args):
+        return pd.DataFrame(self.poly(*args), index=self.names).squeeze()
 
     def __add__(self, other):
         assert self.names == other.names, "Names have to match!"
@@ -64,6 +69,16 @@ class NamedPoly:
     def __sub__(self, other):
         assert self.names == other.names, "Names have to match!"
         poly = self.poly - other.poly
+        return NamedPoly(poly, self.names)
+
+    def __mul__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly * other.poly
+        return NamedPoly(poly, self.names)
+
+    def __div__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly / other.poly
         return NamedPoly(poly, self.names)
 
     @classmethod
@@ -78,7 +93,7 @@ class NamedPoly:
         numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
-def load_dataset(fn, obj="cost", sense="min"):
+def load_dataset(fn, obj="cost", sense="min", eps=None):
 
     raw_df = pd.read_csv(fn, index_col=0, header=list(range(8))).T
 
@@ -88,22 +103,12 @@ def load_dataset(fn, obj="cost", sense="min"):
         df.index = df.index.droplevel(level="epsilon")
     else:
         df = df.append(raw_df.xs(["cost", "min"], level=["objective", "sense"]))
+        if eps is not None:
+            if not isinstance(eps, str):
+                eps = str(eps)
+            df = df.xs(eps, level="epsilon")
 
     return df
-
-
-# def load_dataset_old(fn):
-#     df = pd.read_csv(fn, index_col=0, header=list(range(5))).T
-
-#     df["offwind"] = df["offwind-ac"] + df["offwind-dc"]
-#     df["wind"] = df["onwind"] + df["offwind"]
-#     df["transmission"] = df["lines"] + df["links"] + 290
-#     df.drop(
-#         ["ror", "hydro", "PHS", "offwind-ac", "offwind-dc", "lines", "links"],
-#         axis=1,
-#         inplace=True,
-#     )
-#     return df
 
 
 def multiindex2df(multiindex):
@@ -130,14 +135,7 @@ def calculate_errors(prediction, truth):
     )
 
 
-def build_ann_prediction(model, samples, mirror):
-    prediction = model.predict(samples.T)
-    return pd.DataFrame(prediction, index=mirror.index, columns=mirror.columns)
-
-
 def build_pce_prediction(model, samples):
-    prediction = samples.apply(lambda s: model(*s), result_type="expand").clip(
-        lower=0.0
-    )
+    prediction = model(samples.values).clip(lower=0.0)
     prediction.columns = pd.MultiIndex.from_frame(samples.astype(str).T)
     return prediction.T

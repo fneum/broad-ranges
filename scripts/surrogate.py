@@ -30,13 +30,21 @@ def build_sklearn_model(cf):
     return getattr(lm, method)(**with_sklearn)
 
 
-def apply_multifidelity(model, kind, filename, dimension, sense, order, distribution):
+def apply_multifidelity(
+    model, kind, filename, dimension, sense, epsilon, order, distribution
+):
     if filename is None:
-        return
+        return model
 
-    hf_dataset = h.load_dataset(filename, dimension, sense)
+    hf_dataset = h.load_dataset(filename, dimension, sense, epsilon)
     hf_samples = h.multiindex2df(hf_dataset.index)
     lf_dataset = h.build_pce_prediction(model, hf_samples)
+
+    # check for solutions with numerical trouble
+    if dimension != "cost":
+        hf_opt_dataset = h.load_dataset(filename, "cost", "min")
+        sel = hf_dataset[dimension] == hf_opt_dataset[dimension]
+        hf_dataset.loc[sel] = 0.0  # empirical
 
     def additive_correction():
         scaling_factors = hf_dataset - lf_dataset
@@ -55,16 +63,16 @@ def apply_multifidelity(model, kind, filename, dimension, sense, order, distribu
         return omega
 
     if kind == "additive":
-        model += additive_correction()
+        corrected_model = model + additive_correction()
 
     elif kind == "multiplicative":
-        model *= multiplicative_correction()
+        corrected_model = model * multiplicative_correction()
 
     elif kind == "hybrid":
         add_correction = additive_correction()
         mul_correction = multiplicative_correction()
         omega = optimal_balance(add_correction, mul_correction)
-        model = omega * (model + add_correction) + (1 - omega) * (
+        corrected_model = omega * (model + add_correction) + (1 - omega) * (
             model * mul_correction
         )
 
@@ -73,23 +81,22 @@ def apply_multifidelity(model, kind, filename, dimension, sense, order, distribu
             f"Multifidelity kind must be in ['additive', 'multiplicative', 'hybrid']. Is {kind}"
         )
 
-    return model
+    return corrected_model
 
 
 if __name__ == "__main__":
 
-    cf = snakemake.config
-    uncertainties = cf["uncertainties"]
-    epsilons = cf["nearoptimal"]["epsilon"]
-
-    order = int(snakemake.wildcards.order)
     dimension = snakemake.wildcards.dimension
     sense = snakemake.wildcards.sense
+    epsilon = snakemake.wildcards.epsilon
 
-    dataset = h.load_dataset(snakemake.input["low"], dimension, sense)
+    cf = snakemake.config
+    uncertainties = cf["uncertainties"]
+    surrogate_opts = cf["surrogate"]
+    order = surrogate_opts["order"]
 
-    if dimension != "cost":
-        uncertainties["epsilon"] = dict(type="Uniform", args=[0, max(epsilons)])
+    dataset = h.load_dataset(snakemake.input["low"], dimension, sense, epsilon)
+
     distribution = h.NamedJ(uncertainties)
 
     train_set, test_set = train_test_split(dataset, **cf["train_test_split"])
@@ -98,15 +105,9 @@ if __name__ == "__main__":
 
     sklearn_model = build_sklearn_model(cf)
     model = build_surrogate(order, distribution, train_set, sklearn_model)
+    model.to_txt(snakemake.output.low_polynomial, fmt="%.4f")
 
-    filename = snakemake.input.get("high", None)
-    model = apply_multifidelity(
-        model, "additive", filename, dimension, sense, order, distribution
-    )
-
-    model.to_txt(snakemake.output.polynomial, fmt="%.4f")
-
-    # Evaluation
+    # Evaluation (based on low-fidelity data)
 
     train_samples = h.multiindex2df(train_set.index)
     train_predictions = h.build_pce_prediction(model, train_samples)
@@ -124,3 +125,15 @@ if __name__ == "__main__":
     h.calculate_errors(test_predictions, test_set).to_csv(
         snakemake.output.test_errors, **cf["csvargs"]
     )
+
+    # Multifidelity
+
+    filename = snakemake.input.get("high", None)
+    c_kind = surrogate_opts["correction"]["kind"]
+    c_order = surrogate_opts["correction"]["order"]
+
+    model = apply_multifidelity(
+        model, c_kind, filename, dimension, sense, epsilon, c_order, distribution
+    )
+
+    model.to_txt(snakemake.output.high_polynomial, fmt="%.4f")

@@ -55,7 +55,13 @@ multifidelity:
   approach: "additive"
 
 enable:
-  collect_samples: true
+  collect_samples: false
+
+surrogate:
+  order: 3
+  correction:
+    kind: "additive"
+    order: 1
 
 lines:
   s_nom_add: 8000
@@ -92,8 +98,8 @@ train_test_split:
   shuffle: true
 
 # with_sklearn:
-#   method: Lasso
-#   fit_intercept: true
+#   method: Lars
+#   fit_intercept: false
 
 csvargs:
   float_format: "%.4f"

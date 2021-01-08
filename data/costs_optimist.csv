@@ -72,3 +72,4 @@ solar-rooftop,lifetime,25,years,European PV Technology and Innovation Platform,2
 solar-utility,FOM,2,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Fixed O&M
 solar-utility,investment,250,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Nominal investment
 solar-utility,lifetime,25,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Technical lifetime
+gas,fuel,21.6,EUR/MWhth,NA,NA

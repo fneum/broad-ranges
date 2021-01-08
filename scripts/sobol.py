@@ -17,6 +17,11 @@ def calculate_sobol(surrogate, distribution, sobol="t", decimals=3):
     return pd.DataFrame(sobol, index=distribution.names, columns=surrogate.names)
 
 
+def calculate_sobol_m2(surrogate, distribution, decimals=3):
+    sobol = chaospy.Sens_m2(surrogate, distribution.J).round(decimals)
+    return pd.DataFrame(sobol, index=distribution.names, columns=distribution.names)
+
+
 if __name__ == "__main__":
 
     cf = snakemake.config

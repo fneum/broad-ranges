@@ -15,7 +15,6 @@ include: "rules/common.smk"
 wildcard_constraints:
     fidelity="(high|low)",
     epsilon="[0-9\.]*",
-    order="[0-9]*",
     sobol="(t|m|m2)",
     dimension="(cost|wind|onwind|offwind|solar|storage|transmission|H2|battery)"
 
@@ -58,33 +57,43 @@ rule build_surrogate_model:
     input:
         **{fidelity: "results/dataset_" + fidelity +".csv" for fidelity in config["scenarios"].keys()}
     output:
-        polynomial="results/pce/polynomial-{order}-{sense}-{dimension}.txt",
-        train_errors="results/pce/train-errors-{order}-{sense}-{dimension}.csv",
-        test_errors="results/pce/test-errors-{order}-{sense}-{dimension}.csv",
-        plot="results/pce/histogram-{order}-{sense}-{dimension}.pdf"
+        low_polynomial="results/pce/polynomial-low-{sense}-{dimension}-{epsilon}.txt",
+        high_polynomial="results/pce/polynomial-high-{sense}-{dimension}-{epsilon}.txt",
+        train_errors="results/pce/train-errors-{sense}-{dimension}-{epsilon}.csv",
+        test_errors="results/pce/test-errors-{sense}-{dimension}-{epsilon}.csv",
+        plot="results/pce/histogram-{sense}-{dimension}-{epsilon}.pdf"
     threads: 1
-    resources: mem=16000
+    resources: mem=8000
     script: "scripts/surrogate.py"
 
 
-ruleorder: calculate_sensitivity_indices > calculate_nearoptimal_sensitivity_indices
+rule build_all_surrogates:
+    input:
+        epsilon=expand("results/pce/polynomial-high-{sense}-{dimension}-{epsilon}.txt",
+               dimension=["onwind", "offwind", "wind", "solar", "transmission", "H2", "battery"],
+               sense=["min", "max"],
+               epsilon=config["nearoptimal"]["epsilon"]),
+        cost="results/pce/polynomial-high-min-cost-0.0.txt"
+
+
+# ruleorder: calculate_sensitivity_indices > calculate_nearoptimal_sensitivity_indices
 
 
 rule calculate_sensitivity_indices:
-    input: "results/pce/polynomial-{order}-min-cost.txt"
+    input: "results/pce/polynomial-high-min-cost.txt"
     output:
-        data="results/graphics/sobol-{order}-min-cost-{sobol}.csv",
-        plot="results/graphics/sobol-{order}-min-cost-{sobol}.pdf"
+        data="results/graphics/sobol-min-cost.csv",
+        plot="results/graphics/sobol-min-cost.pdf"
     threads: 1
     resources: mem=8000
     script: "scripts/sobol.py"
 
 
-rule calculate_nearoptimal_sensitivity_indices:
-    input: "results/pce/polynomial-{order}-{sense}-{dimension}.txt"
-    output:
-        data="results/graphics/sobol-{order}-{sense}-{dimension}-{sobol}.csv",
-        plot="results/graphics/sobol-{order}-{sense}-{dimension}-{sobol}.pdf"
-    threads: 1
-    resources: mem=8000
-    script: "scripts/nearoptimal_sobol.py"
+# rule calculate_nearoptimal_sensitivity_indices:
+#     input: "results/pce/polynomial-high-{sense}-{dimension}.txt"
+#     output:
+#         data="results/graphics/sobol-{sense}-{dimension}.csv",
+#         plot="results/graphics/sobol-{sense}-{dimension}.pdf"
+#     threads: 1
+#     resources: mem=8000
+#     script: "scripts/nearoptimal_sobol.py"
