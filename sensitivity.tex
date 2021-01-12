@@ -1,0 +1,122 @@
+\documentclass[1p]{elsarticle}
+
+\journal{TBD}
+
+%% `Elsevier LaTeX' style
+\bibliographystyle{elsarticle-num}
+\biboptions{numbers,sort&compress}
+
+% format hacks
+\usepackage{libertine}
+\usepackage{libertinust1math}
+% \renewcommand*\familydefault{\sfdefault} % biolinum
+% \usepackage[margin=3.5cm]{geometry}
+
+% \usepackage[latin1]{inputenc}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{eurosym}
+\usepackage{mathtools}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{xfrac}
+\usepackage[colorlinks]{hyperref}
+\usepackage{cleveref}
+
+\usepackage[
+	type={CC},
+	modifier={by},
+	version={4.0},
+]{doclicense}
+
+\newcommand{\abs}[1]{\left|#1\right|}
+\def\cL{\mathcal{L}}
+\def\cN{\mathcal{N}}
+\def\cT{\mathcal{T}}
+
+\begin{document}
+
+\begin{frontmatter}
+
+	\title{Sensitivity and Uncertainty}
+	
+	\author[kitaddress]{Fabian Neumann\corref{correspondingauthor}}
+	\ead{fabian.neumann@kit.edu}
+	\author[kitaddress]{Veit Hagenmeyer}
+	\author[kitaddress]{Tom Brown}
+	\cortext[correspondingauthor]{Corresponding author}
+	\address[kitaddress]{Institute for Automation and Applied Informatics (IAI), Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344, Eggenstein-Leopoldshafen, Germany}
+
+	\begin{abstract}
+		\input{sections/abstract.tex}
+	\end{abstract}
+
+	\begin{keyword}
+		TODO
+	\end{keyword}
+
+\end{frontmatter}
+
+\begin{small}
+	\tableofcontents
+\end{small}
+
+\addcontentsline{toc}{section}{Highlights}
+\section*{Highlights}
+
+\begin{itemize}
+	\item TODO
+\end{itemize}
+
+\section{Introduction}
+\label{sec:intro}
+
+\section{Methods}
+\label{sec:methods}
+
+\input{sections/methods.tex}
+
+\section{Results and Discussion}
+\label{sec:results}
+
+\input{sections/results.tex}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\input{sections/conclusion.tex}
+
+\section*{Acknowledgement}
+
+F.N. and T.B. gratefully acknowledge funding from the Helmholtz
+Association under grant no. VH-NG-1352.
+The responsibility for the contents lies with the authors.
+\doclicenseLongText
+\doclicenseIcon
+
+\section*{CRediT Author Statement}
+
+\textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation, Software, Validation, Formal analysis, Visualization, Writing -- Original Draft, Writing -- Review \& Editing
+\textbf{Veit Hagenmeyer:} Writing -- Review \& Editing, Project administration, Funding acquisition
+\textbf{Tom Brown:} Conceptualization, Writing -- Review \& Editing, Supervision, Project administration, Funding acquisition
+
+\section*{Data Availability}
+
+A dataset of the results including networks and graphics is available at \href{TBA}{doi:TBA}. 
+We also refer to the documentation of PyPSA (\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}),
+PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}) and the source code 
+repository
+(\href{https://github.com/fneum/TBA}{github.com/fneum/TBA}).
+
+\addcontentsline{toc}{section}{References}
+\bibliography{library}
+
+% \begin{appendix}
+% 	\input{sections/appendix.tex}
+% \end{appendix}
+
+\end{document}
