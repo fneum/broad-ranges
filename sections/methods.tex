@@ -1,44 +1,497 @@
-\subsection{Uncertainty Characterization}
+\subsection{Power System Investment Planning}
+\label{sec:model}
+%\blindtext
+
+\subsubsection{Power System Model}
+
+%F map of 37 and 128 nodes and time series 4H/2H at particular location
+
+\begin{SCfigure}
+    \begin{tabular}{cc}
+        \footnotesize low-fidelity: 37 nodes and 4-hourly & \footnotesize high-fidelity: 128 nodes and 2-hourly \\
+        \includegraphics[width=0.33\textwidth]{map37.pdf} &
+        \includegraphics[width=0.33\textwidth]{map128.pdf} \\
+        \includegraphics[width=0.33\textwidth]{timeseries37.pdf} &
+        \includegraphics[width=0.33\textwidth]{timeseries128.pdf} \\
+    \end{tabular}
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+\end{SCfigure}
+
+PyPSA-Eur \cite{pypsa} \cite{pypsaeur} \cite{hoersch_spatial_2017} \cite{snakemake}
+
+
+\subsubsection{Least-Cost Optimisation}
+
+%objective
+The objective is to minimise the total annual system costs comprising generation, transmission and storage infrastructure in a fully renewable system.
+
+% constraints
+The objective is subject to linear constraints that define limits on (i) the capacities of infrastructure from geographical and technical potentials, (ii) the availability of variable renewable energy sources for each location and point in time derived from reanalysis weather data, and (iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations.
+
+
+
+\begin{equation}
+    C = \min\{c^\top x \mid Ax\leq b\}
+\end{equation}
+
+\subsubsection{Near-Optimal Solutions}
+
+Following \cite{nearoptimal}
+epsilon constraint method from multi-objective optimisation \cite{mavrotas_effective_2009}
+
+one technology
+
+- new objective
+- add constraint to limit cost increase
+
+$x_s\subseteq x$ (for instance solar capacities)
+
+\begin{align}
+    \overline{x_s} = \max\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\} \\
+\end{align}
+
+for generation (any wind, onshore wind, offshore wind, solar)
+for transmission
+for storage (hydrogen, battery)
+
+two technologies
+
+- add constraint to fix total capacity
+
+$x_w\subseteq x$ (for instance wind capacities)
+
+\begin{equation}
+    \overline{x_w} = \max\{\:x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\}
+\end{equation}
+
+for pairs
+(i) wind and solar,
+(ii) offshore and onshore wind,
+(iii) hydrogen and battery storage
+
+more sophisticated than discrete steps to map the 2D crossection in \cite{pedersen_modeling_2020}
+
+\subsection{Technology Cost Uncertainty}
 \label{sec:uncertainty}
+%\blindtext
 
+Main challenge is quantifying the input uncertainties! \cite{moret_characterization_2017}
 
+"the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" \cite{yue_review_2018}
 
-\subsubsection{Origin}
+While quantifying cost uncertainties itself is uncertain,
+it is more insightful than using best-guess values \cite{fraiture_robustness_2020}
 
-
+Two main sources of uncertainty wrt technological learning \cite{trondle_trade-offs_2020}
+- future deployment rates unknown
+- learning rate unknown
+- odels "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" \cite{mattsson_learning_2019}
+- \cite{yeh_review_2012}
+- \cite{heuberger_power_2017}
+- \cite{gritsevskyi_modeling_2000}
+- \cite{schmidt_projecting_2019}
+- \cite{schmidt_future_2017}
 
 \subsubsection{Ranges}
 
+\begin{SCtable}
+    \begin{small}
+        \begin{tabular}{cccc}
+            \toprule
+            Technology & Lower Annuity & Upper Annuity & Unit  \\ \midrule
+            Onshore Wind & 73 & 109 & EUR/kW/a \\
+            Offshore Wind & 178 & 245 & EUR/kW/a \\ % this includes connection cost!
+            Solar & 36 & 53 & EUR/kW/a \\
+            Battery & 30 & 125 & EUR/kW/a \\
+            Hydrogen & 111 & 259 & EUR/kW/a \\ \bottomrule
+        \end{tabular}
+    \end{small}
+    \caption{Technology cost uncertainty using optimistic and pessimistic assumptions from DEA.}
+\end{SCtable}   
 
+vital to choose widest plausible parameter range and not exclude plausible scenarios \cite{moret_characterization_2017,mccollum_energy_2020}
+
+Danish Energy Agency source
+- take optimistic and pessimistic values
+- lower and higher bounds "shall be interpreted as representing probabilities corresponding to a 90\% confidence interval"
+- for 2050, but supplemented with 2030 values if widen range
+- continuously updated since 2016
+- no ranges rooftop PV
+- `./costcomparison.csv`
+
+Comparison to others:
+- \cite{trondle_trade-offs_2020} has almost always more conservative values than pessmistic DEA database; data mostly from ETIP
+- JRC Energy Technology Reference Indicators is relatively old and conservative from 2014
+
+Other uncertainty ranges:
+- previous studies have considered "relatively narrow range[s] of uncertainties" \cite{Li2017}
+- plus/minus 20\% \cite{moret_characterization_2017}
+- mostly less than plus/minus 25\% \cite{pizarro-alonso_uncertainties_2019}
+- plus/minus 50\% \cite{shirizadeh_how_2019}
 
 \subsubsection{Distributions}
 
+% literature
 
+technology cost projection distributions
+- uniform: \cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}
+- normal: \cite{mavromatidis_uncertainty_2018}
+- triangle: \cite{li_using_2020}
+- "The variance [..] was set according to the maturity of technologies" \cite{li_using_2020}
 
+always independently sampled (IID); easy but incorrect: e.g. offshore and onshore wind
+
+"difficult and possibly misleading to associate a PDF to a parameter with unknown PDF" \cite{moret_robust_2016}
+
+"To date, a general methodology for uncertainty characterization, assessing parameter uncertainty by type and degree [..] is missing." \cite{moret_robust_2016}
+
+% maximum-entropy
+
+"Following a maximum entropy approach, we model [...] uncertainty with uniform distributions over ranges taken from the literature" \cite{trondle_trade-offs_2020}
+- %https://de.wikipedia.org/wiki/Maximum-Entropie-Methode
+- %https://en.wikipedia.org/wiki/Principle_of_maximum_entropy
+- from Bayesian statistics
+- "assign an a-priori probability despite insufficient problem-specific information" (wiki)
+- "the one that makes fewest assumptions about the true distribution of data" (wiki)
+- % "entropy maximization with no testable information respects the universal constraint that the sum of the probabilities is one. Under this constraint, the maximum entropy probability distribution is the uniform distribution" (wiki)
+
+\subsubsection{Sampling}
+
+%https://chaospy.readthedocs.io/en/master/sampling/sequences.html
+%https://en.wikipedia.org/wiki/Low-discrepancy_sequence
+%https://en.wikipedia.org/wiki/Quasi-Monte_Carlo_method
+
+using chaospy \cite{feinberg_chaospy_2015}
+
+also called experimental design or collocation points
+
+on optimal experimental design \cite{fajraoui_optimal_2017}
+
+low-discrepancy series improvements to random sampling! avoid large gaps and clusters, deterministic sequences
+
+can be used to efficiently sample from the parameter space.
+
+traditional MC sampling with pseudo-random numbers has slow convergence % 1 / \sqrt{n}
+
+strategies to find sufficiently accurate surrogate at low computational cost \cite{fajraoui_optimal_2017}
+
+intendended to achieve "efficient coverage" \cite{usher_value_2015}
+
+quasi Monte-Carlo (MC) sampling
+
+using Halton sequence
+
+alternatives are Latin hypercube sampling \cite{trondle_trade-offs_2020} and Method of Morris \cite{usher_value_2015,mavromatidis_uncertainty_2018}
+
+Categories of sampling methods \cite{palar_multi-fidelity_2016}:
+- structured: orthogonal polynomial roots, Newton-Cotes, sparse grid
+- unstructured: random, LHS, low-discrepancy
+- unstructured types typically used for uniform distributions
+
+disadvantage of LHS \cite{fajraoui_optimal_2017}
+- sampling size has to be set a priori, extensions difficult
+
+Challenges
+- adds more dimensions to uncertainty space, curse of dimensionality [12 in \cite{trondle_trade-offs_2020}, 36 in \cite{pilpola_analyzing_2020}, 5 in \cite{shirizadeh_how_2019}, 5 in this paper]
+
+- \cite{trondle_trade-offs_2020} high fidelity: 10 samples, 400 nodes, 4-hourly; low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
+- \cite{shirizadeh_how_2019} 315 cost samples
+
+how many optimisation runs in this study
+- 50000 low-fidelity optimisation runs
+- 1000 high-fidelity runs
+
+computational requirements:
+- high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average values, CPU time ~238 weeks or 4.56 years
+- low-fidelity: 3 GB, 5 minutes, 1 thread, Gurobi, average values, CPU time ~25 weeeks or 0.48 years
 
 \subsection{Surrogate Modelling}
 \label{sec:surrogate}
+%\blindtext
 
+premise: outcome of original model cannot be obtained easily (e.g. computational constraints)
 
+consider only simplified/aggregated outputs
+
+only input/output behaviour is important (link to machine learning), each output can be predicted independently
+
+synonyms for surrogate: emulators, approximation models, response surface methods, metamodels
+
+same input/output behaviour as original model, but faster to compute
+
+use cases: design space exploration, sensitivity analysis, what-if analyis
+
+"reduce the number of deterministic evaluations while retaining accuracy" \cite{palar_multi-fidelity_2016}
+
+used inputs: cost of offshore, onshore, solar, H2, battery
+recorded outputs: system cost, wind, offwind, onwind, solar, H2, battery, transmission
 
 \subsubsection{Polynomial Chaos Expansion}
 
+literature
+detailed general info and advise
+\cite{gratiet_metamodel-based_2015} 
+\cite{sudret_global_2008}
+\cite{fajraoui_optimal_2017}
+\cite{marelli_uqlab_nodate}
 
 
-\subsubsection{Experimental Design}
+Use PCE to build surrogate models \cite{sudret_global_2008}
 
+What is PCE?
+- Hilbert space technique (is like a Euclidian space for polynomials, polynomials are so to speak the coordinates \cite{gratiet_metamodel-based_2015})
+- polynomial expansion is a collection of polynomials
+- needs finite variance!
+- idea: "expand random variables as a linear combination of orthogonal basis functions weighted by deterministic coefficients." \cite{muhlpfordt_uncertainty_2020}
+- "A polynomial chaos expansion for a random variable is what a classic Fourier series is for a periodic signal" \cite{muhlpfordt_uncertainty_2020}
+- PCE is like PCA over an orthogonal vector space of polynomials
+- "In practice the truncated PCE is used, meaning that only finitely many coefficients represent the random variable" \cite{muhlpfordt_uncertainty_2020}
+- steps: find polynomial basis, calculate polynomial coefficients
+- techniques for finding coefficients:
+  - spectral projection: project response onto basis functions using inner products and orthogonal polynomials \cite{palar_multi-fidelity_2016}
+  - point collocation: obtain coefficients by performing  regression \cite{palar_multi-fidelity_2016} regression problem in \cite{fajraoui_optimal_2017}
+want to do non-intrusive (i.e. wrapping around model) point collocation (i.e. MC sampling) based on regression \cite{ng_multifidelity_2012}
 
+steps (following \cite{feinberg_chaospy_2015} and many others):
+1 sample from parameter space (experimental design)
+2 evaluate model at samples
+3 select an expansion of orthogonal polynomials within the parameters space (Hilbertian basis of Hilbert space that contains the response \cite{sudret_global_2008})
+4 do a regression for PCE coefficients
+5 use the model approximation for statistial analysis
+
+without truncation the polynomial chaos expansion is exact! \cite{fajraoui_optimal_2017}
+standard truncation scheme \cite{gratiet_metamodel-based_2015,sudret_global_2008}
+\begin{equation}
+    P = \frac{(M+p)!}{M!p!}
+\end{equation}
+P: number of unknown coefficients, also cardinality
+M: number of uncertain input parameters
+p: order/degree of the polynomial
+- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
+
+how to create a polynomial chaos expansion
+- three terms recurrence algorithm \cite{feinberg_chaospy_2015}
+
+sparsity-of-effects principle:
+- "system can be represented using a small number or statistically significant effects" \cite{berchier_multi-fidelity_nodate}
+- in PCE: use only small number of polynomials from polynomial basis
+- achieved by adding regularisation/penalty term to regression to favour sparse solutions (e.g. LARS regression)
+- one can force sparse expansion (few non-zero coefficients) to partially counteract curse of dimensionality \cite{gratiet_metamodel-based_2015}
+- these will use regularisation terms in the formulation of the regression problem
+- but ordinary least-square regression is fine if number of uncertaint parameters is $\leq 10$ \cite{gratiet_metamodel-based_2015}
+
+over-sampling ratio (OSR):
+- ratio between number of samples and coefficients of polynomial basis (cardinality) \cite{palar_multi-fidelity_2016}
+- cardinality increases exponentially with number of input parameters -> curse of dimensionality
+- recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
+- too high OSR: very coarse approximation; too low OSR: risk of over-fitting \cite{palar_multi-fidelity_2016}
+
+OSR considerations (M=5) 2-3
+- for order 1, need 12-18 samples
+- for order 2, need 42-63 samples
+- for order 3, need 112-168 samples
+- for order 4, need 252-378 samples
+- for order 5, need 504-756 samples
+
+% math equations
+
+vector of random variables
+\begin{equation}
+    \bm{X} = \{X_1, \dots , X_M\}
+\end{equation}
+
+computational model
+\begin{equation}
+    Y = \cM ( \bm X )
+\end{equation}
+
+polynomial chaos expansion
+\begin{equation}
+    Y = \cM ( \bm X ) = \sum_{\ba \,\in\, \mathbb{N}^M} c_{\ba} \Psi_{\ba} (\bm X)
+\end{equation}
+where $\Psi_\ba$ is a collection of multivariate orthogonal polynomials that form a Hilbertian basis on $f_{\bm X}$
+where $\ba = \{\alpha_1,\dots,\alpha_M\}$ is a multiindex and its elements
+denotes the degree of $\Psi_\ba$ in each of the $M$ input variables $X_i$
+$Y\in\mathbb{R}$ is scalar in the following, but we will look at 8 outputs
+$c_\ba \in \mathbb{R}$ are the polynomial coefficients (or PCE coefficients)
+
+orthogonality condition
+\begin{equation}
+    \langle \Psi_{\bm\alpha}, \Psi_{\bm\beta} \rangle = \delta_{\bm{\alpha\beta}}
+\end{equation}
+where $\delta_{\bm{\alpha\beta}}$ is the Kronecker delta which is $1$ if $\bm\alpha=\bm\beta$ and $0$ otherwise.
+
+truncated polynomial chaos expansion
+\begin{equation}
+    \cM^{PC}(\bm X) = \sum_{\ba \,\in\, \cA^{M,p}} c_\ba \Psi_\ba(\bm X)
+\end{equation}
+
+standard truncation (select all polynomials in $M$ input variables where total degree is less than $p$), it's a set of indices
+\begin{equation}
+    \cA^{M,p} = \left\{\ba \in \mathbb{N}^M \,:\, \abs{\ba} \leq p\right\}
+\end{equation}
+where $\abs{\ba} = \sum_{i=1}^M \alpha_i$
+
+cardinality of truncation
+\begin{equation}
+    P = \card \cA^{M,p} = \left(\begin{matrix}
+        M+p \\
+        p
+    \end{matrix}\right) = \frac{(M+p)!}{M!p!}
+\end{equation}
+
+coefficients to be found
+\begin{equation}
+    \bm c = \left\{c_\ba \,:\, \ba \in \cA^{M,p}\right\}
+\end{equation}
+
+experimental design
+inputs
+\begin{equation}
+    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(N)} }
+\end{equation}
+outputs
+\begin{equation}
+    \mathcal{Y} = \set{ \cM\left(\bm x^{(1)}\right),\dots,\cM\left(\bm x^{(N)}\right) }
+\end{equation}
+
+regression: minimise least-square residual of polynomial approximation over all samples
+\begin{equation}
+    \hat{\bm{c}} = \argmin_{\bm{c}_\ba \,\in\, \mathbb{R}^P} \frac{1}{N} \sum_{i=1}^N \left(
+        \cM \left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{M,p}} c_\ba \Psi_\ba\left(\bm x^{(i)}\right)
+    \right)^2
+\end{equation}
+
+finished surrogate model
+\begin{equation}
+    Y = \cM(\bm X) \approx \cM^{PC}(\bm X) = \sum_{\ba \,\in\, \cA} \hat{c}_\ba \Psi_\ba (\bm X)
+\end{equation}
 
 \subsubsection{Multifidelity Approach}
 
+\cite{palar_multi-fidelity_2016}
+\cite{ng_multifidelity_2012}
+\cite{berchier_multi-fidelity_nodate}
 
+fuse high coverage of parameter space from many low-fidelity samples with
+high modelling detail from fewer high-fidelity samples
 
-\subsubsection{Sobol Sensitivity Indices}
+use a simplified model to sweep the parameter space (many samples, fewer details)
+and supplement it with information from a more complex model (fewer samples, more detail)
 
+following (Jiant, 2019)
 
+only high-fidelity for surrogate model is time-consuming,
+but only low-fidelity may result in distorted/inaccurate surrogate models
 
-\subsubsection{Validation Methods and Error Measures}
+"If LF model is much cheaper to evaluate than the HF model, then significant
+computational savings will be obtained" \cite{ng_multifidelity_2012}
 
+integrate both with multi-fidelity approach: correct LF model such that LF output matches HF values
 
+build an own surrogate model for the correction function (i.e. "correction expansion") with identical polynomial basis
 
-\subsubsection{Extensions for Near-Optimal Solutions}
+concept is "correcting lower order effect of LF expansion with correction function, higher order effects are predicted by LF expansion" \cite{palar_multi-fidelity_2016}
+
+rule: "polynomial term in the correction expansion has to e a subset of the LF expansion" \cite{palar_multi-fidelity_2016}
+-> has been checekd, means high-fidelity polynomial order must be lower 
+
+HF sample is subset of LF sample (this is a nice feature of low-discrepancy series)
+
+"in cases with high correlation between LF an HF ($R^2 \geq 0.9$) the MF will very likely increase the approximation accuracy relative to single HF" \cite{palar_multi-fidelity_2016}
+
+method:
+- build surrogate A based on low-fidelity samples
+- build corrective surrogate B for the difference between high-fidelity samples and predictions of A at those sample points
+- add the correction B to the low-fidelity surrogate A to obtain multi-fidelity surrogate C which approximates the high-fidelity model
+
+Additive scaling approach (argue why additive is used not multiplicative)
+- Correct for the difference between HF samples and LF surrogate at HF sample points
+% \begin{equation}
+%     \tilde{f}_{MF}(\xi) = \tilde{f}_{LF} + \tilde{\alpha}(\xi)
+% \end{equation}
+% where $\tilde{\alpha}(\xi)$ is the additive scaling function. The sampled scaling factors are calculated with
+% \begin{equation}
+% \alpha(\xi) = f_{HF}(\xi) - \tilde{f}_{LF}(\xi)
+% \end{equation}
+% Construct scaling function $\tilde{\alpha}(\xi)$ from scaling factors $\alpha(\xi)$ via some regression fit.
+
+error function
+\begin{equation}
+    \mathcal{C}(\bm X) = \cM_h(\bm X) - \cM_\ell(\bm X)
+\end{equation}
+
+samples
+\begin{align}
+    \mathcal{X}_h &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_h)}} \\
+    \mathcal{X}_l &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_l)}}
+\end{align}
+where $N_h < N_\ell$ and when using deterministic low-dicrepancy series
+consequently $\mathcal{X}_h \subset \mathcal{X}_\ell$.
+
+Due to the smaller number of samples for the high fidelity model (and therefore error between high and low fidelity), it is also
+common that $p_h < p_l$ and consequently $\cA_h \subset \cA_l$
+
+multifidelity model (simple)
+\begin{equation}
+    \cM_h^{PC}(\bm X) = \cM_\ell^{PC}(\bm X) + \mathcal{C}^{PC}(\bm X)
+\end{equation}
+
+multifidelity model (more detailed)
+\begin{equation}
+    \cM_h^{PC} = \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\cap\, \cA_c^{M,p_c}}
+    \left(
+     c_{\ell,\ba} + c_{c,\ba}
+    \right) \Psi_\ba(\bm X) + 
+    \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\setminus\, \cA_c^{M,p_c}}
+    c_{\ell,\ba} \Psi_\ba(\bm X)
+\end{equation}
+
+\subsection{Evaluation Methods}
+\label{sec:evaluationmethods}
+
+\subsubsection{Sensitivity Indices}
+
+Sobol: decomposition of output variance and attribution to random input variables
+
+global method!
+
+Sobol first-order second-order total
+
+first-order Sobol:
+- also main-effect
+- share of output variance due to variations in one input parameter alone (averaged over variations in other input parameters)
+
+total Sobol indices:
+- contribution to output variance iincluding all interactions with other input variables
+- can be greater than 100\% if not purely additive
+
+Sensitivity indices:
+- separate influential from non-influential parameters
+- computational cost of sensitivity indices reduces to that of estimating PCE coefficients, 2-3 orders of magnitude faster than traditional MC evaluation \cite{sudret_global_2008}
+- The polynomials can be used for analytic calculations (like Sobol indices) as post-processing and thereby have added value compared to pure machine learning approaches
+
+used in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}
+
+\subsubsection{Validation and Error Measures}
+
+error estimation, measures of accuracy
+
+using cross-validation techniques 
+- training set of known data
+- validation/test set of unknown data to surrogate \cite{gratiet_metamodel-based_2015}
+- only one split, not multiple random splits of test/train sets
+
+error measures:
+- R2: quality of the regression "proportion of the variance in the dependent variable that is predictable from the independent variable" (wiki)
+- MAE: to see absolute deviations (in GW), alternative to relative error (esp if prediction is 0 relative errors are super high)
+- MAPE: relative deviations
+
+- based on low-fidelity models only (too few samples for error analysis for high-fidelity model)
+- out of 500 cost samples, 100 have not been used for building/training the surrogate model. This is our test set.
+
+- benchmark: model error below 5\%, but not specific \cite{trondle_trade-offs_2020}
+
+\subsection{Plots}
+
+contour (chance of being inside near-optimal cone) plots apply quadratic interpolation and gaussian filter for smoothing

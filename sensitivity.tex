@@ -1,4 +1,4 @@
-\documentclass[1p]{elsarticle}
+\documentclass[1p,11pt]{elsarticle}
 
 \journal{TBD}
 
@@ -24,8 +24,14 @@
 \usepackage{booktabs}
 \usepackage{epstopdf}
 \usepackage{xfrac}
+\usepackage{bm}
 \usepackage[colorlinks]{hyperref}
-\usepackage{cleveref}
+\usepackage[nameinlink,sort&compress,capitalise,noabbrev]{cleveref}
+\usepackage[leftcaption,raggedright]{sidecap}
+\usepackage{subcaption}
+\usepackage{blindtext}
+
+\graphicspath{{../../playgrounds/sensitivity-global/notebooks/graphics/}}
 
 \usepackage[
 	type={CC},
@@ -37,12 +43,19 @@
 \def\cL{\mathcal{L}}
 \def\cN{\mathcal{N}}
 \def\cT{\mathcal{T}}
+\def\cM{\mathcal{M}}
+\def\cA{\mathcal{A}}
+\def\ba{{\bm{\alpha}}}
+\def\card{\text{card}\,}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
 
 \begin{document}
 
 \begin{frontmatter}
 
-	\title{Sensitivity and Uncertainty}
+	\title{Affordable renewable power systems can be planned,\\
+	       even if technology costs are uncertain}
 	
 	\author[kitaddress]{Fabian Neumann\corref{correspondingauthor}}
 	\ead{fabian.neumann@kit.edu}
@@ -74,6 +87,8 @@
 
 \section{Introduction}
 \label{sec:intro}
+
+\input{sections/introduction.tex}
 
 \section{Methods}
 \label{sec:methods}
@@ -112,6 +127,7 @@ PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}) an
 repository
 (\href{https://github.com/fneum/TBA}{github.com/fneum/TBA}).
 
+% tidy with https://flamingtempura.github.io/bibtex-tidy/
 \addcontentsline{toc}{section}{References}
 \bibliography{library}
 

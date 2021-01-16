@@ -1,3 +1,184 @@
+\subsection{Least-Cost Solutions}
+%%\blindtext
+
+%F violin plots
+\begin{SCfigure}
+    \includegraphics[width=0.75\textwidth]{violins/violin-capacities-high-prediction.pdf}
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:violin}
+\end{SCfigure}
+
+\cref{fig:violin}
+
+%F sensitivity of built capacities
+
+\begin{figure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{onshore wind}
+        \includegraphics[width=\textwidth]{1D/1D-onwind-onwind-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{offshore wind}
+        \includegraphics[width=\textwidth]{1D/1D-offwind-offwind-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{solar}
+        \includegraphics[width=\textwidth]{1D/1D-solar-solar-high.pdf}
+    \end{subfigure} \\
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{battery storage}
+        \includegraphics[width=\textwidth]{1D/1D-battery-battery-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{hydrogen storage}
+        \includegraphics[width=\textwidth]{1D/1D-H2-H2-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \caption{transmission}
+        \includegraphics[width=\textwidth]{1D/1D-transmission-H2-high.pdf}
+    \end{subfigure}
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+\end{figure}
+
+by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band
+
+%F sobol indices
+
+\begin{figure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \caption{first-order Sobol indices}
+        \includegraphics[width=\textwidth]{sobol/sobol-m-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.54\textwidth}
+        \caption{total Sobol indices}
+        \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
+    \end{subfigure}
+    \caption{Sobol sensitivity indices}
+\end{figure}
+
+\subsection{Near-Optimal Solutions}
+%%\blindtext
+
+%F fuzzy c-shaped plots
+
+\begin{figure}
+    \noindent\makebox[\textwidth]{
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        % \caption{any wind}
+        \includegraphics[width=\textwidth]{neardensity/surr-high-wind.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        % \caption{onshore wind}
+        \includegraphics[width=\textwidth]{neardensity/surr-high-onwind.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        % \caption{offshore wind}
+        \includegraphics[width=\textwidth]{neardensity/surr-high-offwind.pdf}
+    \end{subfigure}
+    }
+    \noindent\makebox[\textwidth]{
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        % \caption{solar}
+        \includegraphics[width=\textwidth]{neardensity/surr-high-solar.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        % \caption{transmission network}
+        \includegraphics[width=\textwidth]{neardensity/surr-high-transmission.pdf}
+    \end{subfigure}
+    }
+    \noindent\makebox[\textwidth]{
+        \begin{subfigure}[t]{0.45\textwidth}
+            \centering
+            % \caption{hydrogen storage}
+            \includegraphics[width=\textwidth]{neardensity/surr-low-H2.pdf}
+        \end{subfigure}
+        \begin{subfigure}[t]{0.45\textwidth}
+            \centering
+        % \caption{battery storage}
+        \includegraphics[width=\textwidth]{neardensity/surr-low-battery.pdf}
+    \end{subfigure}
+    }
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+\end{figure}
+
+%F contour plot at fixed epsilon
+
+\begin{figure}
+    \noindent\makebox[\textwidth]{
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \caption{wind and solar}
+        \includegraphics[width=\textwidth]{dependency/2D_surr-low-wind-solar.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \caption{offshore and onshore wind}
+        \includegraphics[width=\textwidth]{dependency/2D_surr-low-offwind-onwind.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \caption{hydrogen and battery storage}
+        \includegraphics[width=\textwidth]{dependency/2D_surr-low-H2-battery.pdf}
+    \end{subfigure}
+    }
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+\end{figure}
+
 \subsection{Model Validation}
+%%\blindtext
+
+%F errors vs number of samples
+%F errors vs polynomial order
+
+\begin{figure}
+
+    \begin{subfigure}[t]{\textwidth}
+        \caption{number of samples}
+        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-samples-order-3.pdf}
+        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-samples-order-3.pdf}
+        \includegraphics[height=.25\textwidth]{error/error-mape-vs-samples-order-3.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+        \caption{polynomial order}
+        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-order.pdf}
+        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-order.pdf}
+        \includegraphics[height=.25\textwidth]{error/error-mape-vs-order.pdf}
+    \end{subfigure}
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+\end{figure}
+
+%T R2, MAPE, MAE for chosen order and nsamples
+
+order of 2 and below is too simple (underfitting)
+order of 5 and above is too flexible (overfitting)
+order of 3 appears to be a suitable compromise
 
 \subsection{Critical Appraisal and Outlook}
+%%\blindtext
+
+Reconstruction and Disaggregation
+
+- When using the surrogate model to determine the optimised system capacities
+from a particular set of cost assumptions, we do not get the full original model outputs.
+- If we are interested in those, we can reconstruct these selectively
+by adding the aggregate outcomes as extra  functionality constraints (e.g. onwind p nom opt = XXX GW) and run the full optimisation.
+- Caveat: due to inaccuracies  of the surrogate model, one may need load shedding or other forms of slack.
+
+redo with sector-coupling version
+
+endogenous learning
+
+- These cheap areas should then be targeted with policy (e.g. drive technology learning by subsidies)
+- smoothly leads up to future work with endogenous learning in multi-horizon investment planning!
+- embed technological learning in optimisation \cite{heuberger_power_2017} \cite{lopion_cost_2019}, remaining uncertainty of learning rate, but "learning by doing" included
+
+further uncertain input parameters:
+- rountrip efficiency of hydrogen storage
+
+Do I need a richer set of technologies? E.g.
+solar thermal, nuclear, CAES, separate hydrogen storage to fuel cell, electrolysis, gas turbine, cavern storage, steel tank?
