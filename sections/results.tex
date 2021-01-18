@@ -8,7 +8,26 @@
     \label{fig:violin}
 \end{SCfigure}
 
-\cref{fig:violin}
+\cref{fig:violin} propagation of input uncertainties into outputs (when system cost is minimised)
+tsc:
+- total system cost range between 160 and 220
+- means most pessimistic cost is about 40\% more expensive than using optimistic cost
+- bell-like probability distribution
+generation:
+- all solutions build at least 350 GW of solar and 600 GW of wind
+- distribution: wind skewed towards higher values, solar skewed towards lower values
+- least-cost solutions prefer onshore over offshore (most solutions beyond 800 GW onshore, less than 100 GW offshore)
+- but (besides battery) onshore wind has the highest uncertainty range
+storage:
+- no least-cost solutions without hydrogen, but some without battery
+- hydrogen tends to dominate battery storage, except when battery storage is very cheap (battery also has wider uncertainty range)
+transmission:
+- least affected by cost uncertainties
+- almost doubling in relation to today's capacities
+
+criticise that
+- boundaries are not robust when small cost penalties are allowed
+- does not tell which input uncertainties are responsible
 
 %F sensitivity of built capacities
 
@@ -38,23 +57,49 @@
         \includegraphics[width=\textwidth]{1D/1D-transmission-H2-high.pdf}
     \end{subfigure}
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:sensitivity}
 \end{figure}
 
-by reducing capital cost of wind, not only expected costs decrease, but also the uncertainty band
+\cref{fig:sensitivity}
+how:
+- like local sensitivity analysis, like what-if analysis
+- sweep the parameter space in one dimension and obserse corresponding capacity (e.g. onshore cost - onshore capacity)
+- the remaining uncertainty (from other cost assumptions) is depicted by percentiles
+result:
+- low cost of onshore wind -> much onshore wind with low uncertainty
+- high cost of onshore wind -> how much is built greatly depends on other cost parameters
+- the opposite for offshore wind (and solar)
+- battery  becomes economically significantly more attractive (see change of slope) once annuity falls below 75 EUR/kW/a [translate into an overnight investment with exemplary lifetime/interest] (regardless of other cost uncertainties), below it is a minor to hydrogen
+- hydrogen on the other hand -> steady slope and uncertainty band
+- the limited uncertainty about optimal levels of network expansion is mostly due to hydrogen storage cost. As cost of storing H2 falls, less grid reinforcment chosen (can also see this  in Sobol indices)
+transition:
+- link to Sobol (next step): we can formalise how input uncertainties affect the outcomes with sensitivity indices
 
 %F sobol indices
 
 \begin{figure}
     \begin{subfigure}[t]{0.45\textwidth}
         \caption{first-order Sobol indices}
+        \label{fig:sobol:first}
         \includegraphics[width=\textwidth]{sobol/sobol-m-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.54\textwidth}
         \caption{total Sobol indices}
+        \label{fig:sobol:total}
         \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
     \end{subfigure}
     \caption{Sobol sensitivity indices}
+    \label{fig:sobol}
 \end{figure}
+
+\cref{fig:sobol} \cref{fig:sobol:first} \cref{fig:sobol:total}
+- two ways to display as a heatmap or as stacked bar chart
+- first order effects dominate
+- tsc largely decided by how expensive it is to build onshore wind capacity, followed by cost of hydrogen storage
+- wind deploymend almost exclusively governed by cost of onwind/offwind
+- other carriers yield a more varied picture (depend on other technologies)
+- solar deployment also depends on onshore wind and battery cost (in addition)
+- amount of hydrogen influenced by battery and H2 cost alike
 
 \subsection{Near-Optimal Solutions}
 %%\blindtext
@@ -104,7 +149,51 @@ by reducing capital cost of wind, not only expected costs decrease, but also the
     \end{subfigure}
     }
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:fuzzycone}
 \end{figure}
+
+general:
+- in effect: look at solutions between 160 and 240 bn EUR pa
+- The Sobol indices of the least-cost solution are widely shared across the near-optimal solutions with little deviation.
+
+
+\cref{fig:fuzzycone}
+how:
+- contour lines represent the chance of being inside near-optimal cone
+- plots apply quadratic interpolation and gaussian filter for smoothing
+interpretation:
+- shows low-cost solutions common to most parameter sets (above 90\%)
+- system layouts that do not low-cost criteria in any circumstances (below 10\%)
+- the distance: the wider the contour lines are apart (distance), the more uncertainty propagates, the closer contour lines are together the more distinct
+- the height: quantifies flexibility for a given level of certainty
+- the angle: sensitivity towards cost slack
+- why are probabilities closer to optimum smaller? - little overlap
+results:
+- any wind:
+  - minimisation will push for substitution with solar an
+  - extremely likely (99\%) that building 900 GW of wind capacity (in suitable locations) is within 3\% of the optimum
+  - building less than 600 GW has low chance of being within 8\% of the cost optimum (even in highest yield locations)
+- onshore wind and offshore wind:
+  - only some solutions can forego onshore wind and remain within 8\% of the cost-optimum
+  - conversely, it is very likely possible (90\%) to build a system without offshore wind at a cost penalty of 4\% at most
+  - but more is possible: same chances apply for building up to 200 GW of offshore wind to remain within 8\% 
+  - unlike onshore wind (where it's uncertain how little can be built), uncertainty for offshore wind deployment exists about
+    how much can be built so that costs remain within a specified range
+- solar:
+  - range of options within 8\% at 90\% certainty is very wide: anything between 100 GW and 1000 GW, amounts to factor 10
+- transmission: 
+  - the level of required transmission expansion is least affected by the cost uncertainty (sharp boundaries)
+  - within 8\% it is likewise possible to plan for moderate grid reinforcement increasing capacity by 30\%
+  - or to initiate extensive remodelling of the European transmission tripling the transmission volume
+  - in any case some transmission reinforcement is essential 
+- hydrogen:
+  - 100 GW is very likely within 2\$ of the optimum
+  - hydrogen (symbolising long-term multi-weak/seasonal storage) appears to be an essential technology in most cases
+  - even at 8\% slack only 25\% require no long-term storage such as hydrogen (these will be cases where battery costs are very low)
+- battery
+  - 90\% can work without any batteries and stay within 4\% of the optimum
+  - but also 50\% can build a system within 8\% with more than 400 GW of battery
+  - very wide uncertainty range, especially about how much can be built
 
 %F contour plot at fixed epsilon
 
@@ -113,21 +202,80 @@ by reducing capital cost of wind, not only expected costs decrease, but also the
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \caption{wind and solar}
+        \label{fig:dependencies:ws}
         \includegraphics[width=\textwidth]{dependency/2D_surr-low-wind-solar.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \caption{offshore and onshore wind}
+        \label{fig:dependencies:oo}
         \includegraphics[width=\textwidth]{dependency/2D_surr-low-offwind-onwind.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \caption{hydrogen and battery storage}
+        \label{fig:dependencies:hb}
         \includegraphics[width=\textwidth]{dependency/2D_surr-low-H2-battery.pdf}
     \end{subfigure}
     }
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:dependencies}
 \end{figure}
+
+\cref{fig:dependencies}
+how:
+- for a given epsilon look at different cross-section
+- cones from before assumed that the other technologies can be heavily optimised
+- selected three substitutes (one can at least partially be exchanged for the other) - most interesting trade-offs expected
+interpretation:
+- logical AND
+results:
+- \cref{fig:dependencies:ws}
+  - upper right: building much of both wind and solar becomes too expensive
+  - bottom left: building too little of any wind or solar does not suffice to produce enough
+  - example: very high chance that building 1000 GW and 400 GW of solar is within 6\%
+  - example: building less than 200 GW of solar and 600 GW of wind is unlikely to yield a low-cost solution
+  - minimising the capacity of both primary energy providers results in
+    - location at high yield locations even if additional network expansion is necessary
+    - increased preference for efficient energy storage (battery)
+  - even considering combinations of wind and solar, a wide space of low-cost options exists with moderate to high likelyhoods 
+- \cref{fig:dependencies:oo}
+  - again upper right: too much of both
+  - again bottom left: too little wind of any kind
+  - most certain area: building more than 700 GW onshore wind and less than 250 GW offshore wind
+  - but there are some solutions with a high substitutability between onshore and offshore wind (upper left of the contour plt)
+  - other than wind and solar, ...
+- \cref{fig:dependencies:hb}
+  - some storage is definitely needed, 50 GW of each at least, more to be more certain 
+
+\begin{figure}
+    \noindent\makebox[\textwidth]{
+    \begin{subfigure}[t]{0.65\textwidth}
+     \centering
+     \caption{minimal onshore wind with 8\% system cost slack}
+     \label{fig:nearviolin:onwind}
+     \includegraphics[width=\textwidth, trim=0cm .3cm 3.3cm .63cm, clip]{violins/violin-capacities-high-prediction-min-onwind-0.08.pdf}   
+    \end{subfigure}
+    \begin{subfigure}[t]{0.65\textwidth}
+     \centering
+     \caption{minimal transmission expansion with 8\% system cost slack}
+     \label{fig:nearviolin:transmission}
+     \includegraphics[width=\textwidth, trim=0cm .3cm 3.3cm  .63cm, clip]{violins/violin-capacities-high-prediction-min-transmission-0.08.pdf}   
+    \end{subfigure}
+    }
+    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:nearviolin}
+\end{figure}
+
+\cref{fig:nearviolin}
+- \cref{fig:nearviolin:onwind}
+  - lack of onshore wind generation compensated by predominantly increased offshore wind parks but also more solar generation capacity
+  - the increased focus on offshore wind also leads to bigger amounts of hydrogen storage, while transmission expansion needs remain similar to least-cost solutions
+  - there exist cases which still require lots of onshore wind (800 GW)
+- \cref{fig:nearviolin:transmission}
+  - some transmission expansion between 10\% and 30\%
+  - more generation capacity overall (more curtailment, more distributed resources with weaker capacity factors)
+  - more hydrogen storage (compensating balancing in space with balancing in time)
 
 \subsection{Model Validation}
 %%\blindtext
@@ -136,27 +284,34 @@ by reducing capital cost of wind, not only expected costs decrease, but also the
 %F errors vs polynomial order
 
 \begin{figure}
-
     \begin{subfigure}[t]{\textwidth}
         \caption{number of samples}
+        \label{fig:error:samples}
         \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-samples-order-3.pdf}
         \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-samples-order-3.pdf}
         \includegraphics[height=.25\textwidth]{error/error-mape-vs-samples-order-3.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{\textwidth}
         \caption{polynomial order}
+        \label{fig:error:poly}
         \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-order.pdf}
         \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-order.pdf}
         \includegraphics[height=.25\textwidth]{error/error-mape-vs-order.pdf}
     \end{subfigure}
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \label{fig:error}
 \end{figure}
 
-%T R2, MAPE, MAE for chosen order and nsamples
+\cref{fig:error}
+- \cref{fig:error:samples}
+  - acceptable already at OSR of 2.5
+  - not much better after OSR of 4
+- \cref{fig:error:poly}
+  - order of 2 and below is too simple (underfitting)
+  - order of 5 and above is too flexible (overfitting)
+  - order of 3 appears to be a suitable compromise
 
-order of 2 and below is too simple (underfitting)
-order of 5 and above is too flexible (overfitting)
-order of 3 appears to be a suitable compromise
+%T R2, MAPE, MAE for chosen order and nsamples
 
 \subsection{Critical Appraisal and Outlook}
 %%\blindtext

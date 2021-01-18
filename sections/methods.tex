@@ -19,6 +19,12 @@
 
 PyPSA-Eur \cite{pypsa} \cite{pypsaeur} \cite{hoersch_spatial_2017} \cite{snakemake}
 
+only power system
+
+100\% renewable system based on wind and solar
+
+greenfield, exception: today's transmission grid, hydro, run-of-river
+
 
 \subsubsection{Least-Cost Optimisation}
 
@@ -31,7 +37,7 @@ The objective is subject to linear constraints that define limits on (i) the cap
 
 
 \begin{equation}
-    C = \min\{c^\top x \mid Ax\leq b\}
+    C = \min_x\{c^\top x \mid Ax\leq b\}
 \end{equation}
 
 \subsubsection{Near-Optimal Solutions}
@@ -47,7 +53,7 @@ one technology
 $x_s\subseteq x$ (for instance solar capacities)
 
 \begin{align}
-    \overline{x_s} = \max\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\} \\
+    \overline{x_s} = \max_{x_s}\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\} \\
 \end{align}
 
 for generation (any wind, onshore wind, offshore wind, solar)
@@ -61,7 +67,7 @@ two technologies
 $x_w\subseteq x$ (for instance wind capacities)
 
 \begin{equation}
-    \overline{x_w} = \max\{\:x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\}
+    \overline{x_w} = \max_{x_w}\{\:x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\}
 \end{equation}
 
 for pairs
@@ -252,6 +258,8 @@ What is PCE?
   - point collocation: obtain coefficients by performing  regression \cite{palar_multi-fidelity_2016} regression problem in \cite{fajraoui_optimal_2017}
 want to do non-intrusive (i.e. wrapping around model) point collocation (i.e. MC sampling) based on regression \cite{ng_multifidelity_2012}
 
+one surrogate model for each $\varepsilon$ (5)  , min/max optimisation sense (2), objective (7) and output variable (8).
+
 steps (following \cite{feinberg_chaospy_2015} and many others):
 1 sample from parameter space (experimental design)
 2 evaluate model at samples
@@ -261,12 +269,7 @@ steps (following \cite{feinberg_chaospy_2015} and many others):
 
 without truncation the polynomial chaos expansion is exact! \cite{fajraoui_optimal_2017}
 standard truncation scheme \cite{gratiet_metamodel-based_2015,sudret_global_2008}
-\begin{equation}
-    P = \frac{(M+p)!}{M!p!}
-\end{equation}
-P: number of unknown coefficients, also cardinality
-M: number of uncertain input parameters
-p: order/degree of the polynomial
+
 - typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
 
 how to create a polynomial chaos expansion
@@ -339,6 +342,9 @@ cardinality of truncation
         p
     \end{matrix}\right) = \frac{(M+p)!}{M!p!}
 \end{equation}
+P: number of unknown coefficients, also cardinality
+M: number of uncertain input parameters
+p: order/degree of the polynomial
 
 coefficients to be found
 \begin{equation}
@@ -424,7 +430,7 @@ error function
 samples
 \begin{align}
     \mathcal{X}_h &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_h)}} \\
-    \mathcal{X}_l &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_l)}}
+    \mathcal{X}_l &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_h)}, \dots, \bm{x}^{(N_l)}}
 \end{align}
 where $N_h < N_\ell$ and when using deterministic low-dicrepancy series
 consequently $\mathcal{X}_h \subset \mathcal{X}_\ell$.
@@ -439,7 +445,7 @@ multifidelity model (simple)
 
 multifidelity model (more detailed)
 \begin{equation}
-    \cM_h^{PC} = \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\cap\, \cA_c^{M,p_c}}
+    \cM_h^{PC} (\bm X) = \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\cap\, \cA_c^{M,p_c}}
     \left(
      c_{\ell,\ba} + c_{c,\ba}
     \right) \Psi_\ba(\bm X) + 
@@ -491,7 +497,3 @@ error measures:
 - out of 500 cost samples, 100 have not been used for building/training the surrogate model. This is our test set.
 
 - benchmark: model error below 5\%, but not specific \cite{trondle_trade-offs_2020}
-
-\subsection{Plots}
-
-contour (chance of being inside near-optimal cone) plots apply quadratic interpolation and gaussian filter for smoothing
