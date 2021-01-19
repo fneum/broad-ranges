@@ -284,20 +284,27 @@ results:
 %F errors vs polynomial order
 
 \begin{figure}
-    \begin{subfigure}[t]{\textwidth}
-        \caption{number of samples}
-        \label{fig:error:samples}
-        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-samples-order-3.pdf}
-        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-samples-order-3.pdf}
-        \includegraphics[height=.25\textwidth]{error/error-mape-vs-samples-order-3.pdf}
-    \end{subfigure}
-    \begin{subfigure}[t]{\textwidth}
-        \caption{polynomial order}
-        \label{fig:error:poly}
-        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-order.pdf}
-        \includegraphics[height=.25\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-order.pdf}
-        \includegraphics[height=.25\textwidth]{error/error-mape-vs-order.pdf}
-    \end{subfigure}
+    \noindent\makebox[\textwidth]{
+        \begin{subfigure}[t]{1.4\textwidth}
+            \caption{number of samples}
+            \label{fig:error:samples}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mape-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth]{error/error-rmse-vs-samples-order-3-sklearn.pdf}
+        \end{subfigure}
+    }
+    \noindent\makebox[\textwidth]{
+        \begin{subfigure}[t]{1.4\textwidth}
+            \caption{polynomial order}
+            \label{fig:error:poly}
+            
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mape-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
+        \end{subfigure}
+    }
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
     \label{fig:error}
 \end{figure}
