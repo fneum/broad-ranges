@@ -278,7 +278,7 @@ outputs
     \mathcal{Y} = \set{ \cM\left(\bm x^{(1)}\right),\dots,\cM\left(\bm x^{(N)}\right) }
 \end{equation}
 
-regression: minimise least-square residual of polynomial approximation over all samples (Lasso regression: $L_2$ regression with an extra $L_1$ regularization term, and a preference for fewer non-zero terms.)
+regression: minimise least-square residual of polynomial approximation over all samples (Lasso regression: $L_2$ regression with an extra $L_1$ regularization term, and a preference for fewer non-zero terms [sparse].)
 \begin{equation}
     \hat{\bm{r}} = \argmin_{\bm{r}_\ba \,\in\, \mathbb{R}^P} \frac{1}{N} \sum_{i=1}^N \left(
         \cM \left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{M,p}} r_\ba \psi_\ba\left(\bm x^{(i)}\right)
@@ -294,7 +294,7 @@ finished surrogate model
 sparsity:
 - one can force sparse expansion (few non-zero coefficients) to partially counteract curse of dimensionality \cite{gratiet_metamodel-based_2015}
 - these will use regularisation/penalty terms in the formulation of the regression problem
-- but ordinary least-square regression is fine if number of uncertaint parameters is $\leq 10$ \cite{gratiet_metamodel-based_2015}
+- but ordinary least-square regression is fine if number of uncertain parameters is $\leq 10$ \cite{gratiet_metamodel-based_2015}
 
 \subsubsection{Multifidelity Approach}
 \label{sec:multifidelity}
