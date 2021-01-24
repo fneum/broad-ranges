@@ -1,14 +1,22 @@
+In this section,
+- first how to obtain least-cost and near-optimal solutions for a given cost parameter set from PyPSA-Eur model
+- second definition of the uncertainties we consider
+- third how we make use of surrogate modelling techniques to efficiently cover parameter space,
+  while detailed modelling
+- experimental design
+- sensitivity indices
+
 \subsection{Power System Investment Planning}
 \label{sec:model}
 %\blindtext
 
-\subsubsection{Least-Cost Optimisation}
+\subsubsection{Least-Cost Solutions}
 
 %objective
 The objective is to minimise the total annual system costs comprising generation, transmission and storage infrastructure in a fully renewable system. Stylised as $c^\top x$.
 
 % constraints
-The objective is subject to linear constraints $Ax=b$ that define limits on
+The objective is subject to linear constraints $Ax\leq b$ that define limits on
 (i) the capacities of infrastructure from geographical and technical potentials,
 (ii) the availability of variable renewable energy sources for each location and point in time derived from reanalysis weather data, and
 (iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations.
@@ -30,7 +38,7 @@ one technology
 $x_s\subseteq x$ (for instance solar capacities)
 
 \begin{align}
-    \overline{x_s} = \max_{x_s}\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\} \\
+    \overline{x_s} = \max_{x_s}\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\}
 \end{align}
 
 for generation (any wind, onshore wind, offshore wind, solar)
@@ -57,7 +65,7 @@ more sophisticated than discrete steps to map the 2D crossection in \cite{peders
 
 \subsubsection{Power System Model}
 
-%F map of 37 and 128 nodes and time series 4H/2H at particular location
+%F map of 37 and 128 nodes and time series 4H/2H at particular locationkt
 
 \begin{SCfigure}
     \begin{tabular}{cc}
@@ -134,6 +142,11 @@ Comparison to others:
 - mostly less than $\pm$25\% \cite{pizarro-alonso_uncertainties_2019}
 - $\pm$50\% \cite{shirizadeh_how_2019}
 
+because we evaluate uncertainties based on annuities,
+the analysis incorporates uncertainties about
+overnight investments, FOM, lifetime, and discount rate
+(multiple combinations can lead to the same annuity)
+
 \subsubsection{Distributions}
 
 distributions of cost projections
@@ -200,25 +213,25 @@ steps (following \cite{feinberg_chaospy_2015} and many others):
 
 vector of random variables
 \begin{equation}
-    \bm{X} = \{X_1, \dots , X_M\}
+    \x = \{\mathsf{x}_1, \dots , \mathsf{x}_m\}
 \end{equation}
 
 computational model
 \begin{equation}
-    Y = \cM ( \bm X )
+    \mathsf{y} = f(\x)
 \end{equation}
 
 polynomial chaos expansion
 - three terms recurrence algorithm \cite{feinberg_chaospy_2015}
 - Hilbertian basis of Hilbert space that contains the response \cite{sudret_global_2008}
 \begin{equation}
-    Y = \cM ( \bm X ) = \sum_{\ba \,\in\, \mathbb{N}^M} r_{\ba} \psi_{\ba} (\bm X)
+    \mathsf{y} = f(\x) = \sum_{\ba \,\in\, \mathbb{N}^m} r_{\ba} \psi_{\ba}(\x)
 \end{equation}
-where $\psi_\ba$ is a collection of multivariate orthogonal polynomials that form a Hilbertian basis on $f_{\bm X}$
-where $\ba = \{\alpha_1,\dots,\alpha_M\}$ is a multiindex and its elements
-denotes the degree of $\psi_\ba$ in each of the $M$ input variables $X_i$
-$Y\in\mathbb{R}$ is scalar in the following, but we will look at 8 outputs
-$c_\ba \in \mathbb{R}$ are the polynomial coefficients (or PCE coefficients)
+where $\psi_\ba$ is a collection of multivariate orthogonal polynomials that form a Hilbertian basis on $f_{\x}$
+where $\ba = \{\alpha_1,\dots,\alpha_m\}$ is a multiindex and its elements
+denotes the degree of $\psi_\ba$ in each of the $m$ input variables $\mathsf{x}_i$
+$\mathsf{y}\in\mathbb{R}$ is scalar in the following, but we will look at 8 outputs (can use same basis polynomials)
+$r_\ba \in \mathbb{R}$ are the polynomial coefficients (or PCE coefficients)
 
 orthogonality condition
 \begin{equation}
@@ -232,29 +245,29 @@ without truncation the polynomial chaos expansion is exact! \cite{fajraoui_optim
 - limit expansion to a number of finite coefficients
 - typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
 \begin{equation}
-    \cM'(\bm X) = \sum_{\ba \,\in\, \cA^{M,p}} r_\ba \psi_\ba(\bm X)
+    f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba(\x)
 \end{equation}
 
-standard truncation (select all polynomials in $M$ input variables where total degree is less than $p$), it's a set of indices
+standard truncation (select all polynomials in $m$ input variables where total degree is less than $p$), it's a set of indices
 \begin{equation}
-    \cA^{M,p} = \left\{\ba \in \mathbb{N}^M \,:\, \abs{\ba} \leq p\right\}
+    \cA^{m,p} = \left\{\ba \in \mathbb{N}^m \,:\, \abs{\ba} \leq p\right\}
 \end{equation}
-where $\abs{\ba} = \sum_{i=1}^M \alpha_i$
+where $\abs{\ba} = \sum_{i=1}^m \alpha_i$
 
 cardinality of truncation
 \begin{equation}
-    P = \card \cA^{M,p} = \left(\begin{matrix}
-        M+p \\
+    q = \card \cA^{m,p} = \left(\begin{matrix}
+        m+p \\
         p
-    \end{matrix}\right) = \frac{(M+p)!}{M!p!}
+    \end{matrix}\right) = \frac{(m+p)!}{m!p!}
 \end{equation}
-$P$: number of unknown coefficients, also cardinality
-$M$: number of uncertain input parameters
+$q$: number of unknown coefficients, also cardinality
+$m$: number of uncertain input parameters
 $p$: order/degree of the polynomial
 
 coefficients to be found
 \begin{equation}
-    \bm r = \left\{r_\ba \,:\, \ba \in \cA^{M,p}\right\}
+    \bm r = \left\{r_\ba \,:\, \ba \in \cA^{m,p}\right\}
 \end{equation}
 
 experimental design
@@ -263,38 +276,34 @@ over-sampling ratio (OSR):
 - cardinality increases exponentially with number of input parameters -> curse of dimensionality
 - recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
 - too high OSR: very coarse approximation; too low OSR: risk of over-fitting \cite{palar_multi-fidelity_2016}
-OSR considerations (M=5) 2-3
+OSR considerations (m=5) 2-3
 - for order 1, need 12-18 samples
 - for order 2, need 42-63 samples
 - for order 3, need 112-168 samples
 - for order 4, need 252-378 samples
 - for order 5, need 504-756 samples
-inputs
+inputs and corresponding outputs
 \begin{equation}
-    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(N)} }
-\end{equation}
-outputs
-\begin{equation}
-    \mathcal{Y} = \set{ \cM\left(\bm x^{(1)}\right),\dots,\cM\left(\bm x^{(N)}\right) }
+    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad 
+    \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }
 \end{equation}
 
 regression: minimise least-square residual of polynomial approximation over all samples (Lasso regression: $L_2$ regression with an extra $L_1$ regularization term, and a preference for fewer non-zero terms [sparse].)
 \begin{equation}
-    \hat{\bm{r}} = \argmin_{\bm{r}_\ba \,\in\, \mathbb{R}^P} \frac{1}{N} \sum_{i=1}^N \left(
-        \cM \left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{M,p}} r_\ba \psi_\ba\left(\bm x^{(i)}\right)
-    \right)^2  + \lambda \norm{\bm{r}_\ba}_1
+    \hat{\bm{r}} = \argmin_{\bm{r}_\ba \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
+        f\left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba\left(\bm x^{(i)}\right)
+    \right)^2  + \lambda \norm{\bm{r}_\ba}_1 \right]
 \end{equation}
 $\lambda=0.005$
-
-finished surrogate model
-\begin{equation}
-    Y = \cM(\bm X) \approx \cM'(\bm X) = \sum_{\ba \,\in\, \cA} \hat{r}_\ba \psi_\ba (\bm X)
-\end{equation}
-
 sparsity:
 - one can force sparse expansion (few non-zero coefficients) to partially counteract curse of dimensionality \cite{gratiet_metamodel-based_2015}
 - these will use regularisation/penalty terms in the formulation of the regression problem
 - but ordinary least-square regression is fine if number of uncertain parameters is $\leq 10$ \cite{gratiet_metamodel-based_2015}
+
+finished surrogate model
+\begin{equation}
+    \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA} \hat{r}_\ba \psi_\ba (\x)
+\end{equation}
 
 \subsubsection{Multifidelity Approach}
 \label{sec:multifidelity}
@@ -338,33 +347,33 @@ Additive scaling approach (argue why additive is used not multiplicative)
 
 error function
 \begin{equation}
-    \mathcal{C}(\bm X) = \cM_h(\bm X) - \cM_\ell(\bm X)
+    \Delta(\x) = f_h(\x) - f_\ell(\x)
 \end{equation}
 
 samples
-\begin{align}
-    \mathcal{X}_h &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_h)}} \\
-    \mathcal{X}_l &= \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(N_h)}, \dots, \bm{x}^{(N_l)}}
-\end{align}
-where $N_h < N_\ell$ and when using deterministic low-dicrepancy series
+\begin{equation}
+    \mathcal{X}_h = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}} \quad\text{and}\quad
+    \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}}
+\end{equation}
+where $n_h < n_\ell$ and when using deterministic low-dicrepancy series
 consequently $\mathcal{X}_h \subset \mathcal{X}_\ell$.
 
 Due to the smaller number of samples for the high fidelity model (and therefore error between high and low fidelity), it is also
-common that $p_h < p_l$ and consequently $\cA_h \subset \cA_l$
+common that $p_h < p_\ell$ and consequently $\cA_h \subset \cA_\ell$
 
 multifidelity model (simple)
 \begin{equation}
-    \cM_h'(\bm X) = \cM_\ell'(\bm X) + \mathcal{C}'(\bm X)
+    f_h'(\x) = f_\ell'(\x) + \Delta'(\x)
 \end{equation}
 
 multifidelity model (more detailed)
 \begin{equation}
-    \cM_h' (\bm X) = \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\cap\, \cA_r^{M,p_c}}
+    f_h' (\x) = \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\cap\, \cA_r^{m,p_c}}
     \left(
      r_{\ell,\ba} + r_{c,\ba}
-    \right) \psi_\ba(\bm X) + 
-    \sum_{\ba\,\in\,\cA_\ell^{M,p_\ell} \,\setminus\, \cA_r^{M,p_c}}
-    r_{\ell,\ba} \psi_\ba(\bm X)
+    \right) \psi_\ba(\x) + 
+    \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\setminus\, \cA_r^{m,p_c}}
+    r_{\ell,\ba} \psi_\ba(\x)
 \end{equation}
 
 using chaospy \cite{feinberg_chaospy_2015}
@@ -405,6 +414,7 @@ computational requirements:
 - high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average values, CPU time ~238 weeks or 4.56 years
 - low-fidelity: 3 GB, 5 minutes, 1 thread, Gurobi, average values, CPU time ~25 weeeks or 0.48 years
 
+% TODO potentially move to results
 \subsection{Sensitivity Indices}
 \label{sec:sobol}
 
@@ -424,23 +434,3 @@ total Sobol indices:
 - can be greater than 100\% if not purely additive
 
 using chaospy \cite{feinberg_chaospy_2015}
-
-\subsection{Validation and Error Measures}
-\label{sec:validation}
-
-error estimation, measures of accuracy
-
-using cross-validation techniques 
-- training set of known data
-- validation/test set of unknown data to surrogate \cite{gratiet_metamodel-based_2015}
-- based on low-fidelity models only
-- too few samples for error analysis for high-fidelity model
-- out of 500 cost samples, 100 have not been used for building/training the surrogate model; this is our test set.
-
-error measures:
-- R2: quality of the regression "proportion of the variance in the dependent variable that is predictable from the independent variable" (wiki)
-- MAE: to see absolute deviations (in GW), alternative to relative error (esp if prediction is 0 relative errors are super high)
-- MAPE: relative deviations
-- RMSE
-
-- benchmark: model cross-validation error below 5\% \cite{trondle_trade-offs_2020}
