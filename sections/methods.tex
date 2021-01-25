@@ -19,12 +19,12 @@ annual system costs, comprising annualised capital costs $c_\star$ for investmen
 in generator capacity $G_{i,r}$ of technology $r$, storage capacity $H_{i,s}$ of technology $s$, and transmission line capacities
 $F_{\ell}$, as well as the variable operating costs $o_\star$ for generator dispatch $g_{i,r,t}$:
 \begin{align}
-    \min_{G,H,F,g} \quad \left[
+    \min_{G,H,F,g} \quad \left\{
         \sum_{i,r} c_{i,r}\cdot G_{i,r} +
         \sum_{i,s} c_{i,s}\cdot H_{i,s} +
         \sum_{\ell}c_{\ell}\cdot F_{\ell}+
         \sum_{i,r,t}w_t\cdot o_{i,r} \cdot g_{i,r,t}
-    \right]
+    \right\}
     \label{eq:objective}
 \end{align}
 where the snapshots $t$ are weighted by $w_t$ such that their total duration
@@ -100,12 +100,16 @@ Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capac
 where $\overline{f}_\ell$ acts as a per-unit buffer capacity
 to protect against the outage of single circuits.
 
-The problem is implemented in the open-source tool PyPSA \cite{pypsa}.
-Note, that this formulation assumes perfect foresight for the reference year based on which capacities are optimized.
+The problem is implemented in the open-source tool PyPSA \cite{pypsa} and we use Gurobi to solve it.
+Note, that this formulation assumes perfect foresight for the reference year based on which capacities are optimised.
 It does not include pathway optimization, nor aspects of reserve power, system stability or robust scheduling.
+Changes of line expansion to line impedance are ignored for computational reasons.
 
 \subsubsection{Near-Optimal Solutions}
 
+For the sake of brevity, in the following we refer
+to the objective function in \cref{eq:objective} as $c^\top x$ and
+to the set of linear constraints in \crefrange{eq:firstA}{eq:lastA} as $Ax\leq b$.
 \begin{equation}
     C = \min_x\{c^\top x \mid Ax\leq b\}
 \end{equation}
@@ -148,8 +152,6 @@ more sophisticated than discrete steps to map the 2D crossection in \cite{peders
 
 \subsection{Model Inputs}
 
-%F map of 37 and 128 nodes and time series 4H/2H at particular locationkt
-
 \begin{SCfigure}
     \begin{tabular}{cc}
         \footnotesize low-fidelity: 37 nodes and 4-hourly & \footnotesize high-fidelity: 128 nodes and 2-hourly \\
@@ -161,20 +163,57 @@ more sophisticated than discrete steps to map the 2D crossection in \cite{peders
     \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
 \end{SCfigure}
 
-PyPSA-Eur \cite{pypsa} \cite{pypsaeur} \cite{hoersch_spatial_2017} 
+% general
 
-open-source model built as snakemake workflow \cite{snakemake}
+- the instance of coordinated capacity expansion problem
+- PyPSA-Eur European transmission system \cite{pypsaeur} \cite{hoersch_spatial_2017} 
+- open-source model built as snakemake workflow \cite{snakemake}
+- only open data
+- high spatial and temporal resolution and scope
+- fully renewable electricity system based on solar photovoltaics and onshore and offshore wind
+- hydrogen storage system (representing long-term synoptic and seasonal storage)
+- battery storage (representing short-term storage primarily suited to balancing daily fluctuations)
+- greenfield, exception:
+  - existing transmission infrastructure can only be reinforced continuously by up to X GW each but not removed
+  - existing hydro-electric infrastructure are not extendable because of geographical constraints
+- one coarse 37 nodes at 4-hourly resolution
+- one more detailed 128 nodes at 2-hourly resolution
 
-only power system
+% existing infrastructure (hydro and transmission)
 
-100\% renewable system based on wind and solar
+- retrieved from ENTSO-E map transmission system at and above 220 kV and substations
+- standard line types
+- HVDC links from TYNDP planned projects are included
+- $N-1$ security is approximated by not using more than 70\% of nominal line ratings
+- powerplantmatching merged dataset of conventional power plants
+  run-of-river, hydro-electric dams, pumped-hydro storage
 
-greenfield, exception: today's transmission grid, hydro, run-of-river
+% renewable generation potentials
 
+- CORINE landuse (eligible codes and distance criteria)
+- exclude natural protection areas (NATURA 2000)
+- GEBCO bathymetry (no more than 50m depths)
+- justify why no biomass and nuclear?
 
-\subsection{Technology Cost Uncertainty}
+% renewable generation time series
+
+- ERA5 reanalysis weather data wind speeds, surface roughness run-off in 0.28x0.28 deg grid and hourly
+- direct and diffuse surface solar irradiance of SARAH-2
+- models for wind turbines, solar panels, and calculating hydro-electric inflow into basins
+- converted to hourly capacity factors per grid node
+
+% demand time series
+
+- ENTSO-E national load data historic (projection)
+- distributed by 40\% population density and 60\% gross domestic product to each grid node
+
+Full details \cite{pypsaeur}.
+
+\subsection{Technology Cost Assumptions and Uncertainty}
 \label{sec:uncertainty}
 %\blindtext
+
+% fixed cost assumptions
 
 % General
 
@@ -262,7 +301,7 @@ one method is building a surrogate model based on polynomial chaos expansion
 used inputs: cost of offshore, onshore, solar, H2, battery
 recorded outputs: system cost, wind, offwind, onwind, solar, H2, battery, transmission
 
-\subsubsection{Polynomial Chaos Expansion}
+\subsubsection{Surrogate Modelling using Polynomial Chaos Expansion}
 
 detailed general info and advise
 \cite{gratiet_metamodel-based_2015} 
@@ -390,7 +429,7 @@ finished surrogate model
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA} \hat{r}_\ba \psi_\ba (\x)
 \end{equation}
 
-\subsubsection{Multifidelity Approach}
+\subsubsection{Extension by Multifidelity Approach}
 \label{sec:multifidelity}
 
 \cite{palar_multi-fidelity_2016}
