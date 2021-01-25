@@ -10,22 +10,105 @@ In this section,
 \label{sec:model}
 %\blindtext
 
+First, least-cost investment then how to obtain near-optimal alternatives.
+
 \subsubsection{Least-Cost Solutions}
 
-%objective
-The objective is to minimise the total annual system costs comprising generation, transmission and storage infrastructure in a fully renewable system. Stylised as $c^\top x$.
-
-% constraints
-The objective is subject to linear constraints $Ax\leq b$ that define limits on
+The objective of long-term power system planning is to minimize the total
+annual system costs, comprising annualised capital costs $c_\star$ for investments at locations $i$
+in generator capacity $G_{i,r}$ of technology $r$, storage capacity $H_{i,s}$ of technology $s$, and transmission line capacities
+$F_{\ell}$, as well as the variable operating costs $o_\star$ for generator dispatch $g_{i,r,t}$:
+\begin{align}
+    \min_{G,H,F,g} \quad \left[
+        \sum_{i,r} c_{i,r}\cdot G_{i,r} +
+        \sum_{i,s} c_{i,s}\cdot H_{i,s} +
+        \sum_{\ell}c_{\ell}\cdot F_{\ell}+
+        \sum_{i,r,t}w_t\cdot o_{i,r} \cdot g_{i,r,t}
+    \right]
+    \label{eq:objective}
+\end{align}
+where the snapshots $t$ are weighted by $w_t$ such that their total duration
+adds up to one year. The objective is subject to a set of linear constraints that define limits on
 (i) the capacities of infrastructure from geographical and technical potentials,
-(ii) the availability of variable renewable energy sources for each location and point in time derived from reanalysis weather data, and
-(iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations.
+(ii) the availability of variable renewable energy sources for each location and point in time, and
+(iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations,
+which we describe in more detail in the following.
+
+The capacities of generation, storage and transmission infrastructure are
+limited to their geographical potentials from above and existing infrastructure from below:
+\begin{align}
+    \label{eq:firstA}
+    \underline{G}_{i,r}  \leq G_{i,r}  \leq \overline{G}_{i,r}  &\qquad\forall i, r \\
+    \underline{H}_{i,s}  \leq H_{i,s}  \leq \overline{H}_{i,s}  &\qquad\forall i, s \\
+    \underline{F}_{\ell} \leq F_{\ell} \leq \overline{F}_{\ell} &\qquad\forall \ell
+\end{align}
+
+The dispatch of a renewable generator is constrained by
+its rated capacity and the time- and location-dependent availability $\overline{g}_{i,r,t}$,
+given in per-unit of the generator's capacity:
+\begin{align}
+    0 \leq g_{i,r,t} \leq \overline{g}_{i,r,t} G_{i,r} \qquad\forall i, r, t
+\end{align}
+
+The dispatch of storage units is described by a charge variable $h_{i,s,t}^+$
+and a discharge variable $h_{i,s,t}^-$, each limited by the power rating $H_{i,s}$.
+\begin{align}
+    0 \leq h_{i,s,t}^+ \leq H_{i,s} &\qquad\forall i, s, t \\
+    0 \leq h_{i,s,t}^- \leq H_{i,s} &\qquad\forall i, s, t
+\end{align}
+The energy levels $e_{i,s,t}$ of all storage units are linked to the dispatch by
+\begin{align}
+    e_{i,s,t} =\: & \eta_{i,s,0}^{w_t} \cdot e_{i,s,t-1} + w_t \cdot h_{i,s,t}^\text{inflow} - w_t \cdot h_{i,s,t}^\text{spillage} & \quad\forall i, s, t \nonumber \\
+    & + \eta_{i,s,+} \cdot w_t \cdot h_{i,s,t}^+ - \eta_{i,s,-}^{-1} \cdot w_t \cdot h_{i,s,t}^-.
+\end{align}
+Storage units can have a standing loss $\eta_{i,s,0}$, a charging efficiency $\eta_{i,s,+}$, a discharging efficiency $\eta_{i,s,-}$,
+natural inflow $h_{i,s,t}^\text{inflow}$ and spillage $h_{i,s,t}^\text{spillage}$.
+The storage energy levels are assumed to be cyclic and are constrained by their energy capacity
+\begin{align}
+    e_{i,s,0} = e_{i,s,T} &\qquad\forall i, s \\
+    0 \leq e_{i,s,t} \leq \overline{T}_s \cdot H_{i,s} &\qquad\forall i, s, t.
+\end{align}
+To reduce the number of decisison variables, we link the energy capacity to
+power ratings with a technology-specific parameter $\overline{T}_s$
+that describes the maximum duration a storage unit can discharge at full power rating.
+
+Kirchhoff's Current Law (KCL) requires local generators and storage units as well as
+incoming or outgoing flows $f_{\ell,t}$ of incident transmission lines $\ell$
+to balance the inelastic electricity demand $d_{i,t}$ at each location $i$ and snapshot $t$
+\begin{align}
+    \sum_r g_{i,r,t} + \sum_s h_{i,s,t} + \sum_\ell K_{i\ell} f_{\ell,t} = d_{i,t} \qquad\forall i,t,
+\end{align}
+where $K_{i\ell}$ is the incidence matrix of the network.
+
+Kichhoff's Voltage Law (KVL) imposes further constraints on the flow of AC lines.
+Using linearised load flow assumptions, the voltage angle difference around every closed cycle in the
+network must add up to zero. We formulate this constraint using a cycle basis $C_{\ell c}$
+of the network graph where the independent cycles $c$ are expressed as
+directed linear combinations of lines $\ell$ \cite{cycleflows}.
+This leads to the constraints
+\begin{align}
+    \sum_\ell C_{\ell c} \cdot x_\ell \cdot f_{\ell,t} = 0 \qquad\forall c,t
+\end{align}
+where $x_\ell$ is the series inductive reactance of line $\ell$.
+Controllable HVDC links are not affected by this constraint.
+
+Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capacities $F_\ell$
+\begin{align}
+    \abs{f_{\ell,t}} \leq \overline{f}_{\ell} F_{\ell} & \qquad\forall \ell, t,
+    \label{eq:lastA}
+\end{align}
+where $\overline{f}_\ell$ acts as a per-unit buffer capacity
+to protect against the outage of single circuits.
+
+The problem is implemented in the open-source tool PyPSA \cite{pypsa}.
+Note, that this formulation assumes perfect foresight for the reference year based on which capacities are optimized.
+It does not include pathway optimization, nor aspects of reserve power, system stability or robust scheduling.
+
+\subsubsection{Near-Optimal Solutions}
 
 \begin{equation}
     C = \min_x\{c^\top x \mid Ax\leq b\}
 \end{equation}
-
-\subsubsection{Near-Optimal Solutions}
 
 Following the methodology presented in \cite{nearoptimal}
 epsilon constraint method from multi-objective optimisation \cite{mavrotas_effective_2009}
@@ -63,7 +146,7 @@ for pairs
 more sophisticated than discrete steps to map the 2D crossection in \cite{pedersen_modeling_2020}
 
 
-\subsubsection{Power System Model}
+\subsection{Model Inputs}
 
 %F map of 37 and 128 nodes and time series 4H/2H at particular locationkt
 
@@ -93,6 +176,8 @@ greenfield, exception: today's transmission grid, hydro, run-of-river
 \label{sec:uncertainty}
 %\blindtext
 
+% General
+
 "the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" \cite{yue_review_2018}
 it is more insightful than using best-guess values \cite{fraiture_robustness_2020}
 but quantifying the input uncertainties is a challenge \cite{moret_characterization_2017}
@@ -107,7 +192,7 @@ Two main sources of technology cost uncertainty \cite{trondle_trade-offs_2020}
 - \cite{schmidt_projecting_2019}
 - \cite{schmidt_future_2017}
 
-\subsubsection{Ranges}
+% Ranges
 
 \begin{SCtable}
     \begin{small}
@@ -147,7 +232,7 @@ the analysis incorporates uncertainties about
 overnight investments, FOM, lifetime, and discount rate
 (multiple combinations can lead to the same annuity)
 
-\subsubsection{Distributions}
+% Distributions
 
 distributions of cost projections
 - uniform: \cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}
