@@ -25,6 +25,7 @@
 % \usepackage{amssymb}
 
 \usepackage{amsmath}
+\usepackage{bbold}
 \usepackage{graphicx}
 \usepackage{eurosym}
 \usepackage{mathtools}
@@ -49,6 +50,8 @@
 
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
 \def\cL{\mathcal{L}}
 \def\cN{\mathcal{N}}
 \def\cT{\mathcal{T}}
@@ -56,16 +59,15 @@
 \def\cA{\mathcal{A}}
 \def\ba{{\bm{\alpha}}}
 \def\card{\text{card}\,}
-\newcommand{\set}[1]{\left\{#1\right\}}
-\DeclareMathOperator*{\argmin}{\arg\!\min}
 \def\x{\boldsymbol{\mathsf{x}}}
+
+\urlstyle{sf}
 
 \begin{document}
 
 \begin{frontmatter}
 
-	\title{Affordable renewable power systems can be planned,\\
-	       even if technology costs are uncertain}
+	\title{Near-Optimal Parametric Uncertainty Analysis}
 	
 	\author[kitaddress]{Fabian Neumann\corref{correspondingauthor}}
 	\ead{fabian.neumann@kit.edu}
@@ -131,7 +133,7 @@ The responsibility for the contents lies with the authors.
 
 \section*{Data Availability}
 
-A dataset of the results including networks and graphics is available at \href{TBA}{doi:TBA}. 
+A dataset of the results including selected networks and all graphics is available at \href{TBA}{doi:TBA}. 
 We also refer to the documentation of PyPSA (\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}),
 PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}) and the source code 
 repository

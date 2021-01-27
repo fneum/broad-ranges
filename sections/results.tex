@@ -29,6 +29,7 @@ storage:
 transmission:
 - least affected by cost uncertainties
 - almost doubling in relation to today's capacities
+- relate to TYNDP
 
 criticise that
 - interpretation of boundaries is limited
@@ -78,10 +79,10 @@ result:
 - slope:
   - battery  becomes economically significantly more attractive (see change of slope) once annuity falls below 75 EUR/kW/a
   - [translate into an overnight investment with exemplary lifetime/interest] (regardless of other cost uncertainties), below it is a minor to hydrogen
-  - hydrogen on the other hand -> steady slope and uncertainty band
+  - hydrogen on the other hand - steady slope and uncertainty band
 - uncertainty:
-  - low cost of onshore wind -> much onshore wind with low uncertainty
-  - high cost of onshore wind -> how much is built greatly depends on other cost parameters
+  - low cost of onshore wind - much onshore wind with low uncertainty
+  - high cost of onshore wind - how much is built greatly depends on other cost parameters
   - the opposite for offshore wind (and solar)
 - other:
   - the limited uncertainty about optimal levels of network expansion is mostly due to hydrogen storage cost. As cost of storing H2 falls, less grid reinforcment chosen (can also see this  in Sobol indices)
@@ -94,18 +95,27 @@ transition:
 
 \begin{figure}
     \begin{subfigure}[t]{0.45\textwidth}
-        \caption{first-order Sobol indices}
+        \caption{first-order Sobol indices [\%]}
         \label{fig:sobol:first}
         \includegraphics[width=\textwidth]{sobol/sobol-m-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.54\textwidth}
-        \caption{total Sobol indices}
+        \caption{total Sobol indices [\%]}
         \label{fig:sobol:total}
         \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
     \end{subfigure}
     \caption{Sobol sensitivity indices}
     \label{fig:sobol}
 \end{figure}
+
+Sobol / sensitivity indices:
+- decomposition of output variance and attribution to random input variables
+- separate influential from non-influential parameters
+- The polynomials can be used for calculating Sobol indices efficiently in post-processing \cite{sudret_global_2008}
+- used in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}
+- using chaospy \cite{feinberg_chaospy_2015}
+- first-order Sobol: share of output variance due to variations in one input parameter alone (averaged over variations in other input parameters)
+- total Sobol indices: contribution to output variance including all interactions with other input variables (can be greater than 100\% if not purely additive)
 
 \cref{fig:sobol} \cref{fig:sobol:first} \cref{fig:sobol:total}
 - two ways to display as a heatmap or as stacked bar chart
@@ -309,10 +319,8 @@ results:
   - more hydrogen storage (compensating balancing in space with balancing in time)
 
 \subsection{Model Validation}
+\label{sec:validation}
 %%\blindtext
-
-%F errors vs number of samples
-%F errors vs polynomial order
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
@@ -339,6 +347,8 @@ results:
     \label{fig:error}
 \end{figure}
 
+% TODO: model validation in methods or results?
+
 using cross-validation techniques 
 - training set of known data
 - validation/test set of unknown data to surrogate \cite{gratiet_metamodel-based_2015}
@@ -364,11 +374,8 @@ error estimation, measures of accuracy:
   - (exception is transmission -- why?)
 - \cref{fig:error:poly}
   - order of 2 and below is too simple (underfitting)
-  - order of 4 and above yields no improvement (overfitting, were it not for the reqularization term)
+  - order of 4 and above yields no improvement (overfitting, were it not for the regularisation term)
   - as higher order requires more samples, in the interest of computational burden, order of 3 appears to be a suitable compromise
-
-
-
 
 \subsection{Critical Appraisal and Outlook}
 %%\blindtext

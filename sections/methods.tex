@@ -1,29 +1,22 @@
 In this section,
-- first how to obtain least-cost and near-optimal solutions for a given cost parameter set from PyPSA-Eur model
-- second definition of the uncertainties we consider
-- third how we make use of surrogate modelling techniques to efficiently cover parameter space,
-  while detailed modelling
-- experimental design
-- sensitivity indices
+we first outline how we obtain least-cost and near-optimal solutions for a given cost parameter set.
+We then describe the model of the European power system and define the cost uncertainties. 
+Finally, we explain how we make use of surrogate modelling techniques
+and find an experimental design that efficiently covers the parameter space.
 
-\subsection{Power System Investment Planning}
-\label{sec:model}
-%\blindtext
+\subsection{Least-Cost Investment Planning}
+\label{sec:leastcost}
 
-First, least-cost investment then how to obtain near-optimal alternatives.
-
-\subsubsection{Least-Cost Solutions}
-
-The objective of long-term power system planning is to minimize the total
+The objective of long-term power system planning is to minimise the total
 annual system costs, comprising annualised capital costs $c_\star$ for investments at locations $i$
 in generator capacity $G_{i,r}$ of technology $r$, storage capacity $H_{i,s}$ of technology $s$, and transmission line capacities
 $F_{\ell}$, as well as the variable operating costs $o_\star$ for generator dispatch $g_{i,r,t}$:
 \begin{align}
     \min_{G,H,F,g} \quad \left\{
-        \sum_{i,r} c_{i,r}\cdot G_{i,r} +
-        \sum_{i,s} c_{i,s}\cdot H_{i,s} +
-        \sum_{\ell}c_{\ell}\cdot F_{\ell}+
-        \sum_{i,r,t}w_t\cdot o_{i,r} \cdot g_{i,r,t}
+        \sum_{i,r}   c_{i,r}  \cdot G_{i,r}  +
+        \sum_{i,s}   c_{i,s}  \cdot H_{i,s}  +
+        \sum_{\ell}  c_{\ell} \cdot F_{\ell} +
+        \sum_{i,r,t} w_t \cdot o_{i,r} \cdot g_{i,r,t}
     \right\}
     \label{eq:objective}
 \end{align}
@@ -49,7 +42,6 @@ given in per-unit of the generator's capacity:
 \begin{align}
     0 \leq g_{i,r,t} \leq \overline{g}_{i,r,t} G_{i,r} \qquad\forall i, r, t
 \end{align}
-
 The dispatch of storage units is described by a charge variable $h_{i,s,t}^+$
 and a discharge variable $h_{i,s,t}^-$, each limited by the power rating $H_{i,s}$.
 \begin{align}
@@ -88,6 +80,7 @@ directed linear combinations of lines $\ell$ \cite{cycleflows}.
 This leads to the constraints
 \begin{align}
     \sum_\ell C_{\ell c} \cdot x_\ell \cdot f_{\ell,t} = 0 \qquad\forall c,t
+    \label{eq:kvl}
 \end{align}
 where $x_\ell$ is the series inductive reactance of line $\ell$.
 Controllable HVDC links are not affected by this constraint.
@@ -100,138 +93,173 @@ Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capac
 where $\overline{f}_\ell$ acts as a per-unit buffer capacity
 to protect against the outage of single circuits.
 
-The problem is implemented in the open-source tool PyPSA \cite{pypsa} and we use Gurobi to solve it.
-Note, that this formulation assumes perfect foresight for the reference year based on which capacities are optimised.
-It does not include pathway optimization, nor aspects of reserve power, system stability or robust scheduling.
-Changes of line expansion to line impedance are ignored for computational reasons.
+This problem is implemented in the open-source tool PyPSA \cite{pypsa} and is solved by Gurobi.
+Note, that it assumes perfect foresight for a single reference year based on which capacities are optimised.
+It does not include pathway optimisation, nor aspects of reserve power, or system stability.
+Changes of line expansion to line impedance are ignored.
 
-\subsubsection{Near-Optimal Solutions}
+\subsection{Near-Optimal Alternatives}
 
-For the sake of brevity, in the following we refer
-to the objective function in \cref{eq:objective} as $c^\top x$ and
-to the set of linear constraints in \crefrange{eq:firstA}{eq:lastA} as $Ax\leq b$.
+Using the least-cost solution as an anchor, we use the
+$\varepsilon$-constraint method from multi-objective optimisation
+to find near-optimal feasible solutions \cite{nearoptimal,mavrotas_effective_2009}.
+For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
+and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
+in a space of continuous variables, 
+such that the minimised system cost can be represented by
 \begin{equation}
-    C = \min_x\{c^\top x \mid Ax\leq b\}
+    C = \min_x\left\{c^\top x \mid Ax\leq b\right\}.
 \end{equation}
 
-Following the methodology presented in \cite{nearoptimal}
-epsilon constraint method from multi-objective optimisation \cite{mavrotas_effective_2009}
+% one technology
 
-one technology
-
-- new objective
-- add constraint to limit cost increase
-
-$x_s\subseteq x$ (for instance solar capacities)
-
-\begin{align}
-    \overline{x_s} = \max_{x_s}\{\:&x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\}
-\end{align}
-
-for generation (any wind, onshore wind, offshore wind, solar)
-for transmission
-for storage (hydrogen, battery)
-
-two technologies
-
-- add constraint to fix total capacity
-
-$x_w\subseteq x$ (for instance wind capacities)
-
+We then encode the original objective as a constraint 
+such that the cost increase is limited to a given $\varepsilon$.
+In other words, the feasible space is cut to solutions that
+are at most $\varepsilon$ more expensive than the least-cost solution.
+Given this slack, we can formulate alternative search directions in the objective.
+For instance, we can seek to minimise the sum of solar installations $x_s \subseteq x$ with
 \begin{equation}
-    \overline{x_w} = \max_{x_w}\{\:x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\}
+    \overline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\right\}.
 \end{equation}
+To draw a full picture of the frontiers of near-optimal feasible space, 
+we systematically explore the extremes of various technologies:
+we both minimise and maximise the system-wide investments in
+solar, onshore wind, offshore wind, any wind, hydrogen storage, and battery storage
+capacities, as well as the total volume of transmission network expansion.
+Evaluating each of these technology groups for
+different cost deviations $\varepsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
+allows us to observe how the degree of freedom regarding investment decisions
+rises as the optimality tolerance is increased, both at lower and upper ends.
+By arguments of convexity, these extremes even delineate boundaries
+within which all near-optimal solutions are contained.
+Moreover, although this scheme primarily studies aggregated capacities,
+the solutions are still spatially explicit, and we can inspect for each case
+how the capacities of each technology are distributed in the network.
 
-for pairs
+% two technologies
+
+A caveat of the method hides in the fact that the extremes
+of different technologies cannot be realised simultaneously.
+This is because technologies that are not part of the active search direction
+will act to support pushing the technologies in the objective further.
+For instance, lowering wind capacities will be compensated for
+by higher solar capacities to be able to satisfy energy demand.
+Thus, extremising one technology narrows the flexibility of a substitute technology. The question about the nature of such dependencies arises.
+To investigate two-dimensional influences,
+in addition to the $\varepsilon$-constraint and the objective to
+extremise use of a particular technology,
+we formulate a constraint that fixes the capacity of another technology.
+An example would be to search for the minimum amount of wind capacity $x_w \subseteq x$ 
+given that a certain amount of solar is built
+\begin{equation}
+    \overline{x_w} = \min_{x_w}\left\{\:1^\top x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad 1^\top x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\right\}.
+\end{equation}
+The $\alpha$ denotes the relative position within the near-optimal
+range of solar capacities at given $\varepsilon$.
+For example, at $\alpha=0\%$ we look for the least wind capacity
+given that minimal solar capacities are built. 
+An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
+using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}.
+
+Due to computational constraints, we focus on technologies which
+are assumed to lend themselves to substitution and limit the analysis to a single
+cost increase level of $\varepsilon=6\%$.
+We consider the three pairs,
 (i) wind and solar,
 (ii) offshore and onshore wind,
-(iii) hydrogen and battery storage
-
-more sophisticated than discrete steps to map the 2D crossection in \cite{pedersen_modeling_2020}
-
+(iii) hydrogen and battery storage,
+by minimising and maximising the former while
+fixing the latter at positions $\alpha \in \{0\%,25\%,50\%,75\%,100\%\}$
+within the respective near-optimal range.
 
 \subsection{Model Inputs}
 
 \begin{SCfigure}
     \begin{tabular}{cc}
-        \footnotesize low-fidelity: 37 nodes and 4-hourly & \footnotesize high-fidelity: 128 nodes and 2-hourly \\
+        \footnotesize (a) low-fidelity: 37 nodes and 4-hourly & \footnotesize (b) high-fidelity: 128 nodes and 2-hourly \\
         \includegraphics[width=0.33\textwidth]{map37.pdf} &
         \includegraphics[width=0.33\textwidth]{map128.pdf} \\
         \includegraphics[width=0.33\textwidth]{timeseries37.pdf} &
         \includegraphics[width=0.33\textwidth]{timeseries128.pdf} \\
     \end{tabular}
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{Illustration of the spatial and temporal resolution of the low and high fidelity model.}
+    \label{fig:pypsaeur}
 \end{SCfigure}
 
 % general
 
-- the instance of coordinated capacity expansion problem
-- PyPSA-Eur European transmission system \cite{pypsaeur} \cite{hoersch_spatial_2017} 
-- open-source model built as snakemake workflow \cite{snakemake}
-- only open data
-- high spatial and temporal resolution and scope
-- fully renewable electricity system based on solar photovoltaics and onshore and offshore wind
-- hydrogen storage system (representing long-term synoptic and seasonal storage)
-- battery storage (representing short-term storage primarily suited to balancing daily fluctuations)
-- greenfield, exception:
-  - existing transmission infrastructure can only be reinforced continuously by up to X GW each but not removed
-  - existing hydro-electric infrastructure are not extendable because of geographical constraints
-- one coarse 37 nodes at 4-hourly resolution
-- one more detailed 128 nodes at 2-hourly resolution
+The instances of the coordinated capacity expansion problem (\cref{sec:leastcost})
+ are based on \mbox{PyPSA-Eur},
+which is an open model of the European power transmission system
+that combines high spatial and temporal resolution \cite{pypsaeur}.
+Its sole reliance on open data from a variety of sources
+and formulation as an open-source snakemake workflow
+that tracks computations from raw data to the solved model,
+makes the analysis conducted in this study transparent and reproducible \cite{snakemake}.
+In the following, we outline the main features and chosen configurations. 
+However, refer to the supplementary material and \cite{pypsaeur} for more extensive details.
+
+We target a fully renewable electricity system primarily based on variable resources
+such as solar photovoltaics, onshore wind and offshore wind.
+Predominantly we pursue a greenfield approach, with a few notable exceptions.
+The existing hydro-electric infrastructure (run-of-river, hydro dams, pumped-storage)
+is included but not considered to be extendable due to assumed geographical constraints.
+Furthermore, the existing transmission infrastructure can only
+be reinforced continuously but may not be removed.
+In addition to balancing renewables in space with transmission networks,
+the model includes storage options to balance renewables in time.
+We consider two extendable storage technologies:
+battery storage representing short-term storage suited to balancing daily fluctuations and
+hydrogen storage system which exemplifies long-term synoptic and seasonal storage.
+
+Since the spatial and temporal resolution strongly affects the size of the optimisation problem,
+running the model at full resolution is computationally infeasible.
+Throughout the paper, we will therefore make use of two levels of aggregation,
+reflecting a compromise between the computational burden incurred by high-resolution models and
+the growing inaccuracies regarding transmission bottlenecks
+and resource distribution in low-resolution models.
+We consider a low fidelity model with 37 nodes at a 4-hourly resolution
+that models power flow via a transport model (i.e.~excluding KVL of \cref{eq:kvl}) and
+a high fidelity model with 128 nodes at a 2-hourly resolution
+subject to linearised load flow constraints.
 
 % existing infrastructure (hydro and transmission)
 
-- retrieved from ENTSO-E map transmission system at and above 220 kV and substations
-- standard line types
-- HVDC links from TYNDP planned projects are included
-- $N-1$ security is approximated by not using more than 70\% of nominal line ratings
-- powerplantmatching merged dataset of conventional power plants
-  run-of-river, hydro-electric dams, pumped-hydro storage
+The topology of the European transmission network is retrieved
+from the ENTSO-E transparency map and includes all lines at and above 220 kV.
+Capacities and electrical characteristics of transmission lines and substations are
+inferred from standard types for each voltage level, before they are transformed to
+a uniform voltage level.
+For each line, $N-1$ security is approximated by limiting the line loading to 70\% of its nominal rating.
+The dataset further includes existing HVDC links and planned projects from the TYNDP.
+Existing run-of-river, hydro-electric dams, pumped-hydro storage plants
+are retrieved from powerplantmatching, a merged dataset of conventional power plants.
 
 % renewable generation potentials
 
-- CORINE landuse (eligible codes and distance criteria)
-- exclude natural protection areas (NATURA 2000)
-- GEBCO bathymetry (no more than 50m depths)
-- justify why no biomass and nuclear?
+Eligible areas for developing renewable infrastructure are calculated
+per technology and grid node, assuming wind and solar installations always connect to the closest substation. 
+How much wind and solar capacity may be built at a particular location is constrained by selected
+eligible codes of the CORINE land use database and is further restricted by distance criteria,
+allowed deployment density, and the natural protection areas specified in the NATURA 2000 dataset.
+Offshore wind farms may not be developed at sea depths exceeding 50 metres,
+as indicated by the GEBCO bathymetry dataset. 
 
-% renewable generation time series
+% renewable generation and demand time series
 
-- ERA5 reanalysis weather data wind speeds, surface roughness run-off in 0.28x0.28 deg grid and hourly
-- direct and diffuse surface solar irradiance of SARAH-2
-- models for wind turbines, solar panels, and calculating hydro-electric inflow into basins
-- converted to hourly capacity factors per grid node
+The location-dependent renewables availability time series are generated
+based on two historical weather datasets from the year 2013.
+We retrieve wind speeds, run-off and surface roughness from the ERA5 reanalysis dataset and
+use the satellite-aided SARAH-2 dataset for the direct and diffuse surface solar irradiance.
+Models for wind turbines, solar panels, and the inflow into the basins of hydro-electric dams
+convert the weather data to hourly capacity factors and aggregate these to each grid node.
+Country-level load time series are taken from ENTSO-E statistics and
+are distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
 
-% demand time series
-
-- ENTSO-E national load data historic (projection)
-- distributed by 40\% population density and 60\% gross domestic product to each grid node
-
-Full details \cite{pypsaeur}.
-
-\subsection{Technology Cost Assumptions and Uncertainty}
+\subsection{Technology Cost Uncertainty}
 \label{sec:uncertainty}
 %\blindtext
-
-% fixed cost assumptions
-
-% General
-
-"the uncertainties inherent in the model structures and input parameters are at best underplayed and at worst ignored" \cite{yue_review_2018}
-it is more insightful than using best-guess values \cite{fraiture_robustness_2020}
-but quantifying the input uncertainties is a challenge \cite{moret_characterization_2017}
-
-Two main sources of technology cost uncertainty \cite{trondle_trade-offs_2020}
-- future deployment rates unknown
-- learning rate unknown
-- models "highly sensitive to uncertainty in the learning rates [...] due to the exponential relationship" \cite{mattsson_learning_2019}
-- \cite{yeh_review_2012}
-- \cite{heuberger_power_2017}
-- \cite{gritsevskyi_modeling_2000}
-- \cite{schmidt_projecting_2019}
-- \cite{schmidt_future_2017}
-
-% Ranges
 
 \begin{SCtable}
     \begin{small}
@@ -249,125 +277,129 @@ Two main sources of technology cost uncertainty \cite{trondle_trade-offs_2020}
     \label{tab:costuncertainty}
 \end{SCtable}   
 
-vital to choose widest plausible parameter range and not exclude plausible scenarios \cite{moret_characterization_2017,mccollum_energy_2020}
+% General
 
-Danish Energy Agency source
-- continuously updated since 2016
-- take optimistic and pessimistic values
-- correspond to a 90\% confidence interval
-- for 2050, but supplemented with 2030 values if widen range
-- no ranges rooftop PV
-- `./costcomparison.csv`
+Two main sources of technology cost uncertainty
+- future deployment rates unknown
+- learning rate unknown
+- \cite{gritsevskyi_modeling_2000,heuberger_power_2017,yeh_review_2012,mattsson_learning_2019}
 
-Comparison to others:
-- \cite{trondle_trade-offs_2020} has almost always more conservative values than pessmistic DEA database; data mostly from ETIP
+quantifying the input uncertainties is a challenge \cite{moret_characterization_2017}
+it is more insightful than using best-guess values \cite{fraiture_robustness_2020}
+
+% Ranges
+
+others: ranges of cost projections
 - previous studies have considered "relatively narrow range[s] of uncertainties" \cite{Li2017}
+- but vital to choose widest plausible parameter range and not exclude plausible scenarios \cite{moret_characterization_2017,mccollum_energy_2020}
 - $\pm$20\% \cite{moret_characterization_2017}
 - mostly less than $\pm$25\% \cite{pizarro-alonso_uncertainties_2019}
 - $\pm$50\% \cite{shirizadeh_how_2019}
+- \cite{trondle_trade-offs_2020} also considered discount rate, bioenergy, transmission (why deviate?)
+- variance set depending on maturity of a technology \cite{li_using_2020}
 
-because we evaluate uncertainties based on annuities,
-the analysis incorporates uncertainties about
-overnight investments, FOM, lifetime, and discount rate
-(multiple combinations can lead to the same annuity)
+here: 
+- consider uncertainties of onshore wind, offshore wind, solar PV, hydrogen storage and battery storage
+- Danish Energy Agency source
+- continuously updated since 2016
+- take optimistic and pessimistic values
+- correspond to a 90\% confidence interval \cite{}
+- for 2050, but supplemented with 2030 values if widen range
+- no ranges rooftop PV
+- because we evaluate uncertainties based on annuities,
+  the analysis incorporates uncertainties about
+  overnight investments, FOM, lifetime, and discount rate
+  (multiple combinations can lead to the same annuity)
 
 % Distributions
 
-distributions of cost projections
-- uniform: \cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}
-- normal: \cite{mavromatidis_uncertainty_2018}
-- triangle: \cite{li_using_2020}
-- variance set depending on maturity of a technology \cite{li_using_2020}
-- difficult to sensibly assign a probability distribution to cost uncertainties \cite{moret_robust_2016}
-
-Just as \cite{trondle_trade-offs_2020} we pursue a maximum entropy approach. 
-- This means we assume the costs are uniformly distributed between the DEA cost ranges and independent.
-- always independently sampled (IID); easy but incorrect: e.g. synergies between offshore and onshore wind
-- Given the lack of knowledge about the distribution, the uniform distribution makes fewest assumptions.
+Existing literature has likewise acknowledged the difficulty of sensibly assigning
+a probability distribution to cost uncertainties \cite{moret_robust_2016}.
+Amongst others, previous work has guessed cost projections
+to follow normal \cite{mavromatidis_uncertainty_2018} or triangular distributions \cite{li_using_2020}.
+But independent uniform distributions manifest as the most prevalent assumption \cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}.
+As pointed out by Tröndle et al.~\cite{trondle_trade-offs_2020} this approach is backed by the maximum entropy approach, which states that given the lack of knowledge about the distribution
+the independent uniform distribution that makes fewest assumptions is most appropriate.
+However, one should be aware that the assumed independence neglects may neglect actual synergies between technologies, for example, between offshore and onshore wind turbine development.
+Nevertheless, we follow the literature's inclination to simplicity here by assuming
+that the cost of solar, onshore wind, offshore wind, hydrogen and battery storage are independent and uniformly distributed within the ranges specified in \cref{tab:costuncertainty}.
 
 \subsection{Surrogate Modelling}
 \label{sec:surrogate}
 %\blindtext
 
+% idea
+
 premise: outcome of original model cannot be obtained easily due to computational constraints
+like running a high resolution power system model for a variety of cost assumptions
 synonyms for surrogate: emulators, approximation models, response surface methods, metamodels
 consider only simplified/aggregated outputs
-same input/output behaviour as original model, but faster to compute (link to machine learning)
+ideally same input/output behaviour as original model, but faster to compute (link to machine learning) \cite{palar_multi-fidelity_2016}
 use cases: design space exploration, sensitivity analysis, what-if analyis
-"reduce the number of deterministic evaluations while retaining accuracy" \cite{palar_multi-fidelity_2016}
-one method is building a surrogate model based on polynomial chaos expansion
+seems very well suited to our cause
 
 % this paper
-used inputs: cost of offshore, onshore, solar, H2, battery
-recorded outputs: system cost, wind, offwind, onwind, solar, H2, battery, transmission
 
-\subsubsection{Surrogate Modelling using Polynomial Chaos Expansion}
+used inputs: cost of offshore, onshore, solar, H2, battery \cref{tab:costuncertainty}
+focus on system-level outputs: system cost, wind, offwind, onwind, solar, H2, battery, transmission
+one method is building a surrogate model based on polynomial chaos expansion, outlined in the following
 
-detailed general info and advise
-\cite{gratiet_metamodel-based_2015} 
-\cite{sudret_global_2008}
-\cite{fajraoui_optimal_2017}
-\cite{marelli_uqlab_nodate}
+\subsubsection{Use of Polynomial Chaos Expansion}
+\label{sec:pce}
 
-Use PCE to build surrogate models \cite{sudret_global_2008}
-- Hilbert space technique 
-- Hilbert space is like Euclidian space for polynomials, polynomials are so to speak the coordinates \cite{gratiet_metamodel-based_2015})
+% general idea
+
+Use PCE to build surrogate models \cite{sudret_global_2008,marelli_uqlab_nodate,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
+- Hilbert space technique
+- requires finite variance of random variables
+- Hilbert space is like Euclidian space for polynomials
+- polynomials are so to speak the coordinates \cite{gratiet_metamodel-based_2015}
 - polynomial expansion is a collection of polynomials
 - The analogy for a polynomial chaos expansion of a random variable in signal processing is a Fourier series \cite{muhlpfordt_uncertainty_2020}
-- also related to PCA
-- needs finite variance!
-- idea: "expand random variables as a linear combination of orthogonal basis functions weighted by deterministic coefficients." \cite{muhlpfordt_uncertainty_2020}
+- idea: "expand random variables as a linear combination of orthogonal basis functions weighted by deterministic coefficients" \cite{muhlpfordt_uncertainty_2020}
 - techniques for finding coefficients:
-  - spectral projection: project response onto basis functions using inner products and orthogonal polynomials \cite{palar_multi-fidelity_2016}
-  - point collocation: obtain coefficients by performing regression \cite{palar_multi-fidelity_2016,fajraoui_optimal_2017}
+  - spectral projection: project response onto basis functions using inner products of orthogonal polynomials \cite{palar_multi-fidelity_2016}
+  - point collocation: non-intrusive obtain coefficients by performing regression \cite{ng_multifidelity_2012,palar_multi-fidelity_2016,fajraoui_optimal_2017}
+  - build one surrogate model for each $\varepsilon$ (5+1), min/max optimisation sense (2), objective (7) and output variable (8).
 
-% in this paper
-- want to do non-intrusive (i.e. wrapping around model) point collocation (i.e. MC sampling) based on regression \cite{ng_multifidelity_2012}
-- one surrogate model for each $\varepsilon$ (5), min/max optimisation sense (2), objective (7) and output variable (8).
-
-% general procedure
-steps (following \cite{feinberg_chaospy_2015} and many others):
-(i) sample from parameter space (experimental design)
-(ii) evaluate model at samples
-(iii) select an expansion of orthogonal polynomials within the parameters space (up to certain order terms)
-(iv) do a regression to calculate the polynomial coefficients
+% procedure
+  
+steps following \cite{feinberg_chaospy_2015}
+(i) sample from parameter space
+(ii) evaluate the model at samples
+(iii) select an expansion of orthogonal polynomials within the parameters space up to certain order terms
+(iv) perform a regression to calculate the polynomial coefficients
 (v) use the model approximation for statistial analysis
+  
+Formalise this approach:
 
-% detailed math
-
-vector of random variables
+vector of random variables (e.g. cost uncertainties)
 \begin{equation}
     \x = \{\mathsf{x}_1, \dots , \mathsf{x}_m\}
 \end{equation}
 
-computational model
+computational model (e.g. solving of the optimisation problem)
 \begin{equation}
     \mathsf{y} = f(\x)
 \end{equation}
+$\mathsf{y}\in\mathbb{R}$ is scalar in the following for simplicity,
+but is easy to expand to vector-valued model outputs.
 
-polynomial chaos expansion
-- three terms recurrence algorithm \cite{feinberg_chaospy_2015}
-- Hilbertian basis of Hilbert space that contains the response \cite{sudret_global_2008}
+Represent the computational model with its polynomial chaos expansion
 \begin{equation}
     \mathsf{y} = f(\x) = \sum_{\ba \,\in\, \mathbb{N}^m} r_{\ba} \psi_{\ba}(\x)
 \end{equation}
-where $\psi_\ba$ is a collection of multivariate orthogonal polynomials that form a Hilbertian basis on $f_{\x}$
-where $\ba = \{\alpha_1,\dots,\alpha_m\}$ is a multiindex and its elements
-denotes the degree of $\psi_\ba$ in each of the $m$ input variables $\mathsf{x}_i$
-$\mathsf{y}\in\mathbb{R}$ is scalar in the following, but we will look at 8 outputs (can use same basis polynomials)
-$r_\ba \in \mathbb{R}$ are the polynomial coefficients (or PCE coefficients)
-
-orthogonality condition
-\begin{equation}
-    \langle \psi_{\bm\alpha}, \psi_{\bm\beta} \rangle = \delta_{\bm{\alpha\beta}}
-\end{equation}
-where $\delta_{\bm{\alpha\beta}}$ is the Kronecker delta which is $1$ if $\bm\alpha=\bm\beta$ and $0$ otherwise.
+where $\psi_\ba$ is a collection of multivariate orthogonal polynomials that form
+a Hilbertian basis that contains the response \cite{sudret_global_2008}
+The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$ 
+denotes the degree of $\psi_\ba$ in each of the $m$ random input variables $\mathsf{x}_i$.
+$r_\ba \in \mathbb{R}$ are the polynomial coefficients 
 
 truncated polynomial chaos expansion
+three terms recurrence algorithm \cite{feinberg_chaospy_2015}
 without truncation the polynomial chaos expansion is exact! \cite{fajraoui_optimal_2017}
 - standard truncation scheme \cite{gratiet_metamodel-based_2015,sudret_global_2008}
 - limit expansion to a number of finite coefficients
-- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
 \begin{equation}
     f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba(\x)
 \end{equation}
@@ -385,89 +417,81 @@ cardinality of truncation
         p
     \end{matrix}\right) = \frac{(m+p)!}{m!p!}
 \end{equation}
-$q$: number of unknown coefficients, also cardinality
+$q$: cardinality that denotes the number of unknown polynomial coefficients
 $m$: number of uncertain input parameters
-$p$: order/degree of the polynomial
+$p$: order of the polynomial chaos expansion
 
-coefficients to be found
-\begin{equation}
-    \bm r = \left\{r_\ba \,:\, \ba \in \cA^{m,p}\right\}
-\end{equation}
-
-experimental design
-over-sampling ratio (OSR):
-- ratio between number of samples and coefficients of polynomial basis (cardinality) \cite{palar_multi-fidelity_2016}
-- cardinality increases exponentially with number of input parameters -> curse of dimensionality
+how many samples are required?
+- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
+- over-sampling ratio: ratio between number of samples and coefficients of polynomial basis (cardinality) \cite{palar_multi-fidelity_2016}
+- too high: very coarse approximation; too low: risk of over-fitting \cite{palar_multi-fidelity_2016}
 - recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
-- too high OSR: very coarse approximation; too low OSR: risk of over-fitting \cite{palar_multi-fidelity_2016}
-OSR considerations (m=5) 2-3
-- for order 1, need 12-18 samples
-- for order 2, need 42-63 samples
-- for order 3, need 112-168 samples
-- for order 4, need 252-378 samples
-- for order 5, need 504-756 samples
+- cardinality increases exponentially with number of input parameters
+  - m=5, p=1: 18
+  - m=5, p=2: 63
+  - m=5, p=3: 168
+  - m=5, p=4: 378
+  - m=5, p=5: 756
+- increasing compuational burden
+- suitable combinations of order and sample size are analysed based on low-fidelity least-cost surrogates in \cref{sec:validation}
+
 inputs and corresponding outputs
 \begin{equation}
     \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad 
     \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }
 \end{equation}
 
-regression: minimise least-square residual of polynomial approximation over all samples (Lasso regression: $L_2$ regression with an extra $L_1$ regularization term, and a preference for fewer non-zero terms [sparse].)
+regression problem:
+minimise least-square residual of polynomial approximation over all samples
+Lasso regression adds an extra $L_1$ regularisation term, and a preference for fewer non-zero terms
+results in sparse polynomial chaos expansion to counteract curse of dimensionality \cite{gratiet_metamodel-based_2015}
 \begin{equation}
-    \hat{\bm{r}} = \argmin_{\bm{r}_\ba \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
+    \hat{\bm{r}} = \argmin_{\bm{r} \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
         f\left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba\left(\bm x^{(i)}\right)
-    \right)^2  + \lambda \norm{\bm{r}_\ba}_1 \right]
+    \right)^2  + \lambda \norm{\bm{r}}_1 \right]
+    \label{eq:regression}
 \end{equation}
-$\lambda=0.005$
-sparsity:
-- one can force sparse expansion (few non-zero coefficients) to partially counteract curse of dimensionality \cite{gratiet_metamodel-based_2015}
-- these will use regularisation/penalty terms in the formulation of the regression problem
-- but ordinary least-square regression is fine if number of uncertain parameters is $\leq 10$ \cite{gratiet_metamodel-based_2015}
+we use a small regularisation penalty of $\lambda=0.005$.
 
 finished surrogate model
 \begin{equation}
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA} \hat{r}_\ba \psi_\ba (\x)
 \end{equation}
 
+% remarks
+
+For multiple outputs (i.e. $\mathsf{y}$ is vector), just repeat, same basis can be used.
+implementation uses chaospy \cite{feinberg_chaospy_2015}
+
+
+% orthogonality condition
+% \begin{equation}
+%     \langle \psi_{\bm\alpha}, \psi_{\bm\beta} \rangle = \delta_{\bm{\alpha\beta}}
+% \end{equation}
+% where $\delta_{\bm{\alpha\beta}}$ is the Kronecker delta which is $1$ if $\bm\alpha=\bm\beta$ and $0$ otherwise.
+% coefficients to be found
+% \begin{equation}
+%     \bm r = \left\{r_\ba \,:\, \ba \in \cA^{m,p}\right\}
+% \end{equation}
+
 \subsubsection{Extension by Multifidelity Approach}
 \label{sec:multifidelity}
 
-\cite{palar_multi-fidelity_2016}
-\cite{ng_multifidelity_2012}
-\cite{berchier_multi-fidelity_nodate}
+% idea
 
-fuse high coverage of parameter space from many low-fidelity samples with
-high modelling detail from fewer high-fidelity samples
+- only high-fidelity for surrogate model is time-consuming
+- but only low-fidelity may result in distorted/inaccurate surrogate models \cite{ng_multifidelity_2012}
+- integrate both with multi-fidelity approach
+- fuse high coverage of parameter space from many low-fidelity samples / use a simplified model to sweep the parameter space (many samples, fewer details)
+- with high modelling detail from fewer high-fidelity samples / supplement it with information from a more complex model (fewer samples, more detail)
 
-use a simplified model to sweep the parameter space (many samples, fewer details)
-and supplement it with information from a more complex model (fewer samples, more detail)
+% method
 
-only high-fidelity for surrogate model is time-consuming,
-but only low-fidelity may result in distorted/inaccurate surrogate models
-
-"If LF model is much cheaper to evaluate than the HF model, then significant
-computational savings will be obtained" \cite{ng_multifidelity_2012}
-
-integrate both with multi-fidelity approach: correct LF model such that LF output matches HF values
-
-build an own surrogate model for the correction function (i.e. "correction expansion") with identical polynomial basis
-
-concept is "correcting lower order effect of LF expansion with correction function, higher order effects are predicted by LF expansion" \cite{palar_multi-fidelity_2016}
-
-rule: "polynomial term in the correction expansion has to e a subset of the LF expansion" \cite{palar_multi-fidelity_2016}
--> has been checekd, means high-fidelity polynomial order must be lower 
-
-HF sample is subset of LF sample (this is a nice feature of low-discrepancy series)
-
-"in cases with high correlation between LF an HF ($R^2 \geq 0.9$) the MF will very likely increase the approximation accuracy relative to single HF" \cite{palar_multi-fidelity_2016}
-
-method:
+- correct LF model such that LF output matches HF values / correct for the difference between HF samples and LF surrogate at HF sample points
+- build an own surrogate model for the correction function (i.e. "correction expansion") with identical polynomial basis
 - build surrogate A based on low-fidelity samples
 - build corrective surrogate B for the difference between high-fidelity samples and predictions of A at those sample points
 - add the correction B to the low-fidelity surrogate A to obtain multi-fidelity surrogate C which approximates the high-fidelity model
-
-Additive scaling approach (argue why additive is used not multiplicative)
-- Correct for the difference between HF samples and LF surrogate at HF sample points
 
 error function
 \begin{equation}
@@ -484,6 +508,8 @@ consequently $\mathcal{X}_h \subset \mathcal{X}_\ell$.
 
 Due to the smaller number of samples for the high fidelity model (and therefore error between high and low fidelity), it is also
 common that $p_h < p_\ell$ and consequently $\cA_h \subset \cA_\ell$
+concept is "correcting lower order effect of LF expansion with correction function, higher order effects are predicted by LF expansion" \cite{palar_multi-fidelity_2016}
+rule: "polynomial term in the correction expansion has to e a subset of the LF expansion" \cite{palar_multi-fidelity_2016}
 
 multifidelity model (simple)
 \begin{equation}
@@ -500,61 +526,50 @@ multifidelity model (more detailed)
     r_{\ell,\ba} \psi_\ba(\x)
 \end{equation}
 
-using chaospy \cite{feinberg_chaospy_2015}
+% this paper
+
+low-fidelity: third order polynomial chaos expansion (apply regression problem from \cref{eq:regression})
+we justify this choice based on experimentation in \cref{sec:validation}
+correction function rectifies linear terms (order 1), as suggested by the literature
 
 \subsection{Experimental Design}
 \label{sec:sampling}
 
-%https://chaospy.readthedocs.io/en/master/sampling/sequences.html
-%https://en.wikipedia.org/wiki/Low-discrepancy_sequence
-%https://en.wikipedia.org/wiki/Quasi-Monte_Carlo_method
-
-sampling / experimental design / collocation points
-
 % explanations
+
+final aspect: generating enough samples based on which approximation model is built
+sampling / experimental design / collocation points in the uncertainty space
 strategies to find sufficiently high coverage of the parameter space at low computational cost \cite{fajraoui_optimal_2017,usher_value_2015}
 because traditional MC sampling with pseudo-random numbers has slow convergence % 1 / \sqrt{n}
 especially with high-dimensional parameter space - curse of dimensionality challenge
-12 in \cite{trondle_trade-offs_2020}, 36 in \cite{pilpola_analyzing_2020}, 5 in \cite{shirizadeh_how_2019} 5 in this paper
+12 in \cite{trondle_trade-offs_2020}, 36 in \cite{pilpola_analyzing_2020}, 5 in \cite{shirizadeh_how_2019}
 low-discrepancy series can improve on random sampling
 these deterministic sequences can be used to efficiently sample from the parameter space, as they avoid large gaps and clusters \cite{fajraoui_optimal_2017}
 alternatives:
 - Latin hypercube sampling \cite{trondle_trade-offs_2020}, but sampling size has to be set a priori, extensions difficult \cite{fajraoui_optimal_2017}
 - Method of Morris \cite{usher_value_2015,mavromatidis_uncertainty_2018}
-competition/benchmark: \cite{trondle_trade-offs_2020} high fidelity: 10 samples, 400 nodes, 4-hourly; low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
+competition/benchmark: \cite{trondle_trade-offs_2020}
+- high fidelity: 10 samples, 400 nodes, 4-hourly;
+- low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
 
 % this paper
-consider 5 uniformly distributed uncertain parameters according to \cref{tab:costuncertainty}
-500 low fidelity samples
-15 high fidelity samples
-Halton sequence
-chaospy tool \cite{feinberg_chaospy_2015}
+
+consider the 5 uniformly distributed independent uncertain parameters according to \cref{tab:costuncertainty}
+500 low-fidelity samples (3:OSR=8.9, 5:OSR=2.0)
+15 high-fidelity samples (OSR=2.5)
+Halton sequence using chaospy tool \cite{feinberg_chaospy_2015}
+actually fewer would have been sufficient for the chosen polynomial orders,
+but this number necessary to investigate the trade-off between higher order polynomials and fewer required samples
+as is done in \cref{sec:validation}
 
 how many optimisation runs in this study
+- all combinations of search directions, slacks, samples presented in preceding sections lead to
 - 50000 low-fidelity optimisation runs
-- 1000 high-fidelity runs
+- 1000 high-fidelity runs \cref{fig:pypsaeur}
 
 computational requirements:
-- high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average values, CPU time ~238 weeks or 4.56 years
-- low-fidelity: 3 GB, 5 minutes, 1 thread, Gurobi, average values, CPU time ~25 weeeks or 0.48 years
-
-% TODO potentially move to results
-\subsection{Sensitivity Indices}
-\label{sec:sobol}
-
-Sobol / sensitivity indices:
-- decomposition of output variance and attribution to random input variables
-- separate influential from non-influential parameters
-- The polynomials can be used for calculating Sobol indices in post-processing
-- orders of magnitude faster than traditional MC evaluation \cite{sudret_global_2008}
-- used in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}
-
-first-order Sobol:
-- also main-effect
-- share of output variance due to variations in one input parameter alone (averaged over variations in other input parameters)
-
-total Sobol indices:
-- contribution to output variance iincluding all interactions with other input variables
-- can be greater than 100\% if not purely additive
-
-using chaospy \cite{feinberg_chaospy_2015}
+- high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average 
+- low-fidelity: 3 GB, 5 minutes, 1 thread, Gurobi, average
+- while optimisation generally no boost from paralelisation
+- generation of near-optimal solution profits tremendously from paralelisation
+- only possible on high performance computing infrastructure

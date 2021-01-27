@@ -1,38 +1,27 @@
-% energy system modelling challenges and robustness
+% energy system modelling challenges
 
-energy system models as a tool/instrument for policy-making
-- find cost-efficient system layouts that satisfy climate protection ambitions
-- models can easily give a false sense of exactness, not only because they neglect uncertainties and simplify
-- models can underestimate social factors (behaviour, concerns about / opposition to nuclear, transmission, wind)
+energy system models 
+- a tool/instrument for policy-making
+- find cost-efficient system layouts that satisfy ambitions for climate change mitigation
+- proliferated in spatial, temporal and sectoral detail
+- least-cost optimisation models can easily give a false sense of exactness.
+- caveats simplify, neglect uncertainties, underestimate social factors
+- rising social resistance / concerns about / public opposition to certain technologies such as transmission, wind, nuclear, biomass \cite{mccollum_energy_2020} or uneven distribution of infrastructure
 
-presenting just a single least-cost solution neglects an large degree of freedom \cite{nearoptimal}
+presenting just a single least-cost solution
+- neglects a wide variety of alternative solutions that are equally feasible and only marginally more expensive \cite{nearoptimal,lombardi_policy_2020,sasse_distributional_2019,trondle_trade-offs_2020}
+- underplays uncertainties regarding cost projections, investment planning models are are known to be very sensitive to \cite{Pfenninger2014,yue_review_2018,pye_assessing_2018,pye_modelling_2020} 
 
-Alternative options arising by deviating from least-cost solution are very important for policymakers,
+% why are alternative solutions important
+
+Alternatives arising by deviating from least-cost solution are very important for policymakers,
 because they allow them to make decisions based on other, non-economic criteria,
 without affecting the cost-effectiveness of the system.
 
-- acknowledge uncertainties raises confidence in modelling results and able to derive robust policy guidance
+acknowledge uncertainties raises confidence in modelling results and able to derive robust policy guidance
+- knowing that many similarly costly but technologically diverse solutions exist helps to accomodate political and social dimensions that are otherwise hard to quantify
 - understand key drivers of the cost structure and technology focus \cite{usher_value_2015,moret_characterization_2017}
-- help to accomodate political and social dimensions that are otherwise hard to quantify
-- span a space of options for society and politics to work with beyond least-cost
-- enable social trade-offs, build a consensus
-
-- identify cheap regions in parameter space, can aim for them with policy to force technological learning
-- act as a bridge between optimisation modelling and decision making
-- knowing that near the optimum many similarly costly but technologically diverse solutions exist leaves room for political discussion and compromises
-
-% uncertainty in general
-
-Calls for more
-- exploration of extremes more systematically e.g. rising social resistance to certain technologies, suddenly falling technology cotsts \cite{mccollum_energy_2020,pye_modelling_2020}
-- uncertainty analysis \cite{Pfenninger2014,yue_review_2018,pye_assessing_2018,pye_modelling_2020,decarolis_leveraging_nodate} 
-- sensitivity analysis \cite{bistline_deepening_2020,trondle_trade-offs_2020} 
-
-Difference between uncertainty and sensitivity analsis \cite{usher_value_2016}:
-- uncertainty characterization/analysis: which parameters are uncertain and to what extent
-- uncertainty propagation: to what extent does uncertainty exist in the outputs
-- sensitivity analysis: what input parameters influence the outputs the most
-- stochastic and robust optimisation: how to hedge against uncertainty, embedded in optimisation
+- identify cheap regions in parameter space, can aim for them with policy to induce technological learning
 
 % parametric uncertainty
 
@@ -40,47 +29,46 @@ Examples:
 - technology cost, useable potentials, discount rate, weather year, climate change, electricity demand
 - different time domains of uncertainty: short-term: operation, e.g. weather forecasts; long-term: planning, e.g. technology cost
 
+different aspects \cite{usher_value_2016}:
+- which parameters are uncertain and to what extent
+- what parameters influence outputs the most
+- how uncertainty propagates to the outputs outputs
+- how to hedge against uncertainty with stochastic or robust optimisation
+
 Karush-Kuhn-Tucker multipliers
 - can reveal the sensitivity to small changes in the constraints at the optimal point.
+- but not the global behaviour on the feasible space, which can be highly non-linear.
 - Examples: translate carbon cap + carbon price, renewable generation target + required subsidy, limited potentials (onshore wind, transmission) + scarcity cost, locational marginal prices
-- but no info on global behaviour of the objective function on the feasible space, which can be highly non-linear.
     
 scenario-based sensitivity analysis
-- storyline with narrative elements \cite{DeCarolis2017}
-- but more qualified and contextual description possible \cite{soroudi_decision_2013}
-- criticised as biased, unstructured, subjective \cite{usher_value_2015}
+- handful of storylines with descriptive narrative elements \cite{DeCarolis2017,soroudi_decision_2013}
+- criticised as biased and unstructured \cite{usher_value_2015}
 
 local sensitivity analysis
-- parameter sweeps one dimension at a time \cite{schlachtberger_cost_2018}
-- across costs and constraint constants
-- main interdependencies may already be covered \cite{schlachtberger_cost_2018}
+- parameter sweeps across costs and constraint constants changing one dimension at a time \cite{schlachtberger_cost_2018}
+- premise that main interdependencies may already be covered \cite{schlachtberger_cost_2018}
+- very popular: investement cost and potentials (offwind, onwind, solar) \cite{schlachtberger_cost_2018}, line expansion limits \cite{schlachtberger_benefits_2017}, reference weather years \cite{bloomfield_2021}, distributional equity requirements \cite{sasse_regional_2020,sasse_distributional_2019}, emission reduction targets
 - but given that only small fraction of uncertainty space is sampled it may overlook effects \cite{pizarro-alonso_uncertainties_2019}
-- very popular: examples: spatial resolution \cite{hoersch_spatial_2017}, temporal resolution \cite{kotzur_tsa_2018}, investement cost \cite{shirizadeh_how_2019}, potentials (offwind, onwind, solar) \cite{schlachtberger_cost_2018}, line expansion limits \cite{schlachtberger_benefits_2017}, weather years \cite{bloomfield_2021}, equity requirements \cite{sasse_regional_2020,sasse_distributional_2019}, emission reduction targets
-- \cite{schyska_sensitivity_2020}
 
 global sensitivity analysis
-- changing multiple paramters at a time; co-varying inputs; multi-parameter variations
-- review \cite{iooss_review_2014}
-- to identify interesting scenarios \cite{usher_value_2015}
-- determine how random input variables affect variance of outputs \cite{sudret_global_2008}
-- methods to counteract high computational requirements \cite{usher_value_2015} \cite{pizarro-alonso_uncertainties_2019} \cite{moret_robust_2016}
-- surrogate models using polynomial chaos expansion \cite{trondle_trade-offs_2020}
-- applications: \cite{fais_impact_2016,mavromatidis_uncertainty_2018,pilpola_analyzing_2020}
+- vary multiple paramters at a time
+- determine how each random input variable affects the variance of outputs \cite{sudret_global_2008}
+- high computational requirements \cite{usher_value_2015,pizarro-alonso_uncertainties_2019,moret_robust_2016}
+- applications: \cite{trondle_trade-offs_2020,fais_impact_2016,mavromatidis_uncertainty_2018,pilpola_analyzing_2020}
 
 % structural uncertainty
 
 Examples \cite{DeCarolis2017}:
-- power flow approximation, spatial and temporal aggregation, technology simplification (e.g. UC), unmodelled objectives
+- power flow approximation \cite{flowandlosses}, spatial aggregation \cite{hoersch_spatial_2017}, temporal aggregation \cite{kotzur_tsa_2018}, technology simplification (e.g. UC), unmodelled objectives
 
-Multi-Objective Optimisation
+Multi-Objective Optimisation and Modelling-to-Generate Alternatives
 - epsilon constraint method used in \cite{nearoptimal}
-- determine Pareto-fronts from multi-objective optimisation \cite{mavrotas_effective_2009}
-
-Modelling-to-Generate Alternatives
-- \cite{DeCarolis2016} US electricity sector
+- determine Pareto-fronts \cite{mavrotas_effective_2009}
+- find near-optimal solutions
 - \cite{Price2017} integrated assessment model
-- \cite{nacken_integrated_2019} single node sector coupling
-- \cite{pedersen_modeling_2020} density, 2D span of low-cost space
+- \cite{DeCarolis2016} US electricity sector
+- \cite{nacken_integrated_2019} single node sector coupling Germany
+- \cite{pedersen_modeling_2020} combination of MGA with quickhull algorithm to span a polytope of low-cost solutions
 
 %structural AND parametric uncertainty
 
@@ -91,6 +79,10 @@ marrying near-optimal analysis with parametric uncertainty
 
 % this work / novelty
 
+here we
+- provide a methodology
+- provide (exemplary) results that can be drawn
+
 work with a set of more vague but also more robust, viable alternatives
 - systematically explore decision and parameter space
 - range of options and technology-specific boundary conditions robust to cost uncertainties
@@ -99,13 +91,19 @@ work with a set of more vague but also more robust, viable alternatives
 - represent probability with which capacities of system components are contained within the low-cost space
 - expand distribution view of cost-optimal capacities by the space of near-optimal solutions
 - or vice versa: augment the near-optimal solution space by adding variance induced by cost uncertainty
+- act as a bridge between optimisation modelling and decision making
 
-model characteristics
+show this with model characteristics
 - European scope
 - fully renewable power system
+- based on wind and solar
 - long-term investment planning
 - coordinating generation, transmission and storage investments
 - spatially and temporally explicit
 - combine low/high fidelity models and surrogate models
+- open-source
 
 impact
+- why now? computational power is available
+- common areas are robust and large
+- large degree of freedom regardless of cost uncertainty
