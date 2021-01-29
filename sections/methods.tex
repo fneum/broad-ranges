@@ -371,14 +371,14 @@ can conveniently combine training data from variously detailed models \cite{pala
 The general idea of surrogate models based on PCE is to
 represent uncertain model outputs as a linear combination of orthogonal basis functions 
 of the random input variables weighted by deterministic coefficients \cite{muhlpfordt_uncertainty_2020}.
-It is a Hilbert space technique that works analogously to decomposing a periodic signal  into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
+It is a Hilbert space technique that works analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
 Building the surrogate model consists of the following steps:
 (i) sampling a set of cost projections from the parameter space,
 (ii) solving the least-cost or near-optimal investment planning problem for each sample,
 (iii) selecting an expansion of orthogonal polynomials within the parameter space,
 (iv) performing a regression to calculate the polynomial coefficients, and ultimately
-(v) using the model approximation for statistial analysis.
-In the following we will formalise this approach,
+(v) using the model approximation for statistical analysis.
+In the following, we will formalise this approach,
 which we implemented using the \textit{chaospy} toolbox \cite{feinberg_chaospy_2015},
 and elaborate on individual aspects in more detail.
 
@@ -455,89 +455,67 @@ Knowing the optimised regression coefficients, we can assemble the complete surr
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
 \end{equation}
 
-The remaing question is, how many samples are required to 
-resort to oversampling ratio as guideline:
-It is defined as the ratio between the number of samples
-and the number of coefficients of polynomial basis \cite{palar_multi-fidelity_2016}.
-- too high: very coarse approximation; too low: risk of over-fitting \cite{palar_multi-fidelity_2016}
-- recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
-- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
-- cardinality increases exponentially with number of input parameters
-  - m=5, p=1: 18
-  - m=5, p=2: 63
-  - m=5, p=3: 168
-  - m=5, p=4: 378
-  - m=5, p=5: 756
-- increasing compuational burden
-- suitable combinations of order and sample size are analysed based on low-fidelity least-cost surrogates in \cref{sec:validation}
-
-% orthogonality condition
-% \begin{equation}
-%     \langle \psi_{\bm\alpha}, \psi_{\bm\beta} \rangle = \delta_{\bm{\alpha\beta}}
-% \end{equation}
-% where $\delta_{\bm{\alpha\beta}}$ is the Kronecker delta which is $1$ if $\bm\alpha=\bm\beta$ and $0$ otherwise.
-% coefficients to be found
-% \begin{equation}
-%     \bm r = \left\{r_\ba \,:\, \ba \in \cA^{m,p}\right\}
-% \end{equation}
-
 \subsubsection{Extension by Multifidelity Approach}
 \label{sec:multifidelity}
 
 % idea
 
-- It is desirable only high-fidelity for surrogate model is time-consuming
-- but only low-fidelity may result in distorted/inaccurate surrogate models \cite{ng_multifidelity_2012}
-- integrate both with multi-fidelity approach
-- fuse high coverage of parameter space from many low-fidelity samples / use a simplified model to sweep the parameter space (many samples, fewer details)
-- with high modelling detail from fewer high-fidelity samples / supplement it with information from a more complex model (fewer samples, more detail)
+To construct a precise PCE-based surrogate model, it is desirable to base it
+on many samples from a high-fidelity model.
+However, this is likely prohibitively time-consuming.
+On the other hand, relying only on samples from a
+low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}.
+For example, an investment model that features only a single node per country
+will underestimate transmission bottlenecks and regionally uneven resource or demand distribution.
+In \cref{sec:inputs} we already alluded to using
+two models with varying spatial and temporal resolution in this paper.
+We integrate both in a multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016}.
+We demonstrate how we can
+simultaneously avail of high coverage of the parameter space by sampling
+the simpler model many times, and the high spatio-temporal detail yielded by fewer more complex model runs.
 
 % method
 
-- correct LF model such that LF output matches HF values / correct for the difference between HF samples and LF surrogate at HF sample points
-- build an own surrogate model for the correction function (i.e. "correction expansion") with identical polynomial basis
-- build surrogate A based on low-fidelity samples
-- build corrective surrogate B for the difference between high-fidelity samples and predictions of A at those sample points
-- add the correction B to the low-fidelity surrogate A to obtain multi-fidelity surrogate C which approximates the high-fidelity model
-
-error function
+The idea of the multi-fidelity approach is to build a corrective surrogate model $\Delta'(\x)$ for the
+error of the low-fidelity model $f_\ell$ compared to the high-fidelity model $f_h$ 
 \begin{equation}
-    \Delta(\x) = f_h(\x) - f_\ell(\x)
+    \Delta(\x) = f_h(\x) - f_\ell(\x),
 \end{equation}
-
-samples
+and add it to a surrogate model of the low-fidelity model to approximate the behaviour of the
+high-fidelity model
+\begin{equation}
+    f_h'(\x) = f_\ell'(\x) + \Delta'(\x).
+\end{equation}
+Typically, the corrective PCE only rectifies only the lower order effects
+of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
+The advantage is that this way the correction function can be determined
+based on fewer samples analogous to \cref{sec:pce}.
+To sample the errors, it is only required that the
+high-fidelity samples are a subset of the low-fidelity samples, e.g.
 \begin{equation}
     \mathcal{X}_h = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}} \quad\text{and}\quad
-    \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}}
+    \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}},
 \end{equation}
-where $n_h < n_\ell$ and when using deterministic low-dicrepancy series
-consequently $\mathcal{X}_h \subset \mathcal{X}_\ell$.
-
-Due to the smaller number of samples for the high fidelity model (and therefore error between high and low fidelity), it is also
-common that $p_h < p_\ell$ and consequently $\cA_h \subset \cA_\ell$
-concept is "correcting lower order effect of LF expansion with correction function, higher order effects are predicted by LF expansion" \cite{palar_multi-fidelity_2016}
-rule: "polynomial term in the correction expansion has to e a subset of the LF expansion" \cite{palar_multi-fidelity_2016}
-
-multifidelity model (simple)
-\begin{equation}
-    f_h'(\x) = f_\ell'(\x) + \Delta'(\x)
-\end{equation}
-
-multifidelity model (more detailed)
+which we can guarantee by using deterministic low-discrepancy series
+in the experimental design (\cref{sec:sampling}).
+With $p_c < p_\ell$ and consequently $\cA_h \subset \cA_\ell$,
+the multi-fidelity surrogate model can be written as a combination of low-fidelity
+and corrective polynomial coefficients
 \begin{equation}
     f_h' (\x) = \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\cap\, \cA_r^{m,p_c}}
     \left(
      r_{\ell,\ba} + r_{c,\ba}
     \right) \psi_\ba(\x) + 
     \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\setminus\, \cA_r^{m,p_c}}
-    r_{\ell,\ba} \psi_\ba(\x)
+    r_{\ell,\ba} \psi_\ba(\x).
 \end{equation}
 
 % this paper
 
-low-fidelity: third order polynomial chaos expansion (apply regression problem from \cref{eq:regression})
-we justify this choice based on experimentation in \cref{sec:validation}
-correction function rectifies linear terms (order 1), as suggested by the literature
+This work applies a multi-fidelity surrogate model that considers
+effects up to order three observed in the low-fidelity model. These are corrected with linear terms derived from insights from the high-fidelity model.
+We justify this choice by experimentation in \cref{sec:validation}.
+Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
 
 \subsection{Experimental Design}
 \label{sec:sampling}
@@ -558,21 +536,32 @@ alternatives:
 competition/benchmark: \cite{trondle_trade-offs_2020}
 - high fidelity: 10 samples, 400 nodes, 4-hourly;
 - low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
+resort to oversampling ratio as guideline:
+It is defined as the ratio between the number of samples
+and the number of coefficients of polynomial basis \cite{palar_multi-fidelity_2016}.
+- too high: very coarse approximation; too low: risk of over-fitting \cite{palar_multi-fidelity_2016}
+- recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
+- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
+- cardinality increases exponentially with number of input parameters
+  - m=5, p=1: 18
+  - m=5, p=2: 63
+  - m=5, p=3: 168
+  - m=5, p=4: 378
+  - m=5, p=5: 756
 
 % this paper
 
 consider the 5 uniformly distributed independent uncertain parameters according to \cref{tab:costuncertainty}
 500 low-fidelity samples (3:OSR=8.9, 5:OSR=2.0)
 15 high-fidelity samples (OSR=2.5)
-Halton sequence using chaospy tool \cite{feinberg_chaospy_2015}
-actually fewer would have been sufficient for the chosen polynomial orders,
-but this number necessary to investigate the trade-off between higher order polynomials and fewer required samples
-as is done in \cref{sec:validation}
+Halton sequence
+% actually fewer would have been sufficient for the chosen polynomial orders,
+% but this number necessary to investigate the trade-off between higher order polynomials and fewer required samples
 
 how many optimisation runs in this study
 - all combinations of search directions, slacks, samples presented in preceding sections lead to
 - 50000 low-fidelity optimisation runs
-- 1000 high-fidelity runs \cref{fig:pypsaeur}
+- 1000 high-fidelity runs
 
 computational requirements:
 - high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average 
@@ -610,13 +599,14 @@ computational requirements:
     \label{fig:error}
 \end{figure}
 
-% TODO: model validation in methods or results?
+evaluate combinations of order and sample size experimentally in \cref{sec:validation}
 
 using cross-validation techniques 
 - training set of known data
 - validation/test set of unknown data to surrogate \cite{gratiet_metamodel-based_2015}
-- based on low-fidelity models only
-- too few samples for error analysis for high-fidelity model
+- based on low-fidelity models least-cost solutions only
+    - too few samples for error analysis for high-fidelity model
+    - no fundamental deviations exptected for near-optimal solutions
 - out of 500 cost samples, 100 have not been used for building/training the surrogate model; this is our test set.
 
 error estimation, measures of accuracy:
