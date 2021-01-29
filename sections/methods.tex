@@ -355,8 +355,8 @@ cost of onshore wind, offshore wind, solar, hydrogen, and battery storage (\cref
 onto a selection of eight system-level outputs.
 These are the total system cost and the installed onshore wind, offshore wind, solar, hydrogen, battery, and transmission network capacities.
 We construct surrogate models for least-cost and near-optimal solutions separately
-for each system cost slack, search direction, fixed total capacity, and output variable. This results in a collection of 801 individual surrogate models, one for each optimisation problem that is solved
-for a given set of cost assumptions.
+for each system cost slack, search direction, fixed total capacity, and output variable. This results in a collection of 808 individual surrogate models based on 101 solved optimisation problems
+for one particular set of cost assumptions.
 The method we choose from an abundance of alternatives is based on polynomial chaos expansion (PCE)
 \cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
 We select this approach because the resulting approximations
@@ -427,6 +427,7 @@ The cardinality of the truncated PCE,
         m+p \\
         p
     \end{matrix}\right) = \frac{(m+p)!}{m!p!},
+    \label{eq:cardinality}
 \end{equation}
 indicates the number of unknown polynomial coefficients.
 
@@ -514,61 +515,67 @@ and corrective polynomial coefficients
 
 This work applies a multi-fidelity surrogate model that considers
 effects up to order three observed in the low-fidelity model. These are corrected with linear terms derived from insights from the high-fidelity model.
-We justify this choice by experimentation in \cref{sec:validation}.
+We justify this choice by experimentation in \cref{sec:validation},
+by also reviewing other typical choices between orders one to five \cite{gratiet_metamodel-based_2015}.
 Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
 
 \subsection{Experimental Design}
 \label{sec:sampling}
 
-% explanations
+% competition/benchmark: \cite{trondle_trade-offs_2020}
+% - high fidelity: 10 samples, 400 nodes, 4-hourly;
+% - low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
+% uncertain parameters
+%12 in \cite{trondle_trade-offs_2020}
+%36 in \cite{pilpola_analyzing_2020}
+%5 in \cite{shirizadeh_how_2019}
 
-final aspect: generating enough samples based on which approximation model is built
-sampling / experimental design / collocation points in the uncertainty space
-strategies to find sufficiently high coverage of the parameter space at low computational cost \cite{fajraoui_optimal_2017,usher_value_2015}
-because traditional MC sampling with pseudo-random numbers has slow convergence % 1 / \sqrt{n}
-especially with high-dimensional parameter space - curse of dimensionality challenge
-12 in \cite{trondle_trade-offs_2020}, 36 in \cite{pilpola_analyzing_2020}, 5 in \cite{shirizadeh_how_2019}
-low-discrepancy series can improve on random sampling
-these deterministic sequences can be used to efficiently sample from the parameter space, as they avoid large gaps and clusters \cite{fajraoui_optimal_2017}
-alternatives:
-- Latin hypercube sampling \cite{trondle_trade-offs_2020}, but sampling size has to be set a priori, extensions difficult \cite{fajraoui_optimal_2017}
-- Method of Morris \cite{usher_value_2015,mavromatidis_uncertainty_2018}
-competition/benchmark: \cite{trondle_trade-offs_2020}
-- high fidelity: 10 samples, 400 nodes, 4-hourly;
-- low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
-resort to oversampling ratio as guideline:
-It is defined as the ratio between the number of samples
-and the number of coefficients of polynomial basis \cite{palar_multi-fidelity_2016}.
-- too high: very coarse approximation; too low: risk of over-fitting \cite{palar_multi-fidelity_2016}
-- recommended values range between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
-- typical degrees 3-5 \cite{gratiet_metamodel-based_2015}
-- cardinality increases exponentially with number of input parameters
-  - m=5, p=1: 18
-  - m=5, p=2: 63
-  - m=5, p=3: 168
-  - m=5, p=4: 378
-  - m=5, p=5: 756
+% general
 
-% this paper
+The experimental design covers strategies to find sufficiently high coverage
+of the parameter space at low computational cost \cite{fajraoui_optimal_2017,usher_value_2015}.
+It deals with how many samples are drawn and what sampling method is used.
 
-consider the 5 uniformly distributed independent uncertain parameters according to \cref{tab:costuncertainty}
-500 low-fidelity samples (3:OSR=8.9, 5:OSR=2.0)
-15 high-fidelity samples (OSR=2.5)
-Halton sequence
-% actually fewer would have been sufficient for the chosen polynomial orders,
-% but this number necessary to investigate the trade-off between higher order polynomials and fewer required samples
+% sampling method
 
-how many optimisation runs in this study
-- all combinations of search directions, slacks, samples presented in preceding sections lead to
-- 50000 low-fidelity optimisation runs
-- 1000 high-fidelity runs
+Traditional Monte-Carlo sampling with pseudo-random numbers is known to
+possess slow convergence properties, % 1 / \sqrt{n}
+especially in high-dimensional parameter spaces.
+So-called low-discrepancy series can greatly improve on random sampling.
+Because they are designed to avoid forming large gaps and clusters,
+these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.
+Thus, we draw the samples from a low-discrepancy Halton sequence.
 
-computational requirements:
-- high-fidelity: 20 GB, 5 hours, 4 threads, Gurobi, average 
-- low-fidelity: 3 GB, 5 minutes, 1 thread, Gurobi, average
-- while optimisation generally no boost from paralelisation
-- generation of near-optimal solution profits tremendously from paralelisation
-- only possible on high performance computing infrastructure
+% how many samples
+
+For the question about how many samples should be drawn,
+we resort to the oversampling ratio (OSR) as a guideline.
+The OSR is defined as the ratio between the number of samples
+and the number of unknown coefficients \cite{palar_multi-fidelity_2016}.
+The literature recommends values between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
+In other words, for a sufficiently accurate approximation,
+there should be significantly more samples than unknown coefficients.
+If the OSR is lower, the regression is prone to the risk of overfitting.
+Conversely, a higher OSR may lead to a very coarse approximation \cite{palar_multi-fidelity_2016}.
+
+According to \cref{eq:cardinality}, targeting an OSR of two considering the five uncertain technology cost parameters (\cref{tab:costuncertainty}),
+approximating linear effects would require 12 samples, whereas cubic relations
+would already need 112 samples. Even 504 samples would be necessary to model the dynamics of order 5.
+To investigate the quality of different PCE orders
+and retain a validation dataset,
+we also draw 500 samples for the low-fidelity model.
+Due to the computational burden carried by the high-fidelity models,
+we settle on a linear correction in advance, such that
+15 samples for the high-fidelity model are acceptable.
+In combination with 101 least-cost and near-optimal optimisation
+runs for each sample, this setup results in a total number of
+50,500 runs of the low-fidelity model and
+1,515 runs of the high-fidelity model.
+On average a single high-fidelity model run took 20 GB of memory and 5 hours to solve.
+Each low-fidelity model run on average consumed 3 GB of memory and completed within 5 minutes. 
+This setup profits tremendously from parallelisation as it involves
+numerous independent optimisation runs.
+Moreover, it would have been infeasible to carry out without high-performance computing.
 
 \subsection{Model Validation}
 \label{sec:validation}
