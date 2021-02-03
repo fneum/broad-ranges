@@ -13,6 +13,8 @@ In this section,
     \label{fig:violin}
 \end{SCfigure}
 
+Before extending the uncertainty analysis to near-optimal solutions,
+we 
 \cref{fig:violin}
 propagation of input uncertainties into outputs (when system cost is minimised)
 tsc:
@@ -211,49 +213,40 @@ Sobol / sensitivity indices:
     \label{fig:fuzzycone}
 \end{figure}
 
-\cref{fig:fuzzycone}
-how:
-- for each technology and cost sample, the min/max capacities for increasing epsilons form a cone; 
-- the capacity ranges contained by the cone are feasible within epsilon (widens up)
-- contour lines now represent the chance of being inside near-optimal cone over the whole parameter space (1e6 samples)
-- this is calculated by the overlap of many cones each representing a set of cost assumptions
-- due to discrete sampling points in epsilon: plots apply quadratic interpolation and gaussian filter for smoothing
-interpretation:
-- shows low-cost solutions common to most parameter sets (above 90\%)
-- system layouts that do not meet low-cost criteria in any circumstances (below 10\%)
-- the distance: the wider the contour lines are apart, the more uncertainty propagates, the closer contour lines are together the more distinct
-- the height: quantifies flexibility for a given level of certainty and slack
-- the angle: sensitivity towards cost slack
-- the probabilities closer to optimum are smaller because little overlap
-results:
-- any wind:
-  - extremely likely (99\%) that building 900 GW of wind capacity (in suitable locations) is attainable within 3\% of the optimum
-  - building less than 600 GW has low chance of being within 8\% of the cost optimum (even in highest yield locations) - must have
-  - note the nonlinearity as the space widens with increasing epsilon due to the convexity
-- onshore wind and offshore wind:
-  - only few solutions can forego onshore wind and remain within 8\% of the cost-optimum
-  - minimisation of onshore wind will push for substitution with solar and offshore wind (see violins)
-  - conversely, it is very likely possible (90\%) to build a system without offshore wind at a cost penalty of 4\% at most
-  - but more offshore power generation is possible: as same chances apply for building up to 200 GW of offshore wind to remain within 8\% 
-  - unlike onshore wind (where it's uncertain how little can be built), uncertainty for offshore wind deployment exists about how much can be built so that costs remain within a pre-specified range
-- solar:
-  - range of options within 8\% at 90\% certainty is very wide: anything between 100 GW and 1000 GW, amounts to factor 10
-  - by comparison: narrow range of uncertainty about how little can be built
-- transmission: 
-  - the level of required transmission expansion is least affected by the cost uncertainty (sharp boundaries)
-  - within 8\% it is likewise possible to plan for moderate grid reinforcement increasing capacity by 30\%
-  - or to initiate extensive remodelling of the European transmission tripling the transmission volume compared to what is currently in operation
-  - in any case some transmission reinforcement to balance renewable variations in space appears to be essential 
-- hydrogen:
-  - role: symbolise long-term storage balancing multi-week to seasonal variations
-  - 100 GW is very likely within 2\% of the optimum
-  - hydrogen appears to be a vital technology in many cases
-  - even at 8\% slack only 25\% require no long-term storage such as hydrogen (these will be cases where battery costs are very low)
-- battery
-  - role: representative of short-term storage balancing daily variations
-  - 90\% can work without any batteries and stay within 4\% of the optimum
-  - but also 50\% can build a system within 8\% with more than 400 GW of battery
-  - very wide uncertainty range, especially about how much can be built due to battery cost uncertainty
+\cref{fig:fuzzycone} depicts low-cost solutions common to most parameter sets (e.g. above 90\% contour)
+as well as system layouts that do not meet low-cost criteria in any circumstances.
+The wider the contour lines are apart, the more uncertainty exists about the boundaries.
+The closer contour lines are together, the more specific the limits are.
+The height of the quantiles quantifies flexibility for a given level of certainty and slack;
+the angle presents information about the sensitivity towards cost slack.
+% - the probabilities closer to optimum are smaller because little overlap
+
+From \cref{fig:fuzzycone} we can see that it is 
+highly likely that building 900 GW of wind capacity is within 3\% of the optimum, and that
+conversely building less than 600 GW has a low chance of being near the cost optimum.
+Only a few solutions can forego onshore wind entirely and remain within 8\% of the cost-optimum,
+whereas it is very likely possible to build a system without offshore wind at a cost penalty of 4\% at most.
+On the other hand, more offshore wind generation is equally possible.
+Unlike for onshore wind, where it is more uncertain how little can be built,
+uncertainty regarding offshore wind deployment exists about how much can be built
+so that costs remain within a pre-specified range.
+For solar, the range of options within 8\% of the cost optimum at 90\% certainty is very wide.
+Anything between 100 GW and 1000 GW appears feasible.
+In comparison to onshore wind, the uncertainty about minimal solar requirements is narrower.
+Nonetheless, the level of required transmission expansion is least affected by the cost uncertainty.
+To remain within $\varepsilon=8\%$ it is just as possible to
+plan for moderate grid reinforcement by 30\% as 
+is initiating extensive remodelling of the grid by tripling the transmission volume
+compared to what is currently in operation.
+These results indicate that in any case some transmission reinforcement
+to balance renewable variations across the continent appears to be essential.
+Hydrogen storage, symbolising long-term storage, also gives the impression of a vital technology in many cases.
+Building 100 GW of hydrogen storage capacity is likely viable within 2\% of the cost optimum 
+and, even at $\varepsilon=8\%$, only 25\% of cost samples require no long-term storage; 
+cases where battery costs are exceptionally low.
+Overall, 90\% of cases appear to function without any short-term battery storage
+while the system cost rises by 4\% at most.
+However, especially battery storage exhibits a large degree of freedom to build more.
 
 %F contour plot at fixed epsilon
 
@@ -287,33 +280,35 @@ results:
     \label{fig:dependencies}
 \end{figure}
 
-\cref{fig:dependencies}
-how:
-- cones from before assumed that the other technologies can be heavily optimised
-- selected three substitutes (one can at least partially be exchanged for the other) for which most interesting trade-offs expected
-- question: which combinations of wind and solar capacity, offshore and onshore turbines, and hydrogen and battery storage are likely to be achievable
-- enables deriving logical and statements
-- for that we examine the cross-section of fuzzy near-optimal feasible space for a given epsilon
-- similar to before, the contour lines depict the overlap of the space of near-optimal alternatives across the parameter space
-results:
-- \cref{fig:dependencies:ws}
-  - upper right: building much of both wind and solar becomes too expensive
-  - bottom left: building too little of any wind or solar does not suffice to produce enough electicity
-  - example: very high chance that building 1000 GW and 400 GW of solar is within 6\%
-  - example: building less than 200 GW of solar and 600 GW of wind is unlikely to yield a low-cost solution
-  - overall: even considering combinations of wind and solar, a wide space of low-cost options exists with moderate to high likelyhoods, but naturally range of alternatives is more constrained than when investigating individual technology
-  - minimising the capacity of both primary energy providers results in (characteristics of spatial allocation of capacities will differ!)
-    - location at high yield locations even if additional network expansion is necessary
-    - increased preference for efficient energy storage (battery)
-- \cref{fig:dependencies:oo}
-  - again upper right: too much of both
-  - again bottom left: too little wind of any kind
-  - most certain area: building more than 700 GW onshore wind and less than 250 GW offshore wind
-  - but there are some solutions with a high substitutability between onshore and offshore wind (upper left of the contour plot)
-  - compared to wind and solar, the near-optimal space is more constrained
-- \cref{fig:dependencies:hb}
-  - some storage is definitely needed, 50 GW of each at least, more to be more certain 
-  - summit: 150 GW of each
+The fuzzy cones from \cref{fig:fuzzycone} assume that the other technologies can be heavily optimised.
+But as there are dependencies between the technologies, in \cref{fig:dependencies}
+we furthermore present the probabilistic near-optimal space for three selected technology
+pairs at fixed $\varepsilon=6\%$ for which we expect the most interesting trade-offs.
+It addresses the question about which combinations of wind and solar capacity,
+offshore and onshore turbines, and hydrogen and battery storage are likely to be achievable.
+
+First, \cref{fig:dependencies:ws} addresses constraints between wind and solar.
+The upper right boundary exists because building much of both wind and solar would bee too expensive.
+The absence of solutions in the bottom left corner means that
+building too little of any wind or solar does not suffice to produce enough electricity.
+From the shape and contours, we see a high chance
+that building 1000 GW of wind and 400 GW of solar is within 6\% of the cost-optimum.
+On the other hand, building less than 200 GW of solar and 600 GW of wind is unlikely to yield a low-cost solution.
+Minimising the capacity of both primal energy sources will shift capacity installations to
+high-yield locations even if additional network expansion is necessary and boost
+the preference for highly efficient storage technologies.
+Overall, even considering combinations of wind and solar,
+a wide space of low-cost options exists with moderate to high likelihood,
+although the range of alternatives is shown to be more constrained.
+
+\cref{fig:dependencies:oo} concerns the trade-off between onshore wind and offshore wind.
+The most certain area is characterised by building more than 600 GW onshore wind,
+and less than 250 GW offshore wind capacity.
+However, there are some solutions with high substitutability between onshore and offshore wind,
+shown in the upper left of the contour plot.
+Compared to wind and solar, the range of near-optimal solutions is more constrained.
+Finally, \cref{fig:dependencies:hb} underlines that some storage is definitely needed,
+50 GW of each at least in any case. Highest likelihoods are attained when building 150 GW of each.
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
@@ -337,27 +332,29 @@ results:
     \label{fig:nearviolin}
 \end{figure}
 
-\cref{fig:nearviolin}
-motivation:
-- show interdependencies: what changes does the system layout experience when reaching for extremes in one technology
-- pick two examples: onshore wind and transmission expansion, because they have are often linked to social acceptance problems
-results:
-- \cref{fig:nearviolin:onwind}
-  - reduced onshore wind generation compensated predominantly by increased offshore wind parks but also more solar generation capacity
-  - the increased focus on offshore wind also leads to bigger amounts of hydrogen storage, while transmission expansion needs remain similar to least-cost solutions
-  - there exist cases which still require lots of onshore wind (800 GW)
-- \cref{fig:nearviolin:transmission}
-  - still some transmission expansion between 10\% and 30\% more
-  - more generation capacity overall (likely more curtailment, more distributed resources with weaker capacity factors)
-  - more hydrogen storage (compensating balancing in space with balancing in time)
+Neither of the aforementioned contour plots (\crefrange{fig:fuzzycone}{fig:dependencies}) expose
+what changes the system layout experiences when reaching for the extremes in one technology.
+Therefore, we show in \cref{fig:nearviolin} how the system-wide capacity distributions vary 
+compared to the least-cost solutions (\cref{fig:violin}) for two exemplary alternative objectives.
+For that, we chose minimising onshore wind capacity and transmission expansion
+because they are often linked to public opposition.
+
+\cref{fig:nearviolin:onwind} illustrates that reducing onshore wind capacity is
+predominantly compensated by increased offshore wind generation but also added solar capacities.
+The increased focus on offshore wind also leads to a tendency towards more hydrogen storage,
+while transmission expansion levels are similarly distributed as for the least-cost solutions.
+From \cref{fig:nearviolin:transmission} we can further extract that avoiding transmission expansion entails
+more hydrogen storage that compensates balancing in space with balancing in time,
+and more generation capacity overall, where resources are distributed to locations with
+high demand but weaker capacity factors and more heavily curtailed.
 
 \subsection{Critical Appraisal and Outlook}
 %%\blindtext
 
 Reconstruction and Disaggregation
 - When using the surrogate model we do not get the full original model outputs.
-- If we are interested in particular outcomes, we can reconstruct these selectively
-by adding the aggregate outcomes as additional constraints to the full model.
+- If we are interested in spatially explicit outcomes, we can either take one of the samples
+or reconstruct selectively by adding the aggregate outcomes as additional constraints to the full model.
 
 no sector-coupling
 
