@@ -1,7 +1,8 @@
 In this section,
 we first outline how we obtain least-cost and near-optimal solutions for a given cost parameter set.
 We then describe the model of the European power system and define the cost uncertainties. 
-Finally, we explain how we make use of surrogate modelling techniques
+Finally, we explain how we make use of multi-fidelity surrogate modelling
+techniques based on polynomial chaos expansions
 and find an experimental design that efficiently covers the parameter space.
 
 \subsection{Least-Cost Investment Planning}
@@ -146,7 +147,8 @@ This is because technologies that are not part of the active search direction
 will act to support pushing the technologies in the objective further.
 For instance, lowering wind capacities will be compensated for
 by higher solar capacities to be able to satisfy energy demand.
-Thus, extremising one technology narrows the flexibility of a substitute technology. The question about the nature of such dependencies arises.
+Thus, extremising one technology narrows the flexibility of a substitute technology.
+The question about the nature of such dependencies arises.
 To investigate two-dimensional influences,
 in addition to the $\varepsilon$-constraint and the objective to
 extremise use of a particular technology,
@@ -195,16 +197,15 @@ The instances of the coordinated capacity expansion problem (\cref{sec:leastcost
  are based on \mbox{PyPSA-Eur},
 which is an open model of the European power transmission system
 that combines high spatial and temporal resolution \cite{pypsaeur}.
-Its sole reliance on open data from a variety of sources
-and formulation as an open-source snakemake workflow
-that tracks computations from raw data to the solved model,
-makes the analysis conducted in this study transparent and reproducible \cite{snakemake}.
-In the following, we outline the main features and chosen configurations. 
-However, refer to the supplementary material and \cite{pypsaeur} for more extensive details.
+Because it only uses open data
+and every processing step is defined in a workflow \cite{snakemake},
+improves the transparency and reproducibility of our analysis.
+In the following, we outline the main features and configurations, and
+refer to the supplementary material and \cite{pypsaeur} for more details.
 
-We target a fully renewable electricity system primarily based on variable resources
+We target a fully renewable electricity system based on variable resources
 such as solar photovoltaics, onshore wind and offshore wind.
-Predominantly we pursue a greenfield approach, with a few notable exceptions.
+We pursue a greenfield approach subject to a few notable exceptions.
 The existing hydro-electric infrastructure (run-of-river, hydro dams, pumped-storage)
 is included but not considered to be extendable due to assumed geographical constraints.
 Furthermore, the existing transmission infrastructure can only
@@ -221,10 +222,10 @@ Throughout the paper, we will therefore make use of two levels of aggregation,
 reflecting a compromise between the computational burden incurred by high-resolution models and
 the growing inaccuracies regarding transmission bottlenecks
 and resource distribution in low-resolution models.
-We consider a low fidelity model with 37 nodes at a 4-hourly resolution
+We consider a low-fidelity model with 37 nodes at a 4-hourly resolution
 that models power flow via a transport model (i.e.~excluding KVL of \cref{eq:kvl}) and
-a high fidelity model with 128 nodes at a 2-hourly resolution
-subject to linearised load flow constraints.
+a high-fidelity model with 128 nodes at a 2-hourly resolution
+that is subject to linearised load flow constraints (\cref{fig:pypsaeur}).
 
 % existing infrastructure (hydro and transmission)
 
@@ -242,10 +243,10 @@ are retrieved from powerplantmatching, a merged dataset of conventional power pl
 
 Eligible areas for developing renewable infrastructure are calculated
 per technology and grid node, assuming wind and solar installations always connect to the closest substation. 
-How much wind and solar capacity may be built at a particular location is constrained by selected
+How much wind and solar capacity may be built at a location is constrained by
 eligible codes of the CORINE land use database and is further restricted by distance criteria,
 allowed deployment density, and the natural protection areas specified in the NATURA 2000 dataset.
-Offshore wind farms may not be developed at sea depths exceeding 50 metres,
+Moreover, offshore wind farms may not be developed at sea depths exceeding 50 metres,
 as indicated by the GEBCO bathymetry dataset. 
 
 % renewable generation and demand time series
@@ -257,7 +258,7 @@ use the satellite-aided SARAH-2 dataset for the direct and diffuse surface solar
 Models for wind turbines, solar panels, and the inflow into the basins of hydro-electric dams
 convert the weather data to hourly capacity factors and aggregate these to each grid node.
 Country-level load time series are taken from ENTSO-E statistics and
-are distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
+heuristically distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
 
 \subsection{Technology Cost Uncertainty}
 \label{sec:uncertainty}
@@ -294,23 +295,23 @@ and a distribution that specifies which segments are more probable.
 % Ranges
 
 Ranges of cost projections are best chosen as wide as possible to avoid excluding any plausible scenarios \cite{moret_characterization_2017,mccollum_energy_2020}.
-Commonly, have been varying between $\pm20\%$ and $\pm65\%$ depending on maturity of the technology \cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
-In this study, we consider uncertainty of the annuities of
+If uncertainty was considered, cost assumptions have commonly been modelled to vary between $\pm20\%$ and $\pm65\%$ depending on maturity of the technology \cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
+In this study, we consider uncertainty regarding the annuities of
 onshore wind, offshore wind, solar PV, battery and hydrogen storage systems.
-In this context, hydrogen storage systems comprise the cost of
+The latter comprises the cost of
 electrolysis, cavern storage, and fuel cells.
 For solar PV we assume an even split between utility-scale PV and residential rooftop PV.
 Evaluating uncertainties based on annuities has a distinct advantage.
 They can be seen to simultaneously incorporate uncertainties about
 the overnight investments, fixed operation and maintenance costs,
 their lifetime, and the discount rate,
-since multiple parameter combinations lead to the same annuity.
+since multiple combinations lead to the same annuity.
 We built the uncertainty ranges presented in \cref{tab:costuncertainty}
 from the optimistic and pessimistic technology cost
 and lifetime projections for the year 2050 from the Danish Energy Agency,
 which correspond to 90\% confidence intervals \cite{DEA}.
 We further include projections for the year 2030 when they can further expand the interval
-or in case no ranges were provided for the year 2050, such as for rooftop PV.
+or in case no ranges were provided for the year 2050. %such as for rooftop PV.
 
 % Distributions
 
@@ -345,7 +346,7 @@ In contrast to the full model, they only imitate the input/output behaviour for 
 Like other machine learning techniques, they can generalise from a
 training dataset that comprises only a limited number of samples.
 As surrogate models interpolate gaps in the parameter space that are not contained in the sample set,
-that would otherwise be computationally expensive to fill,
+which would otherwise be computationally expensive to fill,
 they are well suited to use cases such as parameter space exploration and sensitivity analysis.
 
 % this paper
@@ -356,7 +357,7 @@ onto a selection of eight system-level outputs.
 These are the total system cost and the installed onshore wind, offshore wind, solar, hydrogen, battery, and transmission network capacities.
 We construct surrogate models for least-cost and near-optimal solutions separately
 for each system cost slack, search direction, fixed total capacity, and output variable. This results in a collection of 808 individual surrogate models based on 101 solved optimisation problems
-for one particular set of cost assumptions.
+per set of cost assumptions.
 The method we choose from an abundance of alternatives is based on polynomial chaos expansion (PCE)
 \cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
 We select this approach because the resulting approximations
@@ -487,7 +488,7 @@ high-fidelity model
 \begin{equation}
     f_h'(\x) = f_\ell'(\x) + \Delta'(\x).
 \end{equation}
-Typically, the corrective PCE only rectifies only the lower order effects
+Typically, the corrective PCE rectifies only the lower order effects
 of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
 The advantage is that this way the correction function can be determined
 based on fewer samples analogous to \cref{sec:pce}.
@@ -602,37 +603,48 @@ Moreover, it would have been infeasible to carry out without high-performance co
             \includegraphics[height=.2\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
         \end{subfigure}
     }
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{Cross-validation errors by output for varying sample sizes and polynomial orders
+    of least-cost low-fidelity surrogate models.}
     \label{fig:error}
 \end{figure}
 
-evaluate combinations of order and sample size experimentally in \cref{sec:validation}
+We justify the use of surrogate modelling by cross-validation.
+Out of the 500 low-fidelity samples,
+100 samples are not used in the regression.
+This validation dataset is unknown to the surrogate model and is
+consulted to assess the approximation's quality.
+Because the high-fidelity sample size is limited and
+approximating near-optimal solutions is not fundamentally different,
+we base the validation on low-fidelity least-cost solutions only.
+We experimentally evaluate the approximation errors between predicted and observed data
+for different combinations of polynomial order and sample size
+to decide on a suitable parameterisation.
+We present the coefficient of determination (R$^2$)
+for the variance captured,
+the mean absolute (percentage) errors (MAE/MAPE) for absolute and relative deviations,
+and the root mean squared error (RMSE).
 
-using cross-validation techniques 
-- training set of known data
-- validation/test set of unknown data to surrogate \cite{gratiet_metamodel-based_2015}
-- based on low-fidelity models least-cost solutions only
-    - too few samples for error analysis for high-fidelity model
-    - no fundamental deviations exptected for near-optimal solutions
-- out of 500 cost samples, 100 have not been used for building/training the surrogate model; this is our test set.
+Regarding the number of samples required, \cref{fig:error:samples}
+foremost illustrates that, given enough samples, we achieve
+average relative errors of less than 4\% for most output variables.
+This is comparable to the cross-validation errors from Tröndle et al.~\cite{trondle_trade-offs_2020} below 5\%.
+Only for offshore wind and battery storage, we observe larger errors.
+However, this can be explained by a distortion of the relative measure
+when these technologies are hardly built for some cost projections.
+On the contrary, the prediction of total system costs is remarkably accurate.
+\cref{fig:error:samples} also demonstrates that for a polynomial order of 3,
+we gain no significant improvement with more than 200 samples.
+In fact, thanks to the regularisation term used in the regression,
+we already attain acceptable levels of accuracy with as few as 50 samples.
+Moreover, the high R$^2$ values underline that the surrogate model can explain 
+most of the output variance.
 
-error estimation, measures of accuracy:
-- R2: extent of variance captured by regression quality
-- MAE: to see absolute deviations
-- MAPE: relative deviations
-- RMSE:
-- benchmark: model cross-validation error below 5\% \cite{trondle_trade-offs_2020}
-
-\cref{fig:error}
-- \cref{fig:error:samples}
-  - thanks to the regularisation term, already acceptable results with as little as 50 samples
-  - no significant approvement after 150 samples
-  - achieve average relative errors of less than 4\%
-  - (exceptions are offshore wind and battery for which the relative measure is distorted because frequently these technologies are not used at all)
-  - overall the prediction of tsc is remarkably excellent (negligible errors)
-  - determination coefficients above 0.95 showing that the surrogate model captures the output variance very well
-  - (exception is transmission -- why?)
-- \cref{fig:error:poly}
-  - order of 2 and below is too simple (underfitting)
-  - order of 4 and above yields no improvement (overfitting, were it not for the regularisation term)
-  - as higher order requires more samples, in the interest of computational burden, order of 3 appears to be a suitable compromise
+Regarding the polynomial order, \cref{fig:error:poly} shows that
+an order of 2 and below may be too simple to capture the
+interaction between different parameters. On the other hand, 
+an order of 4 and above yields no improvement and,
+were it not for the moderating regularisation term,
+would even result in a loss of generalisation properties due to overfitting.
+As higher-order approximations require significantly more samples,
+an order of 3 appears to be a suitable compromise
+to limit the computational burden.
