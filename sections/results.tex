@@ -1,7 +1,9 @@
-In this section,
-- least-cost solutions distributions and sensitivities
-- probabilistic space of near-optimal solutions
-- critically discussed and appraised
+In this section, we first quantify the uncertainty of least-cost solutions incurred by unknown
+future technology cost
+and conduct a global sensitivity analysis to set a foundation.
+We then expand the uncertainty analysis to the space of nearly cost-optimal solutions,
+which yields us insights about the consistency of alternatives across a variety of cost parameters.
+Finally, the results are critically discussed.
 
 \subsection{Least-Cost Solutions}
 %%\blindtext
@@ -115,32 +117,30 @@ For our application, the Sobol indices can, for instance, tell us which technolo
 contributes the most to total system cost or how much of a specific technology will be built.
 The first-order Sobol indices describe the share of output variance
 due to variations in one input alone averaged over variations in the other inputs.
-Total Sobol indices consider higher-order interactions,
+Total Sobol indices also consider higher-order interactions,
 which are greater than 100\% if the relations are not purely additive.
 Sobol indices have been applied in the context of energy systems (e.g. \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018})
 and we profit from the advantage that we can conveniently compute the indices analytically
 from the polynomial chaos expansion \cite{sudret_global_2008}.
 
-\cref{fig:sobol} \cref{fig:sobol:first} \cref{fig:sobol:total}
-- two ways to display as a heatmap or as stacked bar chart
-- first-order effects dominate, but there are second-order effects
-- tsc largely decided by how expensive it is to build onshore wind capacity, followed by cost of hydrogen storage
-- wind deploymend almost exclusively governed by cost of onwind/offwind
-- other carriers yield a more varied picture (depend on other technologies)
-- solar deployment also depends on onshore wind and battery cost
-- amount of hydrogen influenced by battery and H2 cost alike
-- The Sobol indices of the least-cost solution are widely shared across the near-optimal solutions with little deviation.
+\cref{fig:sobol} displays the first-order and total Sobol indices for least-cost solutions.
+It shows that the total system cost is largely determined by how expensive it is to build onshore wind capacity,
+followed by the cost of hydrogen storage. The amount of wind in the system is 
+almost exclusively governed by the cost of onshore and offshore wind parks.
+Other carriers yield a more varied picture.
+The cost-optimal solar capacities additionally depend on onshore wind and battery costs.
+The amount of hydrogen storage is influenced by battery and hydrogen storage cost alike.
+Overall, although the first-order effects dominate, there are noticable higher-order effects,
+which are largest for the amount of transmission.
 
 \subsection{Near-Optimal Solutions}
 %%\blindtext
 
-- uncertainty quantification of outputs at least-cost solutions: check
-- sensitivity analysis of inputs on outputs at least-cost solutions: check
-- has been shown: for single-cost parameter set a wide array of technologically diverse but similarly costly solutions exist
-- next we want to examine where agree/disagree, feasible alternatives common to all, few or no parameter sets
-- robust conclusions on near-optimal solutions that are not affected by uncertainty: next
-- in other words: find solutions that are likely within epsilon of the least-cost solution
-- combination of cost uncertainty and slack leads to: look at solutions between 160 (optimistic least-cost) and 240 (pessimistic with maximum slack) bn EUR pa
+So far we quantified the output uncertainty and analysed the sensitivity towards inputs at least-cost solutions only.
+Yet, it has been previously shown that even for a single cost parameter set a wide array of
+technologically diverse but similarly costly solutions exists \cite{nearoptimal}.
+In the next step, we examine how technology cost uncertainty affects the outline of near-optimal solutions.  
+By identifying feasible alternatives common to all, few or no cost samples, we improve the robustness of the results.
 
 %F fuzzy c-shaped plots
 
@@ -208,7 +208,6 @@ The wider the contour lines are apart, the more uncertainty exists about the bou
 The closer contour lines are together, the more specific the limits are.
 The height of the quantiles quantifies flexibility for a given level of certainty and slack;
 the angle presents information about the sensitivity towards cost slack.
-% - the probabilities closer to optimum are smaller because little overlap
 
 From \cref{fig:fuzzycone} we can see that it is 
 highly likely that building 900 GW of wind capacity is within 3\% of the optimum, and that
