@@ -1,4 +1,7 @@
 In this section,
+- least-cost solutions distributions and sensitivities
+- probabilistic space of near-optimal solutions
+- critically discussed and appraised
 
 \subsection{Least-Cost Solutions}
 %%\blindtext
@@ -13,33 +16,25 @@ In this section,
     \label{fig:violin}
 \end{SCfigure}
 
-Before extending the uncertainty analysis to near-optimal solutions,
-we 
-\cref{fig:violin}
-propagation of input uncertainties into outputs (when system cost is minimised)
-tsc:
-- total system cost range between 160 and 220
-- means most pessimistic cost is about 40\% more expensive than using optimistic cost
-- bell-like probability distribution
-generation:
-- all solutions build at least 350 GW of solar and 600 GW of wind
-- but no more than 1100 GW of wind
-- wind tendency towards higher values, solar towards lower values
-- least-cost solutions prefer onshore over offshore (most solutions beyond 800 GW onshore, less than 100 GW offshore)
-- but alongside battery storage capacity onshore wind capacity has the highest uncertainty range
-storage:
-- no least-cost solutions without hydrogen, but some without battery
-- hydrogen tends to dominate battery storage, except when battery storage is very cheap
-- battery also has wider uncertainty range
-transmission:
-- least affected by cost uncertainties
-- almost doubling in relation to today's capacities
-- relate to TYNDP
-
-criticise that
-- interpretation of boundaries is limited
-- are not robust when looking beyond least-cost solution and marginal cost penalties are allowed
-- does not tell which input uncertainties are responsible (sensitivity analysis)
+We approach the uncertainty analysis to near-optimal solutions
+by reviewing the propagation of input uncertainties into 
+least-cost solutions first and expanding gradually from there.
+As displayed in \cref{fig:violin},
+the total annual system costs vary between 160 and 220 billion Euro per year.
+This means the most pessimistic cost projections
+entail about 40\% higher cost than the most optimistic projections.
+All least-cost solutions build at least 350 GW solar and 600 GW wind, but no more than 1100 GW.
+While wind capacities tend towards higher values, solar capacities tend towards lower values.
+We observe that least-cost solutions clearly prefer onshore over offshore wind, yet
+alongside battery storage onshore wind features the highest uncertainty range.
+The cost optimum gravitates towards hydrogen storage rather than battery storage,
+unless battery storage becomes very cheap.
+There are no least-cost solutions without hydrogen, only some without battery storage.
+Transmission network expansion is least affected by cost uncertainty and consistently
+doubled compared to today's capacities.
+However, the interpretation of the observed ranges is limited because
+they are not robust when we look beyond the least-cost solutions and allow marginal cost penalties.
+Morover, the distribution of outputs does not yet convey information about their sensitivity to cost assumptions. 
 
 %F sensitivity of built capacities
 
@@ -76,29 +71,21 @@ criticise that
     \label{fig:sensitivity}
 \end{figure}
 
-\cref{fig:sensitivity}
-how:
-- like local sensitivity analysis, reduce one dimension from uncertainty space
-- sweep the parameter space in one dimension and obserse corresponding capacity
-- for instance onshore cost on onshore capacity (presumed highest sensitivity)
-- the remaining uncertainty (from other cost assumptions) is depicted by percentiles
-- the overall tendency is trivial: the cheaper a technology gets, the more it is built
-- but changes of slope and effects on uncertainty range across the parameter space are interesting!
-result:
-- slope:
-  - battery  becomes economically significantly more attractive (see change of slope) once annuity falls below 75 EUR/kW/a
-  - [translate into an overnight investment with exemplary lifetime/interest] (regardless of other cost uncertainties), below it is a minor to hydrogen
-  - hydrogen on the other hand - steady slope and uncertainty band
-- uncertainty:
-  - low cost of onshore wind - much onshore wind with low uncertainty
-  - high cost of onshore wind - how much is built greatly depends on other cost parameters
-  - the opposite for offshore wind (and solar)
-- other:
-  - the limited uncertainty about optimal levels of network expansion is mostly due to hydrogen storage cost. As cost of storing H2 falls, less grid reinforcment chosen (can also see this  in Sobol indices)
-transition:
-- these self-sensitivities are only a selection
-- we can formalise how input uncertainties affect each outcome with sensitivity indices
-- next Sobol
+\cref{fig:sensitivity} addresses a selection of local self-sensitivities, i.e.~how the cost of a technology influences its deployment,
+while displaying the remaining uncertainty induced by other cost parameters.
+The overall tendency is trivial: the cheaper a technology becomes, the more it is built.
+However, changes of slope and effects on uncertainty range across the parameter space are insightful nonetheless.
+For instance, \cref{fig:sensitivity} reveals that battery storage becomes significantly more 
+attractive economically once its annuity falls below 75 EUR/kW/a, whereas hydrogen storage is
+characterised by a steady slope.
+A low cost of onshore wind brings about much onshore wind capacity with low uncertainty,
+whereas if onshore wind costs are high how much is built greatly depends on other cost parameters.
+The opposite is true for offshore wind and solar. 
+The limited uncertainty about cost-optimal levels of grid expansion is mostly due to the cost of hydrogen storage.
+As the cost of hydrogen storage falls, less grid reinforcment is chosen.
+Since the presented self-sensitivities only exhibit a fraction of sensitivities,
+in the next step we formalise how input uncertainties affect each outcome by 
+systematically with variance-based global sensitivity analysis.
 
 %F sobol indices
 
@@ -123,14 +110,16 @@ transition:
     \label{fig:sobol}
 \end{figure}
 
-Sobol / sensitivity indices:
-- decomposition of output variance and attribution to random input variables
-- separate influential from non-influential parameters
-- The polynomials can be used for calculating Sobol indices efficiently in post-processing \cite{sudret_global_2008}
-- used in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}
-- using chaospy \cite{feinberg_chaospy_2015}
-- first-order Sobol: share of output variance due to variations in one input parameter alone (averaged over variations in other input parameters)
-- total Sobol indices: contribution to output variance including all interactions with other input variables (can be greater than 100\% if not purely additive)
+Sensitivity indices, or Sobol indices, attribute the observed output variance to each input.
+For our application, the Sobol indices can, for instance, tell us which technology cost
+contributes the most to total system cost or how much of a specific technology will be built.
+The first-order Sobol indices describe the share of output variance
+due to variations in one input alone averaged over variations in the other inputs.
+Total Sobol indices consider higher-order interactions,
+which are greater than 100\% if the relations are not purely additive.
+Sobol indices have been applied in the context of energy systems (e.g. \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018})
+and we profit from the advantage that we can conveniently compute the indices analytically
+from the polynomial chaos expansion \cite{sudret_global_2008}.
 
 \cref{fig:sobol} \cref{fig:sobol:first} \cref{fig:sobol:total}
 - two ways to display as a heatmap or as stacked bar chart
