@@ -6,7 +6,10 @@ In this section,
 %F violin plots
 \begin{SCfigure}
     \includegraphics[width=0.75\textwidth]{violins/violin-capacities-high-prediction.pdf}
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{
+      Distribution of total system cost, generation, storage, and transmission capacities
+      for least-cost solutions.
+    }
     \label{fig:violin}
 \end{SCfigure}
 
@@ -63,7 +66,11 @@ criticise that
         \caption{transmission}
         \includegraphics[width=\textwidth]{1D/1D-transmission-H2-high.pdf}
     \end{subfigure}
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{
+      Sensitivity of capacities towards their own technology cost.
+      The median (Q50) alongside the 5\%, 25\%, 75\%, and 95\% quantiles (Q5--Q95) display
+      the sensitivity subject to the uncertainty induced by other cost parameters.
+    }
     \label{fig:sensitivity}
 \end{figure}
 
@@ -104,7 +111,13 @@ transition:
         \label{fig:sobol:total}
         \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
     \end{subfigure}
-    \caption{Sobol sensitivity indices}
+    \caption[First-order and total Sobol indices]{
+      Sobol indices. These sensitivity indices attribute output variance to random input variables
+      and reveal which inputs the outputs are most sensitive to. The first-order Sobol indices
+      quantify the share of output variance due to variations in one input parameter alone.
+      The total Sobol indices further include interactions with other input variables.
+      Total Sobol indices can be greater than 100\% if the contributions are not purely additive.
+    }
     \label{fig:sobol}
 \end{figure}
 
@@ -141,6 +154,7 @@ Sobol / sensitivity indices:
 %F fuzzy c-shaped plots
 
 \begin{figure}
+    \vspace{-2cm}
     \noindent\makebox[\textwidth]{
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
@@ -182,7 +196,18 @@ Sobol / sensitivity indices:
         \includegraphics[width=\textwidth]{neardensity/surr-low-battery.pdf}
     \end{subfigure}
     }
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{
+    Space of near-optimal solutions by technology under cost uncertainty.
+    For each technology and cost sample,
+    the minimum and maximum capacities obtained for increasing cost penalties
+    $\varepsilon$ form a cone, starting from a common least-cost solution. 
+    By arguments of convexity, the capacity ranges contained by the cone can be near-optimal and and feasible, given a degree of freedom in the other technologies.
+    From optimisation theory, we know that the cones widen up for increased slacks.
+    As we consider technology cost uncertainty, the cone will look slightly different for each sample.
+    The contour lines represent the frequency a solution is inside near-optimal cone over the whole parameter space.
+    This is calculated from the overlap of many cones, each representing a set of cost assumptions.
+    Due to discrete sampling points in the $\varepsilon$-dimension, the plots further apply quadratic interpolation and gently a Gaussian filter for smoothing.
+    }
     \label{fig:fuzzycone}
 \end{figure}
 
@@ -253,7 +278,12 @@ results:
         \includegraphics[width=\textwidth]{dependency/2D_surr-low-H2-battery.pdf}
     \end{subfigure}
     }
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{
+      Space of near-optimal solutions by selected pairs of technologies under cost uncertainty.
+    Just like in \cref{fig:fuzzycone}, the contour lines depict the overlap of the space of near-optimal alternatives across the parameter space.
+    It can be thought of as the cross-section of the probabilistic near-optimal feasible space for a given $\varepsilon$
+    in two technology dimensions and highlights that the extremes of two technologies from \cref{fig:fuzzycone} cannot be achieved simultaneously.
+    }
     \label{fig:dependencies}
 \end{figure}
 
@@ -300,7 +330,10 @@ results:
      \includegraphics[width=\textwidth, trim=0cm .3cm 3.3cm  .63cm, clip]{violins/violin-capacities-high-prediction-min-transmission-0.08.pdf}   
     \end{subfigure}
     }
-    \caption{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.}
+    \caption{
+      Distribution of total system cost, generation, storage, and transmission capacities
+      for two near-optimal search directions with $\varepsilon=8\%$ system cost slack.
+    }
     \label{fig:nearviolin}
 \end{figure}
 

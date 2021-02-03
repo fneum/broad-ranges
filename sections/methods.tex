@@ -180,14 +180,18 @@ within the respective near-optimal range.
 \label{sec:inputs}
 
 \begin{SCfigure}
-    \begin{tabular}{cc}
-        \footnotesize (a) low-fidelity: 37 nodes and 4-hourly & \footnotesize (b) high-fidelity: 128 nodes and 2-hourly \\
-        \includegraphics[width=0.33\textwidth]{map37.pdf} &
-        \includegraphics[width=0.33\textwidth]{map128.pdf} \\
-        \includegraphics[width=0.33\textwidth]{timeseries37.pdf} &
-        \includegraphics[width=0.33\textwidth]{timeseries128.pdf} \\
-    \end{tabular}
-    \caption{Illustration of the spatial and temporal resolution of the low and high fidelity model.}
+        \begin{tabular}{cc}
+            \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity: \\
+            \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and 2-hourly \\
+            \includegraphics[width=0.34\textwidth]{map37.pdf} &
+            \includegraphics[width=0.34\textwidth]{map128.pdf} \\
+            \includegraphics[width=0.34\textwidth]{timeseries37.pdf} &
+            \includegraphics[width=0.34\textwidth]{timeseries128.pdf} \\
+        \end{tabular}
+    \caption[Spatial and temporal resolution of the low and high fidelity model]{Spatial and temporal resolution of the low and high fidelity model.
+    Green lines represent controllable HVDC lines. Red lines represent HVAC lines.
+    The capacity factors for wind and solar are shown for four days in March
+    at the northernmost node in Germany, alongside the normalised load profile.}
     \label{fig:pypsaeur}
 \end{SCfigure}
 
@@ -203,6 +207,7 @@ improves the transparency and reproducibility of our analysis.
 In the following, we outline the main features and configurations, and
 refer to the supplementary material and \cite{pypsaeur} for more details.
 
+\paragraph{Scenario}
 We target a fully renewable electricity system based on variable resources
 such as solar photovoltaics, onshore wind and offshore wind.
 We pursue a greenfield approach subject to a few notable exceptions.
@@ -216,6 +221,7 @@ We consider two extendable storage technologies:
 battery storage representing short-term storage suited to balancing daily fluctuations and
 hydrogen storage system which exemplifies long-term synoptic and seasonal storage.
 
+\paragraph{Spatial and Temporal Resolution}
 Since the spatial and temporal resolution strongly affects the size of the optimisation problem,
 running the model at full resolution is computationally infeasible.
 Throughout the paper, we will therefore make use of two levels of aggregation,
@@ -229,6 +235,7 @@ that is subject to linearised load flow constraints (\cref{fig:pypsaeur}).
 
 % existing infrastructure (hydro and transmission)
 
+\paragraph{Transmission Grid and Hydro-Electricity}
 The topology of the European transmission network is retrieved
 from the ENTSO-E transparency map and includes all lines at and above 220 kV.
 Capacities and electrical characteristics of transmission lines and substations are
@@ -241,6 +248,7 @@ are retrieved from powerplantmatching, a merged dataset of conventional power pl
 
 % renewable generation potentials
 
+\paragraph{Renewable Energy Potentials}
 Eligible areas for developing renewable infrastructure are calculated
 per technology and grid node, assuming wind and solar installations always connect to the closest substation. 
 How much wind and solar capacity may be built at a location is constrained by
@@ -251,6 +259,7 @@ as indicated by the GEBCO bathymetry dataset.
 
 % renewable generation and demand time series
 
+\paragraph{Renewables and Demand Time Series}
 The location-dependent renewables availability time series are generated
 based on two historical weather datasets from the year 2013.
 We retrieve wind speeds, run-off and surface roughness from the ERA5 reanalysis dataset and
@@ -276,7 +285,7 @@ heuristically distributed to each grid node to 40\% by population density and to
             Hydrogen & 111 & 259 & EUR/kW/a \\ \bottomrule
         \end{tabular}
     \end{small}
-    \caption{Technology cost uncertainty using optimistic and pessimistic assumptions from DEA.}
+    \caption[Technology Cost Uncertainty]{Technology cost uncertainty using optimistic and pessimistic assumptions from the Danish Energy Agency \cite{DEA}.}
     \label{tab:costuncertainty}
 \end{SCtable}   
 
@@ -603,7 +612,7 @@ Moreover, it would have been infeasible to carry out without high-performance co
             \includegraphics[height=.2\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
         \end{subfigure}
     }
-    \caption{Cross-validation errors by output for varying sample sizes and polynomial orders
+    \caption[Cross-validation errors]{Cross-validation errors by output for varying sample sizes and polynomial orders
     of least-cost low-fidelity surrogate models.}
     \label{fig:error}
 \end{figure}
