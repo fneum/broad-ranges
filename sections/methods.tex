@@ -206,6 +206,9 @@ we achieve a high level of transparency and reproducibility.
 In the following, we outline the main features and configurations, and
 refer to the supplementary material and Hörsch et al.~\cite{pypsaeur} for more details.
 
+% TODO maybe need to justify better the setup and scope
+% - range of selected technologies
+% - sectoral coverage limited to electricity
 \paragraph{Scenario}
 We target a fully renewable electricity system based on variable resources
 such as solar photovoltaics, onshore wind and offshore wind.
@@ -241,7 +244,8 @@ Capacities and electrical characteristics of transmission lines and substations 
 inferred from standard types for each voltage level, before they are transformed to
 a uniform voltage level.
 For each line, $N-1$ security is approximated by limiting the line loading to 70\% of its nominal rating.
-The dataset further includes existing HVDC links and planned projects from the TYNDP.
+The dataset further includes existing high-voltage direct current (HVDC) links and planned projects from the
+Ten Year Network Development Plan (TYNDP).
 Existing run-of-river, hydro-electric dams, pumped-hydro storage plants
 are retrieved from \textit{powerplantmatching}, a merged dataset of conventional power plants.
 
@@ -268,9 +272,10 @@ convert the weather data to hourly capacity factors and aggregate these to each 
 Historical country-level load time series are taken from ENTSO-E statistics and
 heuristically distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
 
+% TODO techno-economic parameters
+
 \subsection{Technology Cost Uncertainty}
 \label{sec:uncertainty}
-%\blindtext
 
 \begin{SCtable}
     \begin{small}
@@ -334,7 +339,6 @@ we follow the literature by assuming that the cost are independent and uniformly
 
 \subsection{Surrogate Modelling with Polynomial Chaos Expansion}
 \label{sec:surrogate}
-%\blindtext
 
 % problem
 
@@ -445,7 +449,7 @@ and the corresponding outputs,
     \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }.
 \end{equation}
 Using this training dataset, we minimise the least-square residual of the polynomial approximation across all observations.
-Following the LASSO approach, we add an extra $L_1$ regularisation term,
+We add an extra $L_1$ regularisation term, % LASSO regression
 that induces a preference for fewer non-zero coefficients, and solve
 \begin{equation}
     \hat{\bm{r}} = \argmin_{\bm{r} \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
@@ -546,7 +550,7 @@ It deals with how many samples are drawn and what sampling method is used.
 
 Traditional Monte-Carlo sampling with pseudo-random numbers is known to
 possess slow convergence properties, % 1 / \sqrt{n}
-especially in high-dimensional parameter spaces.
+especially in high-dimensional parameter spaces \cite{TBD}.
 So-called low-discrepancy series can greatly improve on random sampling.
 Because they are designed to avoid forming large gaps and clusters,
 these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.
@@ -586,7 +590,6 @@ Moreover, it would have been infeasible to carry out without high-performance co
 
 \subsection{Model Validation}
 \label{sec:validation}
-%%\blindtext
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
