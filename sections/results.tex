@@ -5,7 +5,7 @@ We then expand the uncertainty analysis to the space of nearly cost-optimal solu
 which yields us insights about the consistency of alternatives across a variety of cost parameters.
 Finally, the results are critically discussed.
 
-\subsection{Least-Cost Solutions}
+\subsection{Cost and Capacity Distribution of Least-Cost Solutions}
 %%\blindtext
 
 %F violin plots
@@ -34,9 +34,15 @@ unless battery storage becomes very cheap.
 There are no least-cost solutions without hydrogen, only some without battery storage.
 Transmission network expansion is least affected by cost uncertainty and consistently
 doubled compared to today's capacities.
-However, the interpretation of the observed ranges is limited because
-they are not robust when we look beyond the least-cost solutions and allow marginal cost penalties.
-Morover, the distribution of outputs does not yet convey information about their sensitivity to cost assumptions. 
+The question arises, what we can actually conclude from these insights.
+The interpretation of the observed ranges may be limited because
+they are not robust when we look beyond the least-cost solutions and acknowledge
+structural modelling uncertainties by allowing deviations for marginal cost penalties
+for reasons, such as social constraints, that are not contained in the model formulation.
+Morover, the pure distribution of outputs does not yet convey information about
+how sensitive results are to particular cost assumptions.
+But knowing the technologies for which lowering overnight costs has a big impact
+is important too promote technological learning in that direction.
 
 %F sensitivity of built capacities
 
@@ -73,21 +79,26 @@ Morover, the distribution of outputs does not yet convey information about their
     \label{fig:sensitivity}
 \end{figure}
 
+\subsection{Self-Sensitivities and Global Sensitivity Indices}
+
 \cref{fig:sensitivity} addresses a selection of local self-sensitivities, i.e.~how the cost of a technology influences its deployment,
 while displaying the remaining uncertainty induced by other cost parameters.
 The overall tendency is trivial: the cheaper a technology becomes, the more it is built.
-However, changes of slope and effects on uncertainty range across the parameter space are insightful nonetheless.
+However, changes of slope and effects on the uncertainty range 
+as one cost parameter is swept are insightful nonetheless.
 For instance, \cref{fig:sensitivity} reveals that battery storage becomes significantly more 
-attractive economically once its annuity falls below 75 EUR/kW/a, whereas hydrogen storage is
-characterised by a steady slope.
-A low cost of onshore wind brings about much onshore wind capacity with low uncertainty,
+attractive economically once its annuity falls below 75 EUR/kW/a
+(including 6h energy capacity at full power output),
+whereas hydrogen storage features a steady slope.
+A low cost of onshore wind makes building much onshore wind capacity attractive with low uncertainty,
 whereas if onshore wind costs are high how much is built greatly depends on other cost parameters.
 The opposite is true for offshore wind and solar. 
-The limited uncertainty about cost-optimal levels of grid expansion is mostly due to the cost of hydrogen storage.
+The limited uncertainty about cost-optimal levels of grid expansion is mostly caused by the cost of hydrogen storage.
 As the cost of hydrogen storage falls, less grid reinforcment is chosen.
-Since the presented self-sensitivities only exhibit a fraction of sensitivities,
-in the next step we formalise how input uncertainties affect each outcome by 
-systematically with variance-based global sensitivity analysis.
+Since the presented self-sensitivities only exhibit a fraction of all sensitivities,
+in the next step we formalise how input uncertainties affect each outcome 
+systematically by applying variance-based global sensitivity analysis techniques, which
+have been applied in the context of energy systems e.g.~in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}.
 
 %F sobol indices
 
@@ -112,19 +123,17 @@ systematically with variance-based global sensitivity analysis.
     \label{fig:sobol}
 \end{figure}
 
-Sensitivity indices, or Sobol indices, attribute the observed output variance to each input.
+Sensitivity indices, or Sobol indices, attribute the observed output variance to each input and
+can be computed analytically from the polynomial chaos expansion \cite{sudret_global_2008}.
 For our application, the Sobol indices can, for instance, tell us which technology cost
 contributes the most to total system cost or how much of a specific technology will be built.
 The first-order Sobol indices describe the share of output variance
 due to variations in one input alone averaged over variations in the other inputs.
 Total Sobol indices also consider higher-order interactions,
 which are greater than 100\% if the relations are not purely additive.
-Sobol indices have been applied in the context of energy systems (e.g. \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018})
-and we profit from the advantage that we can conveniently compute the indices analytically
-from the polynomial chaos expansion \cite{sudret_global_2008}.
 
-\cref{fig:sobol} displays the first-order and total Sobol indices for least-cost solutions.
-It shows that the total system cost is largely determined by how expensive it is to build onshore wind capacity,
+The first-order and total Sobol indices for least-cost solutions in \cref{fig:sobol} show
+that the total system cost is largely determined by how expensive it is to build onshore wind capacity,
 followed by the cost of hydrogen storage. The amount of wind in the system is 
 almost exclusively governed by the cost of onshore and offshore wind parks.
 Other carriers yield a more varied picture.
@@ -133,13 +142,13 @@ The amount of hydrogen storage is influenced by battery and hydrogen storage cos
 Overall, although the first-order effects dominate, there are noticable higher-order effects,
 which are largest for the amount of transmission.
 
-\subsection{Near-Optimal Solutions}
+\subsection{Fuzzy Near-Optimal Corridors with Increasing Cost Slack}
 %%\blindtext
 
 So far we quantified the output uncertainty and analysed the sensitivity towards inputs at least-cost solutions only.
 Yet, it has been previously shown that even for a single cost parameter set a wide array of
 technologically diverse but similarly costly solutions exists \cite{nearoptimal}.
-In the next step, we examine how technology cost uncertainty affects the outline of near-optimal solutions.  
+In the next step, we examine how technology cost uncertainty affects the shape of the space of near-optimal solutions.  
 By identifying feasible alternatives common to all, few or no cost samples, we improve the robustness of the results.
 
 %F fuzzy c-shaped plots
@@ -192,12 +201,12 @@ By identifying feasible alternatives common to all, few or no cost samples, we i
     For each technology and cost sample,
     the minimum and maximum capacities obtained for increasing cost penalties
     $\varepsilon$ form a cone, starting from a common least-cost solution. 
-    By arguments of convexity, the capacity ranges contained by the cone can be near-optimal and and feasible, given a degree of freedom in the other technologies.
+    By arguments of convexity, the capacity ranges contained by the cone can be near-optimal and feasible, given a degree of freedom in the other technologies.
     From optimisation theory, we know that the cones widen up for increased slacks.
     As we consider technology cost uncertainty, the cone will look slightly different for each sample.
-    The contour lines represent the frequency a solution is inside near-optimal cone over the whole parameter space.
+    The contour lines represent the frequency a solution is inside the near-optimal cone over the whole parameter space.
     This is calculated from the overlap of many cones, each representing a set of cost assumptions.
-    Due to discrete sampling points in the $\varepsilon$-dimension, the plots further apply quadratic interpolation and gently a Gaussian filter for smoothing.
+    Due to discrete sampling points in the $\varepsilon$-dimension, the plots further apply quadratic interpolation and a Gaussian filter for smoothing.
     }
     \label{fig:fuzzycone}
 \end{figure}
@@ -210,7 +219,7 @@ The height of the quantiles quantifies flexibility for a given level of certaint
 the angle presents information about the sensitivity towards cost slack.
 
 From \cref{fig:fuzzycone} we can see that it is 
-highly likely that building 900 GW of wind capacity is within 3\% of the optimum, and that
+highly likely that building 900 GW of wind capacity is possible within 3\% of the optimum, and that
 conversely building less than 600 GW has a low chance of being near the cost optimum.
 Only a few solutions can forego onshore wind entirely and remain within 8\% of the cost-optimum,
 whereas it is very likely possible to build a system without offshore wind at a cost penalty of 4\% at most.
@@ -220,9 +229,9 @@ uncertainty regarding offshore wind deployment exists about how much can be buil
 so that costs remain within a pre-specified range.
 For solar, the range of options within 8\% of the cost optimum at 90\% certainty is very wide.
 Anything between 100 GW and 1000 GW appears feasible.
-In comparison to onshore wind, the uncertainty about minimal solar requirements is narrower.
-Nonetheless, the level of required transmission expansion is least affected by the cost uncertainty.
-To remain within $\varepsilon=8\%$ it is just as possible to
+In comparison to onshore wind, the uncertainty about minimal solar requirements is smaller.
+The level of required transmission expansion is least affected by the cost uncertainty.
+To remain within $\varepsilon=8\%$ it is just as likely possible to
 plan for moderate grid reinforcement by 30\% as 
 is initiating extensive remodelling of the grid by tripling the transmission volume
 compared to what is currently in operation.
@@ -231,12 +240,14 @@ to balance renewable variations across the continent appears to be essential.
 Hydrogen storage, symbolising long-term storage, also gives the impression of a vital technology in many cases.
 Building 100 GW of hydrogen storage capacity is likely viable within 2\% of the cost optimum 
 and, even at $\varepsilon=8\%$, only 25\% of cost samples require no long-term storage; 
-cases where battery costs are exceptionally low.
+when battery costs are exceptionally low.
 Overall, 90\% of cases appear to function without any short-term battery storage
 while the system cost rises by 4\% at most.
 However, especially battery storage exhibits a large degree of freedom to build more.
 
 %F contour plot at fixed epsilon
+
+\subsection{Probabilistic Near-Optimal Space in Two Technology Dimensions}
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
@@ -268,35 +279,37 @@ However, especially battery storage exhibits a large degree of freedom to build 
     \label{fig:dependencies}
 \end{figure}
 
-The fuzzy cones from \cref{fig:fuzzycone} assume that the other technologies can be heavily optimised.
+The fuzzy cones from \cref{fig:fuzzycone} assume that the other technologies can be heavily optimised
+while one is extermised..
 But as there are dependencies between the technologies, in \cref{fig:dependencies}
 we furthermore present the probabilistic near-optimal space for three selected technology
-pairs at fixed $\varepsilon=6\%$ for which we expect the most interesting trade-offs.
-It addresses the question about which combinations of wind and solar capacity,
+pairs at fixed system cost increase of $\varepsilon=6\%$ for which we expect the most interesting trade-offs.
+It addresses the question about which \textit{combinations} of wind and solar capacity,
 offshore and onshore turbines, and hydrogen and battery storage are likely to be achievable.
 
 First, \cref{fig:dependencies:ws} addresses constraints between wind and solar.
 The upper right boundary exists because building much of both wind and solar would bee too expensive.
 The absence of solutions in the bottom left corner means that
-building too little of any wind or solar does not suffice to produce enough electricity.
+building too little of any wind or solar does not suffice to generate enough electricity.
 From the shape and contours, we see a high chance
-that building 1000 GW of wind and 400 GW of solar is within 6\% of the cost-optimum.
+that building 1000 GW of wind \textit{and} 400 GW of solar is within 6\% of the cost-optimum.
 On the other hand, building less than 200 GW of solar and 600 GW of wind is unlikely to yield a low-cost solution.
-Minimising the capacity of both primal energy sources will shift capacity installations to
+In general, minimising the capacity of both primal energy sources will shift capacity installations to
 high-yield locations even if additional network expansion is necessary and boost
 the preference for highly efficient storage technologies.
-Overall, even considering combinations of wind and solar,
+Overall, we can take away from this that, even considering combinations of wind and solar,
 a wide space of low-cost options exists with moderate to high likelihood,
 although the range of alternatives is shown to be more constrained.
 
-\cref{fig:dependencies:oo} concerns the trade-off between onshore wind and offshore wind.
-The most certain area is characterised by building more than 600 GW onshore wind,
+The trade-off between onshore wind and offshore wind is illustrated in \cref{fig:dependencies:oo}.
+Here, the most certain area is characterised by building more than 600 GW onshore wind,
 and less than 250 GW offshore wind capacity.
 However, there are some solutions with high substitutability between onshore and offshore wind,
-shown in the upper left of the contour plot.
+shown in the upper left bulge of the contour plot.
 Compared to wind and solar, the range of near-optimal solutions is more constrained.
-Finally, \cref{fig:dependencies:hb} underlines that some storage is definitely needed,
-50 GW of each at least in any case. Highest likelihoods are attained when building 150 GW of each.
+The key role of energy storage in a fully renewable system is underlined in \cref{fig:dependencies:hb}.
+Around 50 GW of each is at least needed in any case,
+while highest likelihoods are attained when building 150 GW of each.
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
@@ -320,8 +333,10 @@ Finally, \cref{fig:dependencies:hb} underlines that some storage is definitely n
     \label{fig:nearviolin}
 \end{figure}
 
+\subsection{Capacity Distributions at Minimal Onshore Wind and Transmission Grid}
+
 Neither of the aforementioned contour plots (\crefrange{fig:fuzzycone}{fig:dependencies}) expose
-what changes the system layout experiences when reaching for the extremes in one technology.
+the changes the system layout experiences when reaching for the extremes in one technology.
 Therefore, we show in \cref{fig:nearviolin} how the system-wide capacity distributions vary 
 compared to the least-cost solutions (\cref{fig:violin}) for two exemplary alternative objectives.
 For that, we chose minimising onshore wind capacity and transmission expansion
