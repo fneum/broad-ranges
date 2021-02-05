@@ -1,25 +1,24 @@
 % energy system modelling challenges
 
 Energy system models have become a pivotal instrument for policy-making
-to find cost-efficient system layouts that satisfy ambitious targets for climate change mitigation.
+to find cost-efficient system layouts that satisfy ambitious climate change mitigation targets.
 But even though they have proliferated in spatial, temporal, technological and sectoral detail and scope in recent years,
 least-cost optimisation models can easily give a false sense of exactness.
-For example, they involve the danger of underplaying social factors
-not contained by the model formulation, such as
-rising public opposition to certain technologies like transmission, wind, nuclear, or biomass
+Prominently, they may underplay social factors, such as
+rising public opposition to transmission lines, wind, nuclear, or biomass
 or an uneven distribution of infrastructure \cite{mccollum_energy_2020,sasse_regional_2020}.
 
 Presenting just a single least-cost solution for a single set of cost assumptions
-not only underplays uncertainties inherent to technology cost projections the
+not only neglects uncertainties inherent to technology cost projections the
 investment planning models are very sensitive to
 \cite{trondle_trade-offs_2020,Pfenninger2014,yue_review_2018,pye_assessing_2018,pye_modelling_2020},
-but also neglects a wide array of alternative solutions
+but also hides a wide array of alternative solutions
 that are equally feasible and only marginally more expensive
 \cite{nearoptimal,lombardi_policy_2020,sasse_distributional_2019}.
 
 % why are alternative solutions important
 
-Such alternatives arising by deviating from the least-cost solution are attractive for policymakers,
+Such alternatives arising by deviating from least-cost solutions are attractive for policymakers,
 because they allow them to make decisions based on other, non-economic criteria,
 without affecting the cost-effectiveness of the system.
 In other words, knowing that many similarly costly but technologically diverse solutions
@@ -33,19 +32,19 @@ central parameters can be targeted for technological learning with policy.
 
 % - technology cost, useable potentials, discount rate, weather year, climate change, projection and regional distribution electricity demand to only name a few
 
-A variety of techniques exist to assess parametric uncertainty
-from a variety of different angles. These include
-which parameters are uncertain and to what extent,
-what parameters influence outputs the most,
-how does uncertainty propagate to the outputs, and
-how to hedge with stochastic or robust optimisation techniques.
-In optimisation, the Karush-Kuhn-Tucker multipliers
-can tell us about the local sensitivity to small changes in the constraints at the optimal point,
-but not the global behaviour on the feasible space, which may be highly non-linear.
-For instance, these dual variables translate a carbon cap to a carbon price, map a renewable generation target to a required subsidy, limited potentials to a scarcity cost, or even output nodal prices \cite{marketvalue}.
-While in scenario-based sensitivity analysis only
+Manifold techniques exist to assess such parametric uncertainty
+from a variety of different angles.
+% These include
+% which parameters are uncertain and to what extent,
+% what parameters influence outputs the most,
+% how uncertainty propagates to the outputs, and
+% how to hedge against uncertainty with stochastic or robust optimisation techniques.
+The Karush-Kuhn-Tucker multipliers
+can tell us about the local sensitivity to small changes in the constraints at the optimal point.
+For instance, they translate a carbon cap to a carbon price, map a renewable generation target to a required subsidy, limited potentials to a scarcity cost, or even output nodal prices \cite{marketvalue}.
+While in scenario analysis only
 a handful of potentially biased narratives are developed \cite{DeCarolis2017,soroudi_decision_2013,usher_value_2015}, local sensitivity analysis sweeps the parameter space
-across costs and constraint constants altering only one dimension at a time \cite{schlachtberger_cost_2018}.
+across costs and constraint constants one dimension at a time \cite{schlachtberger_cost_2018}.
 Popular target parameters include the investement cost and potentials \cite{schlachtberger_cost_2018},
 transmission expansion limits \cite{schlachtberger_benefits_2017},
 reference weather years \cite{bloomfield_2021},
@@ -54,14 +53,14 @@ or varying emission reduction targets.
 But given that only a small fraction of the uncertainty space
 is sampled by single-parameter variation alone,
 decisive interactions may be overlooked \cite{pizarro-alonso_uncertainties_2019}.
-In contrast, global sensitivity analysis techniques vary multiple parameters at a time
+Global sensitivity analysis techniques, in turn, vary multiple parameters simultaneously
 and analyse how each random input variable affects the variance of outputs \cite{sudret_global_2008},
-but easily implicate high computational requirements \cite{usher_value_2015,pizarro-alonso_uncertainties_2019,moret_robust_2016}.
+but easily implicate high computational requirements due to the required sampling size \cite{usher_value_2015,pizarro-alonso_uncertainties_2019,moret_robust_2016}.
 Prominent applications in the context of energy system optimisation include among others
 \cite{trondle_trade-offs_2020,fais_impact_2016,mavromatidis_uncertainty_2018,pilpola_analyzing_2020}.
 
 % structural uncertainty (+ uncertainty)
-
+\newpage
 Besides parametric uncertainty,
 there also exists a structural component to uncertainty, that can
 relate to modelling errors caused by
@@ -76,15 +75,14 @@ are designed to find such near-optimal alternatives and have been
 applied to integrated assessment models \cite{Price2017}, 
 the United States electricity sector \cite{DeCarolis2016},
 the Italian power system \cite{lombardi_policy_2020},
-pathways to decarbonise the power system of the United Kingdom\cite{Li2017},
+pathways to decarbonise the power system of the United Kingdom \cite{Li2017},
 a single node sector-coupling model of Germany \cite{nacken_integrated_2019},
-for determining Pareto frontiers \cite{mavrotas_effective_2009},
 and were combined with a quick hull algorithm to span a polytope of low-cost solutions
 for a single set of cost parameters \cite{pedersen_modeling_2020}.
 Previous works have mostly % national models only
 focussed on either investigating near-optimal solutions or parametric uncertainty
-(excluding \cite{Li2017,lombardi_policy_2020}),
-but both alike have an effect on the confidence in conclusions
+(excluding \cite{Li2017,lombardi_policy_2020}).
+But both alike influence the confidence in conclusions
 about viable future power system designs and it is crucial
 to reflect on such compromises and trade-offs that exist despite prevailing cost uncertainty.
 % - related: least-cost solutions for one parameter sample may be within 5\% of the optimum for another parameter sample, or vice versa
@@ -102,9 +100,9 @@ hydrogen storage technologies.
 To handle the computational burden incurred by searching for near-optimal solutions
 alongside evaluating many different cost parameter sets,
 we employ multi-fidelity surrogate modelling techniques based on sparse polynomial chaos expansion
-that allow us to merge results from a simpler and a more detailed model.
+that allow us to merge results from one simpler and another more detailed model.
 As we solve more than 50,000 resource-intensive optimisation problems,
-this kind of analysis has only become possible by the cheap availability 
+our analysis has only become possible in recent years by the cheap availability 
 of high-performance computing resources. 
 
 % Two ways:
