@@ -11,9 +11,9 @@ or an uneven distribution of infrastructure \cite{mccollum_energy_2020,sasse_reg
 
 Presenting just a single least-cost solution for a single set of cost assumptions
 not only underplays uncertainties inherent to technology cost projections the
-investment planning models are are known to be very sensitive to
+investment planning models are very sensitive to
 \cite{trondle_trade-offs_2020,Pfenninger2014,yue_review_2018,pye_assessing_2018,pye_modelling_2020},
-but also neglects a wide variety of alternative solutions
+but also neglects a wide array of alternative solutions
 that are equally feasible and only marginally more expensive
 \cite{nearoptimal,lombardi_policy_2020,sasse_distributional_2019}.
 
@@ -23,7 +23,7 @@ Such alternatives arising by deviating from the least-cost solution are attracti
 because they allow them to make decisions based on other, non-economic criteria,
 without affecting the cost-effectiveness of the system.
 In other words, knowing that many similarly costly but technologically diverse solutions
-exist helps to accomodate political and social dimensions that are otherwise hard to quantify.
+exist helps to accommodate political and social dimensions that are otherwise hard to quantify.
 Additionally acknowledging sensitivities towards cost assumptions further raises confidence
 in modelling results. If we can understand the key drivers of the cost structure and
 technology preferences \cite{usher_value_2015,moret_characterization_2017},
@@ -33,13 +33,13 @@ central parameters can be targeted for technological learning with policy.
 
 % - technology cost, useable potentials, discount rate, weather year, climate change, projection and regional distribution electricity demand to only name a few
 
-Numerous examples of parametric uncertainty analysis:
-assessed from different angles:
-- which parameters are uncertain and to what extent
-- what parameters influence outputs the most
-- how uncertainty propagates to the outputs outputs
-- how to hedge against uncertainty with stochastic or robust optimisation
-Karush-Kuhn-Tucker multipliers
+A variety of techniques exist to assess parametric uncertainty
+from a variety of different angles. These include
+which parameters are uncertain and to what extent,
+what parameters influence outputs the most,
+how does uncertainty propagate to the outputs, and
+how to hedge with stochastic or robust optimisation techniques.
+In optimisation, the Karush-Kuhn-Tucker multipliers
 can tell us about the local sensitivity to small changes in the constraints at the optimal point,
 but not the global behaviour on the feasible space, which may be highly non-linear.
 For instance, these dual variables translate a carbon cap to a carbon price, map a renewable generation target to a required subsidy, limited potentials to a scarcity cost, or even output nodal prices \cite{marketvalue}.
@@ -48,51 +48,55 @@ a handful of potentially biased narratives are developed \cite{DeCarolis2017,sor
 across costs and constraint constants altering only one dimension at a time \cite{schlachtberger_cost_2018}.
 Popular target parameters include the investement cost and potentials \cite{schlachtberger_cost_2018},
 transmission expansion limits \cite{schlachtberger_benefits_2017},
-reference weather years and climate change \cite{bloomfield_2021,impactofclimatechange},
+reference weather years \cite{bloomfield_2021},
 distributional equity requirements \cite{sasse_regional_2020,sasse_distributional_2019},
 or varying emission reduction targets.
 But given that only a small fraction of the uncertainty space
 is sampled by single-parameter variation alone,
 decisive interactions may be overlooked \cite{pizarro-alonso_uncertainties_2019}.
+In contrast, global sensitivity analysis techniques vary multiple parameters at a time
+and analyse how each random input variable affects the variance of outputs \cite{sudret_global_2008},
+but easily implicate high computational requirements \cite{usher_value_2015,pizarro-alonso_uncertainties_2019,moret_robust_2016}.
+Prominent applications in the context of energy system optimisation include among others
+\cite{trondle_trade-offs_2020,fais_impact_2016,mavromatidis_uncertainty_2018,pilpola_analyzing_2020}.
 
-global sensitivity analysis
-- vary multiple paramters at a time
-- analyses how each random input variable affects the variance of outputs \cite{sudret_global_2008}
-- high computational requirements \cite{usher_value_2015,pizarro-alonso_uncertainties_2019,moret_robust_2016}
-- applications: \cite{trondle_trade-offs_2020,fais_impact_2016,mavromatidis_uncertainty_2018,pilpola_analyzing_2020}
-although account for uncertainty, not compromises and trade-offs
+% structural uncertainty (+ uncertainty)
 
-% structural uncertainty
-
-Besides parametric uncertainty, there is also a component structural uncertainties of the
-optimisation model.
-Examples :
-- power flow approximation \cite{flowandlosses}, spatial aggregation \cite{hoersch_spatial_2017}, temporal aggregation \cite{kotzur_tsa_2018}, technology simplification \cite{DeCarolis2017}, or--as will be studied in this contribution--degrees of freedom near the cost-optimum \cite{nearoptimal}.
+Besides parametric uncertainty,
+there also exists a structural component to uncertainty, that can
+relate to modelling errors caused by
+linear approximation of powerflow \cite{flowandlosses},
+spatial aggregation \cite{hoersch_spatial_2017},
+temporal aggregation \cite{kotzur_tsa_2018},
+technology simplification \cite{DeCarolis2017},
+or--as will be studied in this contribution--degrees
+of freedom near the cost-optimum \cite{nearoptimal}.
 Techniques like multi-objective optimisation and modelling-to-generate-alternatives
-- epsilon constraint method used in \cite{nearoptimal}
-- determine Pareto-fronts \cite{mavrotas_effective_2009}
-- find near-optimal solutions
-- applied in for integrated assessment models \cite{Price2017}, 
-for the United States electricity sector \cite{DeCarolis2016},
+are designed to find such near-optimal alternatives and have been
+applied to integrated assessment models \cite{Price2017}, 
+the United States electricity sector \cite{DeCarolis2016},
 the Italian power system \cite{lombardi_policy_2020},
+pathways to decarbonise the power system of the United Kingdom\cite{Li2017},
 a single node sector-coupling model of Germany \cite{nacken_integrated_2019},
-and combined with a quickhull algorithm to span a polytope of low-cost solutions \cite{pedersen_modeling_2020}.
-
-%structural AND parametric uncertainty
-
-Previous works have mostly put focus on either near-optimal or parametric uncertainty
-- both have an effect on confidence in conclusions
-- related: least-cost solutions for one parameter sample may be within 5\% of the optimum for another parameter sample, or vice versa
-- only few: MGA including cost uncertainty \cite{Trutnevyte2013,Li2017,lombardi_policy_2020}
+for determining Pareto frontiers \cite{mavrotas_effective_2009},
+and were combined with a quick hull algorithm to span a polytope of low-cost solutions
+for a single set of cost parameters \cite{pedersen_modeling_2020}.
+Previous works have mostly % national models only
+focussed on either investigating near-optimal solutions or parametric uncertainty
+(excluding \cite{Li2017,lombardi_policy_2020}),
+but both alike have an effect on the confidence in conclusions
+about viable future power system designs and it is crucial
+to reflect on such compromises and trade-offs that exist despite prevailing cost uncertainty.
+% - related: least-cost solutions for one parameter sample may be within 5\% of the optimum for another parameter sample, or vice versa
 
 % this work / novelty
 
-In this contribution, we systematically explore parameter space of technology cost projections and
-investigate how they affect the space of near-optimal solutions
-of a fully renewable European electricity system model
-that is both spatially and temporally resolved. % open source
-That means we solve long-term investment planning problems that
-coordinate generation, transmission and storage investments,
+In this contribution, we systematically explore the space of near-optimal solutions
+of a fully renewable pan-continental European electricity system model
+and investigate how it is affected by uncertain technology cost projections.
+That means we solve spatially and temporally explicit long-term investment planning problems that
+coordinate generation, transmission and storage investments
+subject to multi-period linear optimal power flow constraints,
 while accounting for a wide range of cost projections for wind, solar, battery and
 hydrogen storage technologies.
 To handle the computational burden incurred by searching for near-optimal solutions
@@ -100,7 +104,7 @@ alongside evaluating many different cost parameter sets,
 we employ multi-fidelity surrogate modelling techniques based on sparse polynomial chaos expansion
 that allow us to merge results from a simpler and a more detailed model.
 As we solve more than 50,000 resource-intensive optimisation problems,
-this kind of analysis has only become possible by the low-cost availability 
+this kind of analysis has only become possible by the cheap availability 
 of high-performance computing resources. 
 
 % Two ways:
