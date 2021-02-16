@@ -146,7 +146,7 @@ In the next step, we examine how technology cost uncertainty affects the shape o
 
 By identifying feasible alternatives common to all, few or no cost samples, we outline
 low-cost solutions common to most parameter sets (e.g. above 90\% contour)
-as well as system layouts that do not meet low-cost criteria in any circumstances for varying $\varepsilon$ in \cref{fig:fuzzycone}.
+as well as system layouts that do not meet low-cost criteria in any circumstances for varying $\epsilon$ in \cref{fig:fuzzycone}.
 The wider the displayed contour lines are apart, the more uncertainty exists about the boundaries.
 The closer contour lines are together, the more specific the limits are.
 The height of the quantiles quantifies flexibility for a given level of certainty and slack;
@@ -199,13 +199,13 @@ the angle presents information about the sensitivity towards cost slack.
     Space of near-optimal solutions by technology under cost uncertainty.
     For each technology and cost sample,
     the minimum and maximum capacities obtained for increasing cost penalties
-    $\varepsilon$ form a cone, starting from a common least-cost solution. 
+    $\epsilon$ form a cone, starting from a common least-cost solution. 
     By arguments of convexity, the capacity ranges contained by the cone can be near-optimal and feasible, given a degree of freedom in the other technologies.
     From optimisation theory, we know that the cones widen up for increased slacks.
     As we consider technology cost uncertainty, the cone will look slightly different for each sample.
     The contour lines represent the frequency a solution is inside the near-optimal cone over the whole parameter space.
     This is calculated from the overlap of many cones, each representing a set of cost assumptions.
-    Due to discrete sampling points in the $\varepsilon$-dimension, the plots further apply quadratic interpolation and a Gaussian filter for smoothing.
+    Due to discrete sampling points in the $\epsilon$-dimension, the plots further apply quadratic interpolation and a Gaussian filter for smoothing.
     }
     \label{fig:fuzzycone}
 \end{figure}
@@ -224,7 +224,7 @@ Anything between 100 GW and 1000 GW appears feasible.
 In comparison to onshore wind, the uncertainty about minimal solar requirements is smaller.
 
 The level of required transmission expansion is least affected by the cost uncertainty.
-To remain within $\varepsilon=8\%$ it is just as likely possible to
+To remain within $\epsilon=8\%$ it is just as likely possible to
 plan for moderate grid reinforcement by 30\% as 
 is initiating extensive remodelling of the grid by tripling the transmission volume
 compared to what is currently in operation.
@@ -232,7 +232,7 @@ These results indicate that in any case some transmission reinforcement
 to balance renewable variations across the continent appears to be essential.
 Hydrogen storage, symbolising long-term storage, also gives the impression of a vital technology in many cases.
 Building 100 GW of hydrogen storage capacity is likely viable within 2\% of the cost optimum 
-and, even at $\varepsilon=8\%$, only 25\% of cost samples require no long-term storage; 
+and, even at $\epsilon=8\%$, only 25\% of cost samples require no long-term storage; 
 when battery costs are exceptionally low.
 Overall, 90\% of cases appear to function without any short-term battery storage
 while the system cost rises by 4\% at most.
@@ -264,7 +264,7 @@ However, especially battery storage exhibits a large degree of freedom to build 
     \caption{
       Space of near-optimal solutions by selected pairs of technologies under cost uncertainty.
     Just like in \cref{fig:fuzzycone}, the contour lines depict the overlap of the space of near-optimal alternatives across the parameter space.
-    It can be thought of as the cross-section of the probabilistic near-optimal feasible space for a given $\varepsilon$
+    It can be thought of as the cross-section of the probabilistic near-optimal feasible space for a given $\epsilon$
     in two technology dimensions and highlights that the extremes of two technologies from \cref{fig:fuzzycone} cannot be achieved simultaneously.
     }
     \label{fig:dependencies}
@@ -274,7 +274,7 @@ The fuzzy cones from \cref{fig:fuzzycone} assume that the other technologies can
 while one is extermised..
 But as there are dependencies between the technologies, in \cref{fig:dependencies}
 we furthermore present the probabilistic near-optimal space for three selected technology
-pairs at fixed system cost increase of $\varepsilon=6\%$ for which we expect the most interesting trade-offs.
+pairs at fixed system cost increase of $\epsilon=6\%$ for which we expect the most interesting trade-offs.
 It addresses the question about which \textit{combinations} of wind and solar capacity,
 offshore and onshore turbines, and hydrogen and battery storage are likely to be achievable.
 
@@ -319,7 +319,7 @@ while highest likelihoods are attained when building 150 GW of each.
     }
     \caption{
       Distribution of total system cost, generation, storage, and transmission capacities
-      for two near-optimal search directions with $\varepsilon=8\%$ system cost slack.
+      for two near-optimal search directions with $\epsilon=8\%$ system cost slack.
     }
     \label{fig:nearviolin}
 \end{figure}

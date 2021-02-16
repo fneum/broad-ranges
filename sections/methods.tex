@@ -103,7 +103,7 @@ Changes of line expansion to line impedance are ignored.
 \label{sec:nearoptimal}
 
 Using the least-cost solution as an anchor, we use the
-$\varepsilon$-constraint method from multi-objective optimisation
+$\epsilon$-constraint method from multi-objective optimisation
 to find near-optimal feasible solutions \cite{nearoptimal,mavrotas_effective_2009}.
 For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
 and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
@@ -116,13 +116,13 @@ such that the minimised system cost can be represented by
 % one technology
 
 We then encode the original objective as a constraint 
-such that the cost increase is limited to a given $\varepsilon$.
+such that the cost increase is limited to a given $\epsilon$.
 In other words, the feasible space is cut to solutions that
-are at most $\varepsilon$ more expensive than the least-cost solution.
+are at most $\epsilon$ more expensive than the least-cost solution.
 Given this slack, we can formulate alternative search directions in the objective.
 For instance, we can seek to minimise the sum of solar installations $x_s \subseteq x$ with
 \begin{equation}
-    \overline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C \:\right\}.
+    \overline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C \:\right\}.
 \end{equation}
 To draw a full picture of the boundaries of the near-optimal feasible space, 
 we systematically explore the extremes of various technologies:
@@ -130,7 +130,7 @@ we both minimise and maximise the system-wide investments in
 solar, onshore wind, offshore wind, any wind, hydrogen storage, and battery storage
 capacities, as well as the total volume of transmission network expansion.
 Evaluating each of these technology groups for
-different cost deviations $\varepsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
+different cost deviations $\epsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
 allows us to observe how the degree of freedom regarding investment decisions
 rises as the optimality tolerance is increased, both at lower and upper ends.
 By arguments of convexity, these extremes even delineate limits
@@ -149,16 +149,16 @@ For instance, lowering wind capacities will be compensated for
 by higher solar capacities to satisfy the total energy demand.
 Thus, extremising one technology narrows the flexibility of a substitute technology.
 To investigate the nature of such dependencies,
-in addition to the $\varepsilon$-constraint and the objective to
+in addition to the $\epsilon$-constraint and the objective to
 extremise capacities of a particular technology,
 we formulate a constraint that fixes the capacity of another technology.
 An example would be to search for the minimum amount of wind capacity $x_w \subseteq x$ 
 given that a certain amount of solar is built
 \begin{equation}
-    \overline{x_w} = \min_{x_w}\left\{\:1^\top x_w \mid Ax\leq b,\quad c^\top x\leq (1+\varepsilon)\cdot C, \quad 1^\top x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\right\}.
+    \overline{x_w} = \min_{x_w}\left\{\:1^\top x_w \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C, \quad 1^\top x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\right\}.
 \end{equation}
 The $\alpha$ denotes the relative position within the near-optimal
-range of solar capacities at given $\varepsilon$.
+range of solar capacities at given $\epsilon$.
 For example, at $\alpha=0\%$ we look for the least wind capacity
 given that minimal solar capacities are built. 
 An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
@@ -166,7 +166,7 @@ using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_mod
 
 Due to computational constraints, we focus on technologies which
 are assumed to lend themselves to substitution and limit the analysis to a single
-cost increase level of $\varepsilon=6\%$.
+cost increase level of $\epsilon=6\%$.
 We consider the three pairs,
 (i) wind and solar,
 (ii) offshore and onshore wind,
