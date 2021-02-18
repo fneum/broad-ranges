@@ -133,27 +133,26 @@ Evaluating each of these technology groups for
 different cost deviations $\epsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
 allows us to observe how the degree of freedom regarding investment decisions
 rises as the optimality tolerance is increased, both at lower and upper ends.
-By arguments of convexity, these extremes even delineate limits
+The boundaries delineate Pareto frontiers on which no criterion,
+neither reducing system cost nor extremising the capacity of a technology,
+can be improved without depressing the other.
+By arguments of convexity, these extremes even define limits
 within which all near-optimal solutions are contained.
 Moreover, although this scheme primarily studies aggregated capacities,
 the solutions are spatially explicit, and we can inspect for each case
-how the capacities of each technology are distributed in the network.
+how the capacities of each technology are distributed within the network.
+
 
 % two technologies
 
-A caveat of the method hides in the fact that the extremes
-of different technologies cannot be realised simultaneously.
-This is because technologies that are not part of the objective
-will act to support the active search direction.
-For instance, lowering wind capacities will be compensated for
-by higher solar capacities to satisfy the total energy demand.
-Thus, extremising one technology narrows the flexibility of a substitute technology.
-To investigate the nature of such dependencies,
-in addition to the $\epsilon$-constraint and the objective to
-extremise capacities of a particular technology,
-we formulate a constraint that fixes the capacity of another technology.
-An example would be to search for the minimum amount of wind capacity $x_w \subseteq x$ 
-given that a certain amount of solar is built
+The near-optimal analysis above only explores the extremes of one technology at
+a time, i.e.~one direction in the feasible space. But actually the space of
+attainable solutions within $\epsilon$ of the cost-optimum is multi-dimensional.
+To further investigate trade-offs between multiple technologies, in addition to the
+$\epsilon$-constraint and the objective to extremise capacities of a particular
+technology, we formulate a constraint that fixes the capacity of another
+technology. For instance, we search for the minimum amount of wind capacity $x_w
+\subseteq x$ given that a certain amount of solar is built
 \begin{equation}
     \overline{x_w} = \min_{x_w}\left\{\:1^\top x_w \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C, \quad 1^\top x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\right\}.
 \end{equation}
@@ -164,16 +163,21 @@ given that minimal solar capacities are built.
 An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
 using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}.
 
-Due to computational constraints, we focus on technologies which
-are assumed to lend themselves to substitution and limit the analysis to a single
-cost increase level of $\epsilon=6\%$.
-We consider the three pairs,
-(i) wind and solar,
-(ii) offshore and onshore wind,
-(iii) hydrogen and battery storage,
-by minimising and maximising the former while
-fixing the latter at positions $\alpha \in \{0\%,25\%,50\%,75\%,100\%\}$
-within the respective near-optimal range.
+% ----------------- unused --------------------------
+% extremes of different technologies cannot be realised simultaneously.
+% This is because technologies that are not part of the objective
+% will act to support the active search direction.
+% For instance, lowering wind capacities will be compensated for
+% by higher solar capacities to satisfy the total energy demand.
+% Thus, extremising one technology narrows the flexibility of a substitute technology.
+
+Due to computational constraints, we focus on technologies which are assumed to
+lend themselves to substitution and limit the corresponding analysis to a single
+cost increase level of $\epsilon=6\%$. We consider the three pairs, (i) wind and
+solar, (ii) offshore and onshore wind, (iii) hydrogen and battery storage, by
+minimising and maximising the former while fixing the latter at positions
+$\alpha \in \{0\%,25\%,50\%,75\%,100\%\}$ within the respective near-optimal
+range.
 
 \subsection{Model Inputs}
 \label{sec:inputs}
@@ -196,58 +200,54 @@ within the respective near-optimal range.
 
 % general
 
-The instances of the coordinated capacity expansion problem (\cref{sec:leastcost})
- are based on \mbox{PyPSA-Eur},
-which is an open model of the European power transmission system
-that combines high spatial and temporal resolution \cite{pypsaeur}.
-Because it only uses open data
-and every processing step is defined in a workflow \cite{snakemake},
-we achieve a high level of transparency and reproducibility.
-In the following, we outline the main features and configurations, and
-refer to the supplementary material and Hörsch et al.~\cite{pypsaeur} for more details.
+The instances of the coordinated capacity expansion problem
+ (\cref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
+ the European power transmission system that combines high spatial and temporal
+ resolution \cite{pypsaeur}. Because it only uses open data and every processing
+ step is defined in a workflow \cite{snakemake}, we achieve a high level of
+ transparency and reproducibility. In the following, we outline the main
+ features and configurations, and refer to the supplementary material and Hörsch
+ et al.~\cite{pypsaeur} for more details.
 
-% TODO maybe need to justify better the setup and scope
-% - range of selected technologies
-% - sectoral coverage limited to electricity
 \paragraph{Scenario}
-We target a fully renewable electricity system based on variable resources
-such as solar photovoltaics, onshore wind and offshore wind.
-We pursue a greenfield approach subject to a few notable exceptions.
-The existing hydro-electric infrastructure (run-of-river, hydro dams, pumped-storage)
-is included but not considered to be extendable due to assumed geographical constraints.
-Furthermore, the existing transmission infrastructure can only
-be reinforced continuously but may not be removed.
-In addition to balancing renewables in space with transmission networks,
-the model includes storage options to balance renewables in time.
-We consider two extendable storage technologies:
-battery storage representing short-term storage suited to balancing daily fluctuations and
-hydrogen storage system which exemplifies long-term synoptic and seasonal storage.
+We target a fully renewable electricity system based on variable resources such
+as solar photovoltaics, onshore wind and offshore wind, that has not carbon
+emissions. We pursue a greenfield approach subject to a few notable exceptions.
+The existing hydro-electric infrastructure (run-of-river, hydro dams,
+pumped-storage) is included but not considered to be extendable due to assumed
+geographical constraints. Furthermore, the existing transmission infrastructure
+can only be reinforced continuously but may not be removed. In addition to
+balancing renewables in space with transmission networks, the model includes
+storage options at each node to balance renewables in time. We consider two extendable
+storage technologies: battery storage representing short-term storage suited to
+balancing daily fluctuations and hydrogen storage which exemplifies
+long-term synoptic and seasonal storage.
 
 \paragraph{Spatial and Temporal Resolution}
-Since the spatial and temporal resolution strongly affects the size of the optimisation problem,
-running the model at full resolution is computationally infeasible.
-Throughout the paper, we will therefore make use of two levels of aggregation,
-reflecting a compromise between the computational burden incurred by high-resolution models and
-the growing inaccuracies regarding transmission bottlenecks
-and resource distribution in low-resolution models.
-We consider a low-fidelity model with 37 nodes at a 4-hourly resolution for a full year
-that models power flow via a transport model (i.e.~excluding KVL of \cref{eq:kvl}) and
-a high-fidelity model with 128 nodes at a 2-hourly resolution
-that is subject to linearised load flow constraints (\cref{fig:pypsaeur}).
+Since the spatial and temporal resolution strongly affects the size of the
+optimisation problem, running the model at full resolution is computationally
+infeasible. Throughout the paper, we will therefore make use of two levels of
+aggregation, reflecting a compromise between the computational burden incurred
+by high-resolution models and the growing inaccuracies regarding transmission
+bottlenecks and resource distribution in low-resolution models. We consider a
+low-fidelity model with 37 nodes at a 4-hourly resolution for a full year that
+models power flow via a transport model (i.e.~excluding KVL of \cref{eq:kvl})
+and a high-fidelity model with 128 nodes at a 2-hourly resolution that is
+subject to linearised load flow constraints (\cref{fig:pypsaeur}).
 
 % existing infrastructure (hydro and transmission)
 
 \paragraph{Transmission Grid and Hydro-Electricity}
-The topology of the European transmission network is retrieved
-from the ENTSO-E transparency map and includes all lines at and above 220 kV.
-Capacities and electrical characteristics of transmission lines and substations are
-inferred from standard types for each voltage level, before they are transformed to
-a uniform voltage level.
-For each line, $N-1$ security is approximated by limiting the line loading to 70\% of its nominal rating.
-The dataset further includes existing high-voltage direct current (HVDC) links and planned projects from the
-Ten Year Network Development Plan (TYNDP).
-Existing run-of-river, hydro-electric dams, pumped-hydro storage plants
-are retrieved from \textit{powerplantmatching}, a merged dataset of conventional power plants.
+The topology of the European transmission network is retrieved from the ENTSO-E
+transparency map and includes all lines at and above 220 kV. Capacities and
+electrical characteristics of transmission lines and substations are inferred
+from standard types for each voltage level, before they are transformed to a
+uniform voltage level. For each line, $N-1$ security is approximated by limiting
+the line loading to 70\% of its nominal rating. The dataset further includes
+existing high-voltage direct current (HVDC) links and planned projects from the
+Ten Year Network Development Plan (TYNDP). Existing run-of-river, hydro-electric
+dams, pumped-hydro storage plants are retrieved from
+\textit{powerplantmatching}, a merged dataset of conventional power plants.
 
 % renewable generation potentials
 
@@ -269,7 +269,7 @@ We retrieve wind speeds, run-off and surface roughness from the ERA5 reanalysis 
 use the satellite-aided SARAH-2 dataset for the direct and diffuse surface solar irradiance.
 Models for wind turbines, solar panels, and the inflow into the basins of hydro-electric dams
 convert the weather data to hourly capacity factors and aggregate these to each grid node.
-Historical country-level load time series are taken from ENTSO-E statistics and
+Historical country-level load time series are taken from ENTSO-E statistics and are
 heuristically distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
 
 % TODO techno-economic parameters
@@ -295,10 +295,10 @@ heuristically distributed to each grid node to 40\% by population density and to
 
 % General
 
-Uncertainty of technology cost projections is driven 
-by unknown learning rates (i.e.~how quickly costs fall as more capacity is built)
-as well as unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
-As modelling technological learning endogeneously is computationally challenging \cite{heuberger_power_2017,mattsson_learning_2019},
+Uncertainty of technology cost projections is driven by two main factors: 
+unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
+unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
+As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019},
 % While uncertainty about the latter could generally be addressed by modelling endogeneous
 % learning in an approach that includes multiple investment periods,
 % the exponential influence of the learning rate raises the computational complexity immensely
@@ -307,35 +307,42 @@ and a distribution that specifies which segments are more probable.
 
 % Ranges
 
-Ranges of cost projections are best chosen as wide as possible to avoid excluding any plausible scenarios \cite{moret_characterization_2017,mccollum_energy_2020}.
-If uncertainty was considered, cost assumptions have commonly been modelled to vary between $\pm20\%$ and $\pm65\%$ depending on the technology's maturity \cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
-In this study, we consider uncertainty regarding the annuities of
-onshore wind, offshore wind, solar PV, battery and hydrogen storage systems.
-The latter comprises the cost of
-electrolysis, cavern storage, and fuel cells.
-For solar PV we assume an even split between utility-scale PV and residential rooftop PV.
-Evaluating uncertainties based on annuities has a distinct advantage.
-They can be seen to simultaneously incorporate uncertainties about
-the overnight investments, fixed operation and maintenance costs,
-their lifetime, and the discount rate,
-since multiple combinations lead to the same annuity.
-We built the uncertainty ranges presented in \cref{tab:costuncertainty}
-from the optimistic and pessimistic technology cost
-and lifetime projections for the year 2050 from the Danish Energy Agency,
-which correspond to 90\% confidence intervals \cite{DEA}.
-We further include projections for the year 2030 when they can further expand the interval
-or in case no ranges were provided for the year 2050. %such as for rooftop PV.
+Ranges of cost projections are best chosen as wide as possible to avoid
+excluding any plausible scenarios
+\cite{moret_characterization_2017,mccollum_energy_2020}. When uncertainty has
+been considered in the literature, cost assumptions have commonly been modelled
+to vary between $\pm20\%$ and $\pm65\%$ depending on the technology's maturity
+\cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
+In this study, we consider uncertainty regarding the annuities of onshore wind,
+offshore wind, solar PV, battery and hydrogen storage systems. The latter
+comprises the cost of electrolysis, cavern storage, and fuel cells. For solar PV
+we assume an even split between utility-scale PV and residential rooftop PV.
+Evaluating uncertainties based on annuities has a distinct advantage. They can
+be seen to simultaneously incorporate uncertainties about the overnight
+investments, fixed operation and maintenance costs, their lifetime, and the
+discount rate, since multiple combinations lead to the same annuity. We built
+the uncertainty ranges presented in \cref{tab:costuncertainty} from the
+optimistic and pessimistic technology cost and lifetime projections for the year
+2050 from the Danish Energy Agency, which correspond to 90\% confidence
+intervals \cite{DEA}. In cases where no uncertainty ranges were provided
+for the year 2050, such as for rooftop PV, projections for the year 2030
+define the upper end of the uncertainty interval. 
 
 % Distributions
 
-Distributions of cost projections have been guessed
-to follow normal \cite{mavromatidis_uncertainty_2018} or triangular distributions \cite{li_using_2020}.
-But independent uniform distributions are the most prevalent assumption \cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}.
-This approach is backed by the maximum entropy approach \cite{trondle_trade-offs_2020}, which states that given the lack of knowledge about the distribution
-the independent uniform distribution that makes fewest assumptions is most appropriate.
-Although the assumed independence may neglect synergies between technologies,
-for example, between offshore and onshore wind turbine development,
-we follow the literature by assuming that the cost are independent and uniformly distributed within the ranges specified in \cref{tab:costuncertainty}.
+Distributions of cost projections have been assumed to follow normal
+\cite{mavromatidis_uncertainty_2018} or triangular distributions
+\cite{li_using_2020}. But independent uniform distributions are the most
+prevalent assumption
+\cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}.
+This approach is backed by the maximum entropy approach
+\cite{trondle_trade-offs_2020}, which states that given the persistent lack of knowledge
+about the distribution the independent uniform distribution, that makes fewest
+assumptions, is most appropriate. Although the assumed independence may neglect
+synergies between technologies, for example, between offshore and onshore wind
+turbine development, we follow the literature by assuming that the cost are
+independent and uniformly distributed within the ranges specified in
+\cref{tab:costuncertainty}.
 
 \subsection{Surrogate Modelling with Polynomial Chaos Expansion}
 \label{sec:surrogate}
@@ -381,14 +388,14 @@ can conveniently combine training data from variously detailed models \cite{pala
 The general idea of surrogate models based on PCE is to
 represent uncertain model outputs as a linear combination of orthogonal basis functions 
 of the random input variables weighted by deterministic coefficients \cite{muhlpfordt_uncertainty_2020}.
-It is a Hilbert space technique that works analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
+It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
 Building the surrogate model consists of the following steps:
 (i) sampling a set of cost projections from the parameter space,
 (ii) solving the least-cost or near-optimal investment planning problem for each sample,
 (iii) selecting an expansion of orthogonal polynomials within the parameter space,
 (iv) performing a regression to calculate the polynomial coefficients, and ultimately
 (v) using the model approximation for statistical analysis.
-In the following, we will formalise this approach,
+In the following, we will formalise this approach mathematically,
 which we implemented using the \textit{chaospy} toolbox \cite{feinberg_chaospy_2015},
 and elaborate on individual aspects in more detail.
 
@@ -460,7 +467,7 @@ that induces a preference for fewer non-zero coefficients, and solve
 where we set the regularisation penalty to $\lambda=0.005$.
 This results in a sparse PCE that has proven to
 improve approximations in high-dimensional uncertainty spaces
-and reduce the required number of samples for comparable approximation errors \cite{gratiet_metamodel-based_2015}.
+and to reduce the required number of samples for comparable approximation errors \cite{gratiet_metamodel-based_2015}.
 Knowing the optimised regression coefficients, we can now assemble the complete surrogate model
 \begin{equation}
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
@@ -471,19 +478,18 @@ Knowing the optimised regression coefficients, we can now assemble the complete 
 
 % idea
 
-To construct a precise PCE-based surrogate model, it is desirable to base it
-on many samples from a high-fidelity model.
-However, this is likely prohibitively time-consuming.
-On the other hand, relying only on samples from a
-low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}.
-For example, an investment model that features only a single node per country
-will underestimate transmission bottlenecks and regionally uneven resource or demand distribution.
-In \cref{sec:inputs} we already alluded to using
-two models with varying spatial and temporal resolution in this paper.
-We integrate both in a multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016}.
-We demonstrate how we can
-simultaneously avail of high coverage of the parameter space by sampling
-the simpler model many times, and the high spatio-temporal detail yielded by fewer more complex model runs.
+To construct a sufficiently precise PCE-based surrogate model, it is desirable
+to base it on many samples from a high-fidelity model. However, this is likely
+prohibitively time-consuming. On the other hand, relying only on samples from a
+low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}. For
+example, an investment model that features only a single node per country will
+underestimate transmission bottlenecks and regionally uneven resource or demand
+distribution. In \cref{sec:inputs} we already alluded to using two models with
+varying spatial and temporal resolution in this paper. We integrate both in a
+multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016},
+and demonstrate how we can simultaneously avail of high coverage of the
+parameter space by sampling the simpler model many times, and the high
+spatio-temporal detail yielded by fewer more complex model runs.
 
 % method
 
@@ -500,14 +506,14 @@ high-fidelity model
 Typically, the corrective PCE rectifies only the lower order effects
 of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
 The advantage is that this way the correction function can be determined
-based on fewer samples analogous to \cref{sec:pce}.
+based on fewer samples analogous to \cref{sec:surrogate}.
 To sample the errors, it is only required that the
 high-fidelity samples are a subset of the low-fidelity samples, e.g.
 \begin{equation}
     \mathcal{X}_h = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}} \quad\text{and}\quad
     \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}},
 \end{equation}
-which we can guarantee by using deterministic low-discrepancy series
+which we can easily guarantee by using deterministic low-discrepancy series
 in the experimental design (\cref{sec:sampling}).
 With $p_c < p_\ell$ and consequently $\cA_c \subset \cA_\ell$,
 the multi-fidelity surrogate model can be written as a combination of low-fidelity
@@ -524,7 +530,7 @@ and corrective polynomial coefficients
 % this paper
 
 In this work, we apply a multi-fidelity surrogate model that considers
-effects up to order three observed in the low-fidelity model. These are corrected with linear terms derived from insights from the high-fidelity model.
+effects up to order three observed in the low-fidelity model. These are then corrected with linear terms derived from insights from the high-fidelity model.
 We justify this choice by experimentation in \cref{sec:validation},
 by testing against other typical choices between orders one to five \cite{gratiet_metamodel-based_2015}.
 Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
@@ -554,7 +560,7 @@ especially in high-dimensional parameter spaces \cite{TBD}.
 So-called low-discrepancy series can greatly improve on random sampling.
 Because they are designed to avoid forming large gaps and clusters,
 these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.
-Thus, samples are drawn from a low-discrepancy Halton sequence.
+Thus, we choose to draw our samples from a low-discrepancy Halton sequence.
 
 % how many samples
 
