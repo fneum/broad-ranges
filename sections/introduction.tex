@@ -43,29 +43,31 @@ polytope of low-cost solutions for a single set of cost parameters
 However, most of the studies above only use a central cost projection for each
 considered technology. But recent decades have shown that many of these
 projections contain a high level of uncertainty, particularly for fast-moving
-technologies like solar, batteries and hydrogen storage. Hence, it is
-crucial that apparent compromises and trade-offs are rigorously tested for
-robustness to technology cost uncertainty to raise confidence in conclusions
-about viable, cost-effective power system designs. To thoroughly sweep the
-uncertainty space, we can fortunately avail of ample previous works on
-multi-dimensional global sensitivity analysis techniques in the context of
-least-cost optimisation \cite{trondle_trade-offs_2020,
-mavromatidis_uncertainty_2018, pizarro-alonso_uncertainties_2019,
-fais_impact_2016, usher_value_2015}. We expand their application to fortifying
-insights on the scope of near-optimal trade-offs, wherein the novelty of this
-contribution lies.
+technologies like solar, batteries and hydrogen storage. This uncertainty
+propagates through the model to strongly affect the optimal and near-optimal
+system compositions, thus undermining any analysis of the trade-offs. Hence, it
+is crucial that apparent compromises are rigorously tested for robustness to
+technology cost uncertainty to raise confidence in conclusions about viable,
+cost-effective power system designs. To thoroughly sweep the uncertainty space,
+we can fortunately avail of previous works on multi-dimensional global
+sensitivity analysis techniques in the context of least-cost optimisation
+\cite{trondle_trade-offs_2020, mavromatidis_uncertainty_2018,
+pizarro-alonso_uncertainties_2019, fais_impact_2016, usher_value_2015}. We
+expand their application to strengthening insights on the scope of near-optimal
+trade-offs, wherein the novelty of this contribution lies.
 
 % this work / novelty
 
-Here, we systematically explore robust trade-offs between system
-cost and technology choices, and between technology pairs near the cost-optimum
-of a fully renewable European electricity system model, and
-investigate how they are affected by uncertain technology cost projections. We
-solve numerous spatially and temporally explicit long-term investment planning
-problems that coordinate generation, transmission and storage investments
-subject to multi-period linear optimal power flow constraints, while employing
-methods from global sensitivity analysis to account for a wide range of cost
-projections for wind, solar, battery and hydrogen storage technologies.
+Here, we systematically explore robust trade-offs near the cost-optimum of a
+fully renewable European electricity system model, and investigate how they are
+affected by uncertain technology cost projections. Thereby, we evaluate both
+compromises between system cost and technology choices, as well as between pairs
+of technologies. We do so by solving numerous spatially and temporally explicit
+long-term investment planning problems that coordinate generation, transmission
+and storage investments subject to multi-period linear optimal power flow
+constraints, while employing methods from global sensitivity analysis to account
+for a wide range of cost projections for wind, solar, battery and hydrogen
+storage technologies.
 
 % computational achievement
 
