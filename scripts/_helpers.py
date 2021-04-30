@@ -8,7 +8,7 @@ import chaospy
 import numpoly
 import re
 
-from sklearn.metrics import explained_variance_score, r2_score
+from sklearn.metrics import r2_score, mean_squared_error
 
 __author__ = "Fabian Neumann (KIT)"
 __copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
@@ -138,9 +138,13 @@ def calculate_errors(prediction, truth):
             "mape": diff.abs().mean() / truth.mean() * 100,
             "mae": diff.abs().mean(),
             "r2": pd.Series(r2_score(truth, prediction, **kws), index=truth.columns),
-            "variance_explained": pd.Series(
-                explained_variance_score(truth, prediction, **kws), index=truth.columns
+            "mse": pd.Series(
+                mean_squared_error(truth, prediction, **kws), index=truth.columns
             ),
+            "rmse": pd.Series(
+                mean_squared_error(truth, prediction, **kws), index=truth.columns
+            )
+            ** 0.5,
         },
         axis=1,
     )

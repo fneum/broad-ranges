@@ -67,9 +67,9 @@ solar,investment,494.05,EUR/kW,"Danish Energy Agency, technology_data_for_el_and
 solar,lifetime,35,years,"Assuming 50% rooftop, 50% utility",22 Photovoltaics Medium:  Technical lifetime of total system
 solar-rooftop,FOM,1.55,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Small:  Fixed O&M
 solar-rooftop,discount rate,0.04,per unit,standard for decentral, from old pypsa cost assumptions
-solar-rooftop,investment,870,EUR/kW,,"22 Photovoltaics Small:  Specific investment, total system"
+solar-rooftop,investment,880,EUR/kW,,"22 Photovoltaics Small:  Specific investment, total system"
 solar-rooftop,lifetime,25,years,,22 Photovoltaics Small:  Technical lifetime of total system
 solar-utility,FOM,2,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Fixed O&M
-solar-utility,investment,350,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Nominal investment
+solar-utility,investment,360,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Nominal investment
 solar-utility,lifetime,25,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Technical lifetime
 gas,fuel,21.6,EUR/MWhth,NA,NA
