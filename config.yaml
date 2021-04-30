@@ -26,7 +26,7 @@ nearoptimal:
 
 dependencies:
   epsilon: [0.06]
-  position: [0.0, 0.25 ,0.5 ,0.75 ,1.0]
+  position: [0.0, 0.25, 0.5, 0.75, 1.0]
   combinations:
     # [{objective}, {fixedcarrier}]
     - [Generator+wind+min, Generator+solar]
@@ -38,11 +38,11 @@ dependencies:
 
 experimental_design:
   low:
-    size: 2
+    size: 500
     rule: halton
     round: 3
   high:
-    size: 1
+    size: 15
     rule: halton
     round: 3
 
@@ -95,8 +95,8 @@ solving:
     method: 2 # barrier
     crossover: 0
     BarConvTol: 1.e-3
-    FeasibilityTol: 1.e-4
-    OptimalityTol: 1.e-4
+    FeasibilityTol: 1.e-3
+    OptimalityTol: 1.e-3
     AggFill: 0
     PreDual: 0
     GURO_PAR_BARDENSETHRESH: 200
@@ -109,9 +109,10 @@ train_test_split:
   train_size: 0.8
   shuffle: true
 
-# with_sklearn:
-#   method: Lars
-#   fit_intercept: false
+with_sklearn:
+  method: Lasso
+  fit_intercept: false
+  alpha: 0.005
 
 csvargs:
   float_format: "%.4f"

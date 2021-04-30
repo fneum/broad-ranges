@@ -1,7 +1,7 @@
 
 # https://unix.stackexchange.com/questions/45583/argument-list-too-long-how-do-i-deal-with-it-without-changing-my-command
 import os
-os.system("ulimit -s 65536")
+os.system("ulimit -s 465536")
 
 configfile: "config.yaml"
 

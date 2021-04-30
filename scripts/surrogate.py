@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import linear_model as lm
 from numpoly import inner
 import chaospy
+import pandas as pd
 
 import _helpers as h
 import _plotters as p
@@ -30,6 +31,27 @@ def build_sklearn_model(cf):
     return getattr(lm, method)(**with_sklearn)
 
 
+def rectify_numerical(dataset, filename, dimension, fixed, position):
+    # check for solutions with numerical trouble -- careful empirical
+    if dimension == "cost": return dataset
+
+    opt_dataset = h.load_dataset(filename, "cost", "min")
+    sel = dataset[dimension] == opt_dataset[dimension]
+
+    if any(sel): print("Rectifying numerical trouble with heuristics!")
+
+    #dataset.loc[sel] = pd.NA
+    dataset.loc[sel, dimension] = 0.0
+
+    if fixed != "none":
+        min_dataset = h.load_dataset(filename, fixed, 'min', epsilon)[fixed]
+        max_dataset = h.load_dataset(filename, fixed, 'max', epsilon)[fixed]
+        fixed_correct = min_dataset + float(position) * (max_dataset - min_dataset)
+        dataset.loc[sel, fixed] = fixed_correct.loc[sel]
+
+    return dataset
+
+
 def apply_multifidelity(
     model,
     kind,
@@ -49,11 +71,7 @@ def apply_multifidelity(
     hf_samples = h.multiindex2df(hf_dataset.index)
     lf_dataset = h.build_pce_prediction(model, hf_samples)
 
-    # check for solutions with numerical trouble
-    if dimension != "cost":
-        hf_opt_dataset = h.load_dataset(filename, "cost", "min")
-        sel = hf_dataset[dimension] == hf_opt_dataset[dimension]
-        hf_dataset.loc[sel] = 0.0  # empirical
+    hf_dataset = rectify_numerical(hf_dataset, filename, dimension, fixed, position)
 
     def additive_correction():
         scaling_factors = hf_dataset - lf_dataset
@@ -113,6 +131,10 @@ if __name__ == "__main__":
     dataset = h.load_dataset(
         snakemake.input["low"], dimension, sense, epsilon, fixed, position
     )
+    dataset = rectify_numerical(
+        dataset, snakemake.input["low"], dimension, fixed, position
+    )
+
 
     distribution = h.NamedJ(uncertainties)
 
