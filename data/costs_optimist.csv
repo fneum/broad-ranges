@@ -1,0 +1,75 @@
+technology,parameter,value,unit,source,further description
+HVAC overhead,FOM,2,%/year,Hagspiel, from old pypsa cost assumptions
+HVAC overhead,investment,400,EUR/MW/km,Hagspiel, from old pypsa cost assumptions
+HVAC overhead,lifetime,40,years,Hagspiel, from old pypsa cost assumptions
+HVDC inverter pair,FOM,2,%/year,Hagspiel, from old pypsa cost assumptions
+HVDC inverter pair,investment,150000,EUR/MW,Hagspiel, from old pypsa cost assumptions
+HVDC inverter pair,lifetime,40,years,Hagspiel, from old pypsa cost assumptions
+HVDC overhead,FOM,2,%/year,Hagspiel, from old pypsa cost assumptions
+HVDC overhead,investment,400,EUR/MW/km,Hagspiel, from old pypsa cost assumptions
+HVDC overhead,lifetime,40,years,Hagspiel, from old pypsa cost assumptions
+HVDC submarine,FOM,2,%/year,Hagspiel, from old pypsa cost assumptions
+HVDC submarine,investment,2000,EUR/MW/km,Own analysis of European submarine HVDC projects since 2000, from old pypsa cost assumptions
+HVDC submarine,lifetime,40,years,Hagspiel, from old pypsa cost assumptions
+PHS,FOM,1,%/year,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+PHS,efficiency,0.75,per unit,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+PHS,investment,2208.16,EUR/kWel,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+PHS,lifetime,80,years,IEA2010, from old pypsa cost assumptions
+battery inverter,FOM,0.9,%/year,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Fixed O&M
+battery inverter,efficiency,0.96,per unit,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Round trip efficiency DC
+battery inverter,investment,40,EUR/kW,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Output capacity expansion cost investment
+battery inverter,lifetime,20,years,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Technical lifetime
+battery storage,investment,46,EUR/kWh,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Energy storage expansion cost investment
+battery storage,lifetime,20,years,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",:  Technical lifetime
+electricity grid connection,FOM,2,%/year,TODO, from old pypsa cost assumptions
+electricity grid connection,investment,140,EUR/kW,DEA, from old pypsa cost assumptions
+electricity grid connection,lifetime,40,years,TODO, from old pypsa cost assumptions
+electrolysis,FOM,5,%/year,"Danish Energy Agency, data_sheets_for_renewable_fuels_-_0003.xlsx",88 Alkaline Electrolyser:  Fixed O&M
+electrolysis,efficiency,0.67,per unit,"Danish Energy Agency, data_sheets_for_renewable_fuels_-_0003.xlsx","88 Alkaline Electrolyser:  A) Hydrogen output, at LHV"
+electrolysis,investment,200,EUR/kW_e,"Danish Energy Agency, data_sheets_for_renewable_fuels_-_0003.xlsx",88 Alkaline Electrolyser:  Specific investment
+electrolysis,lifetime,25,years,"Danish Energy Agency, data_sheets_for_renewable_fuels_-_0003.xlsx",88 Alkaline Electrolyser:  Technical lifetime
+fuel cell,FOM,5,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",12 LT-PEMFC CHP:  Fixed O&M
+fuel cell,efficiency,0.5,per unit,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx","12 LT-PEMFC CHP:  Electricity efficiency, annual average"
+fuel cell,investment,500,EUR/kW_e,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",12 LT-PEMFC CHP:  Nominal investment
+fuel cell,lifetime,20,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",12 LT-PEMFC CHP:  Technical lifetime
+hydro,FOM,1,%/year,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+hydro,efficiency,0.9,per unit,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+hydro,investment,2208.16,EUR/kWel,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+hydro,lifetime,80,years,IEA2010, from old pypsa cost assumptions
+hydrogen storage tank,FOM,0,%/year,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Fixed O&M
+hydrogen storage tank,investment,1,EUR/kWh,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Specific investment
+hydrogen storage tank,lifetime,100,years,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151a Hydrogen Storage – Caverns:  Technical lifetime
+hydrogen storage underground,FOM,0,%/year,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Fixed O&M
+hydrogen storage underground,VOM,0,EUR/MWh,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Variable O&M
+hydrogen storage underground,investment,1.8,EUR/kWh,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Specific investment
+hydrogen storage underground,lifetime,100,years,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx",151c Hydrogen Storage - Caverns:  Technical lifetime
+offwind,FOM,2.29,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",21 Offshore turbines:  Fixed O&M
+offwind,VOM,2.4,EUR/MWh,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",21 Offshore turbines:  Variable O&M
+offwind,investment,1420,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",21 Offshore turbines:  Nominal investment grid connection costs substracted from investment costs
+offwind,lifetime,30,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",21 Offshore turbines:  Technical lifetime
+offwind-ac-connection-submarine,investment,2685,EUR/MW/km,DEA https://ens.dk/en/our-services/projections-and-models/technology-data, from old pypsa cost assumptions
+offwind-ac-connection-underground,investment,1342,EUR/MW/km,DEA https://ens.dk/en/our-services/projections-and-models/technology-data, from old pypsa cost assumptions
+offwind-ac-station,investment,250,EUR/kWel,DEA https://ens.dk/en/our-services/projections-and-models/technology-data, from old pypsa cost assumptions
+offwind-dc-connection-submarine,investment,2000,EUR/MW/km,DTU report based on Fig 34 of https://ec.europa.eu/energy/sites/ener/files/documents/2014_nsog_report.pdf, from old pypsa cost assumptions
+offwind-dc-connection-underground,investment,1000,EUR/MW/km,Haertel 2017; average + 13% learning reduction, from old pypsa cost assumptions
+offwind-dc-station,investment,400,EUR/kWel,Haertel 2017; assuming one onshore and one offshore node + 13% learning reduction, from old pypsa cost assumptions
+onwind,FOM,1.18,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",20 Onshore turbines:  Fixed O&M
+onwind,VOM,1.22,EUR/MWh,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",20 Onshore turbines:  Variable O&M
+onwind,investment,800,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",20 Onshore turbines:  Nominal investment
+onwind,lifetime,30,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",20 Onshore turbines:  Technical lifetime
+ror,FOM,2,%/year,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+ror,efficiency,0.9,per unit,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+ror,investment,3312.24,EUR/kWel,DIW DataDoc http://hdl.handle.net/10419/80348, from old pypsa cost assumptions
+ror,lifetime,80,years,IEA2010, from old pypsa cost assumptions
+solar,FOM,1.58,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Medium:  Fixed O&M
+solar,VOM,0.01,EUR/MWhel,RES costs made up to fix curtailment order, from old pypsa cost assumptions
+solar,investment,494.05,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx","22 Photovoltaics Medium:  Specific investment, total system"
+solar,lifetime,35,years,"Assuming 50% rooftop, 50% utility",22 Photovoltaics Medium:  Technical lifetime of total system
+solar-rooftop,FOM,1.55,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Small:  Fixed O&M
+solar-rooftop,discount rate,0.04,per unit,standard for decentral, from old pypsa cost assumptions
+solar-rooftop,investment,590,EUR/kW,European PV Technology and Innovation Platform,"22 Photovoltaics Small:  Specific investment, total system"
+solar-rooftop,lifetime,25,years,European PV Technology and Innovation Platform,22 Photovoltaics Small:  Technical lifetime of total system
+solar-utility,FOM,2,%/year,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Fixed O&M
+solar-utility,investment,250,EUR/kW,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Nominal investment
+solar-utility,lifetime,25,years,"Danish Energy Agency, technology_data_for_el_and_dh_-_0009.xlsx",22 Photovoltaics Large:  Technical lifetime
+gas,fuel,21.6,EUR/MWhth,NA,NA

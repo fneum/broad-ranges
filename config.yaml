@@ -1,49 +1,118 @@
 scenarios:
-  clusters: [100]
-  opts: [3H]
-  order: [1,2,3,4,5]
-  sobol: [t, m]
+  low:
+    clusters: 37
+    opts: 4H
+  high:
+    clusters: 128
+    opts: 2H
 
-enable:
-  collect_samples: false
+nearoptimal:
+  epsilon: [0.01, 0.02, 0.04, 0.06, 0.08] # skips nearoptimal if empty
+  objective:
+    - Generator+offwind+min
+    - Generator+offwind+max
+    - Generator+onwind+min
+    - Generator+onwind+max
+    - Generator+wind+min
+    - Generator+wind+max
+    - Generator+solar+min
+    - Generator+solar+max
+    - StorageUnit+H2+min
+    - StorageUnit+H2+max
+    - StorageUnit+battery+min
+    - StorageUnit+battery+max
+    - Transmission++min
+    - Transmission++max
+
+dependencies:
+  epsilon: [0.06]
+  position: [0.0, 0.25, 0.5, 0.75, 1.0]
+  combinations:
+    # [{objective}, {fixedcarrier}]
+    - [Generator+wind+min, Generator+solar]
+    - [Generator+wind+max, Generator+solar]
+    - [StorageUnit+H2+min, StorageUnit+battery]
+    - [StorageUnit+H2+max, StorageUnit+battery]
+    - [Generator+offwind+min, Generator+onwind]
+    - [Generator+offwind+max, Generator+onwind]
 
 experimental_design:
-  size: 100
-  rule: halton
-  round: 3
+  low:
+    size: 500
+    rule: halton
+    round: 3
+  high:
+    size: 15
+    rule: halton
+    round: 3
 
 uncertainties:
     onwind:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.670,1]
     offwind:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.726,1]
     solar:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.679,1]
     H2:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.429,1]
     battery:
       type: Uniform
-      args: [0.5,1.5]
+      args: [0.240,1]
+
+multifidelity:
+  approach: "additive"
+
+enable:
+  collect_samples: true
+
+surrogate:
+  order: 3
+  correction:
+    kind: "additive"
+    order: 1
+
+lines:
+  s_nom_add: 8000
+  s_nom_factor: 2
+
+links:
+  p_nom_max: 20000
+
+solving:
+  options:
+    formulation: kirchhoff
+    load_shedding: false
+    noisy_costs: true
+    clip_p_max_pu: 0.01
+    skip_iterations: true
+  solver:
+    name: gurobi
+    threads: 4
+    method: 2 # barrier
+    crossover: 0
+    BarConvTol: 1.e-3
+    FeasibilityTol: 1.e-3
+    OptimalityTol: 1.e-3
+    AggFill: 0
+    PreDual: 0
+    GURO_PAR_BARDENSETHRESH: 200
+    BarHomogeneous: 1
+    #NumericFocus: 2 # for numeric
+    #Presolve: 0 # for numeric
+    #Aggregate: 0 # for numeric
 
 train_test_split:
   train_size: 0.8
   shuffle: true
 
-neural_network:
-  solver: adam
-  hidden_layer_sizes: [50,]
-  max_iter: 100000
-  early_stopping: false
-  tol: 1.e-4
-  n_iter_no_change: 10
-
 with_sklearn:
-  method: Lars
+  method: Lasso
   fit_intercept: false
+  alpha: 0.005
 
 csvargs:
   float_format: "%.4f"

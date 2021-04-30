@@ -1,0 +1,24 @@
+,,DEA 2030,DEA lower,DEA 2050,DEA upper,tr”ndle lower,tr”ndle upper,PyPSA-Eur
+fuel cell,investment,2000,400,800,1300,674,1260,339
+electrolysis,investment,600,250,400,800,449,840,350
+steel tank,investment,45,21,21,35,6,12,8
+battery inverter,investment,160,40,60,250,31,141,350
+battery storage,investment,62,46,75,176,36,166,160
+transmission,investment,,,,,700,1080,400
+utility PV,investment,330,250,300,350,280,580,425
+rooftop PV,investment,870,590,590,590,760,1000,725
+offwind,investment,1930,1420,1780,1950,1790,3270,1640
+onwind,investment,1040,800,960,1190,800,1700,1040
+fuel cell,efficiency,60,62,60,56,54,54,58
+electrolysis,efficiency,79,83,79,75,74,74,80
+battery inverter,efficiency,95,97,96,95,93,93,90
+fuel cell,lifetime,20,20,20,20,15,15,20
+electrolysis,lifetime,25,25,25,25,15,15,18
+steel tank,lifetime,30,30,30,30,15,15,20
+battery inverter,lifetime,25,45,30,20,10,10,20
+battery storage,lifetime,25,45,30,20,10,10,15
+transmission,lifetime,,,,,60,60,40
+utility PV,lifetime,40,40,40,40,25,25,25
+rooftop PV,lifetime,40,40,40,40,25,25,25
+offwind,lifetime,30,35,30,20,30,30,30
+onwind,lifetime,20,40,30,25,25,25,30

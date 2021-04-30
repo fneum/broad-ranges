@@ -8,7 +8,7 @@ import chaospy
 import numpoly
 import re
 
-from sklearn.metrics import explained_variance_score, r2_score
+from sklearn.metrics import r2_score, mean_squared_error
 
 __author__ = "Fabian Neumann (KIT)"
 __copyright__ = f"Copyright 2020 {__author__}, GNU GPL 3"
@@ -35,6 +35,11 @@ class NamedJ:
             DD.append(D(*v["args"]))
         return chaospy.J(*DD)
 
+    def sample(self, size=100, rule="halton", fmt=3):
+        samples = self.J.sample(size=size, rule=rule).round(fmt)
+        index = [f"{n}-cost" for n in self.names]
+        return pd.DataFrame(samples, index=index)
+
 
 class NamedPoly:
     """Dictionary-like wrapper for vector numpoly polynomials with names."""
@@ -53,8 +58,28 @@ class NamedPoly:
             [f"{k}: {r(self.poly[i])}" for i, k in enumerate(self.names)]
         )
 
-    def __call__(self, *args):
-        return pd.Series(self.poly(*args), index=self.names)
+    def __call__(self, args):
+        return pd.DataFrame(self.poly(*args), index=self.names).squeeze()
+
+    def __add__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly + other.poly
+        return NamedPoly(poly, self.names)
+
+    def __sub__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly - other.poly
+        return NamedPoly(poly, self.names)
+
+    def __mul__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly * other.poly
+        return NamedPoly(poly, self.names)
+
+    def __div__(self, other):
+        assert self.names == other.names, "Names have to match!"
+        poly = self.poly / other.poly
+        return NamedPoly(poly, self.names)
 
     @classmethod
     def from_txt(cls, fn):
@@ -68,18 +93,32 @@ class NamedPoly:
         numpoly.savetxt(fn, self.poly, header=" ".join(self.names), fmt=fmt)
 
 
-def load_dataset(fn):
-    df = pd.read_csv(fn, index_col=0, header=list(range(5))).T
+def load_dataset(fn, obj="cost", sense="min", eps=None, fixed="none", pos=None):
 
-    # TODO: remove
-    df["offwind"] = df["offwind-ac"] + df["offwind-dc"]
-    df["wind"] = df["onwind"] + df["offwind"]
-    df["transmission"] = df["lines"] + df["links"] + 290
-    df.drop(
-        ["ror", "hydro", "PHS", "offwind-ac", "offwind-dc", "lines", "links"],
-        axis=1,
-        inplace=True,
-    )
+    assert not (obj == "cost" and fixed != "none"), "Incompatible choice!"
+
+    raw_df = pd.read_csv(fn, index_col=0, header=list(range(10))).T
+
+    levels = ["objective", "sense", "fixed"]
+    df = raw_df.xs([obj, sense, fixed], level=levels, axis=0).copy()
+
+    if fixed == "none":
+        df.index = df.index.droplevel(level="position")
+    else:
+        if pos is not None:
+            if not isinstance(pos, str):
+                pos = str(pos)
+            df = df.xs(pos, level="position")
+
+    if obj == "cost":
+        df.index = df.index.droplevel(level="epsilon")
+    else:
+        df = df.append(raw_df.xs(["cost", "min"], level=["objective", "sense"]))
+        if eps is not None:
+            if not isinstance(eps, str):
+                eps = str(eps)
+            df = df.xs(eps, level="epsilon")
+
     return df
 
 
@@ -99,20 +138,19 @@ def calculate_errors(prediction, truth):
             "mape": diff.abs().mean() / truth.mean() * 100,
             "mae": diff.abs().mean(),
             "r2": pd.Series(r2_score(truth, prediction, **kws), index=truth.columns),
-            "variance_explained": pd.Series(
-                explained_variance_score(truth, prediction, **kws), index=truth.columns
+            "mse": pd.Series(
+                mean_squared_error(truth, prediction, **kws), index=truth.columns
             ),
+            "rmse": pd.Series(
+                mean_squared_error(truth, prediction, **kws), index=truth.columns
+            )
+            ** 0.5,
         },
         axis=1,
     )
 
 
-def build_ann_prediction(model, samples, mirror):
-    prediction = model.predict(samples.T)
-    return pd.DataFrame(prediction, index=mirror.index, columns=mirror.columns)
-
-
 def build_pce_prediction(model, samples):
-    prediction = samples.apply(lambda s: model(*s), result_type="expand")
+    prediction = model(samples.values).clip(lower=0.0)
     prediction.columns = pd.MultiIndex.from_frame(samples.astype(str).T)
     return prediction.T

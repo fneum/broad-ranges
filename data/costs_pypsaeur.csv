@@ -1,0 +1,107 @@
+technology,parameter,value,unit,source,
+CCGT,FOM,2.5,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+CCGT,VOM,4,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348
+CCGT,efficiency,0.5,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+CCGT,investment,800,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+CCGT,lifetime,30,years,IEA2010,
+HVAC overhead,FOM,2,%/year,Hagspiel,
+HVAC overhead,investment,400,EUR/MW/km,Hagspiel,
+HVAC overhead,lifetime,40,years,Hagspiel,
+HVDC inverter pair,FOM,2,%/year,Hagspiel,
+HVDC inverter pair,investment,150000,EUR/MW,Hagspiel,
+HVDC inverter pair,lifetime,40,years,Hagspiel,
+HVDC overhead,FOM,2,%/year,Hagspiel,
+HVDC overhead,investment,400,EUR/MW/km,Hagspiel,
+HVDC overhead,lifetime,40,years,Hagspiel,
+HVDC submarine,FOM,2,%/year,Hagspiel,
+HVDC submarine,investment,2000,EUR/MW/km,DTU report based on Fig 34 of https,//ec.europa.eu/energy/sites/ener/files/documents/2014_nsog_report.pdf
+HVDC submarine,lifetime,40,years,Hagspiel,
+OCGT,FOM,3.75,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+OCGT,VOM,3,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348
+OCGT,efficiency,0.39,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+OCGT,investment,400,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+OCGT,lifetime,30,years,IEA2010,
+PHS,FOM,1,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+PHS,efficiency,0.75,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+PHS,investment,2000,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+PHS,lifetime,80,years,IEA2010,
+battery inverter,FOM,3,%/year,budischak2013,
+battery inverter,efficiency,0.81,per unit,budischak2013; Lund and Kempton (2008) http,//dx.doi.org/10.1016/j.enpol.2008.06.007
+battery inverter,investment,309.5652,USD/kWel,budischak2013,
+battery inverter,lifetime,20,years,budischak2013,
+battery storage,investment,144.6144,USD/kWh,budischak2013,
+battery storage,lifetime,15,years,budischak2013,
+coal,CO2 intensity,0.354,tCO2/MWth,https,//www.eia.gov/environment/emissions/co2_vol_mass.php
+coal,FOM,1.923076,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348 PC (Advanced/SuperC)
+coal,VOM,6,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348 PC (Advanced/SuperC)
+coal,efficiency,0.464,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348 PC (Advanced/SuperC)
+coal,fuel,8.4,EUR/MWhth,IEA2011b,
+coal,investment,1300,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348 PC (Advanced/SuperC)
+coal,lifetime,40,years,IEA2010,
+electrolysis,FOM,4,%/year,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+electrolysis,efficiency,0.8,per unit,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+electrolysis,investment,350,EUR/kWel,Palzer Thesis,
+electrolysis,lifetime,18,years,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+fuel cell,FOM,3,%/year,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+fuel cell,efficiency,0.58,per unit,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013 conservative 2020
+fuel cell,investment,339,EUR/kWel,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+fuel cell,lifetime,20,years,NREL http,//www.nrel.gov/docs/fy09osti/45873.pdf; budischak2013
+gas,CO2 intensity,0.187,tCO2/MWth,https,//www.eia.gov/environment/emissions/co2_vol_mass.php
+gas,fuel,21.6,EUR/MWhth,IEA2011b,
+hydro,FOM,1,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+hydro,efficiency,0.9,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+hydro,investment,2000,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+hydro,lifetime,80,years,IEA2010,
+hydrogen storage tank,investment,8.43584,USD/kWh,budischak2013,
+hydrogen storage tank,lifetime,20,years,budischak2013,
+hydrogen storage underground,investment,0.5,EUR/kWh,maximum from https,//www.nrel.gov/docs/fy10osti/46719.pdf
+hydrogen storage underground,lifetime,40,years,http,//www.acatech.de/fileadmin/user_upload/Baumstruktur_nach_Website/Acatech/root/de/Publikationen/Materialien/ESYS_Technologiesteckbrief_Energiespeicher.pdf
+lignite,CO2 intensity,0.334,tCO2/MWth,https,//www.eia.gov/environment/emissions/co2_vol_mass.php
+lignite,FOM,2,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348 PC (Advanced/SuperC)
+lignite,VOM,7,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348
+lignite,efficiency,0.447,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+lignite,fuel,2.9,EUR/MWhth,IEA2011b,
+lignite,investment,1500,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+lignite,lifetime,40,years,IEA2010,
+nuclear,VOM,8,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348
+nuclear,efficiency,0.337,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+nuclear,fuel,3,EUR/MWhth,IEA2011b,
+nuclear,investment,6000,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+nuclear,lifetime,45,years,ECF2010 in DIW DataDoc http,//hdl.handle.net/10419/80348
+offwind,FOM,2.304878,%/year,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind,VOM,2.7,EUR/MWhel,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind,investment,1640,EUR/kWel,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind,lifetime,30,years,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind-ac-connection-submarine,investment,2685,EUR/MW/km,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind-ac-connection-underground,investment,1342,EUR/MW/km,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind-ac-station,investment,250,EUR/kWel,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+offwind-dc-connection-submarine,investment,2000,EUR/MW/km,DTU report based on Fig 34 of https,//ec.europa.eu/energy/sites/ener/files/documents/2014_nsog_report.pdf
+offwind-dc-connection-underground,investment,1000,EUR/MW/km,Haertel 2017; average + 13% learning reduction,
+offwind-dc-station,investment,400,EUR/kWel,Haertel 2017; assuming one onshore and one offshore node + 13% learning reduction,
+oil,CO2 intensity,0.248,tCO2/MWth,https,//www.eia.gov/environment/emissions/co2_vol_mass.php
+oil,FOM,1.5,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+oil,VOM,3,EUR/MWhel,DIW DataDoc http,//hdl.handle.net/10419/80348
+oil,efficiency,0.393,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348 CT
+oil,fuel,50,EUR/MWhth,IEA WEM2017 97USD/boe = http,//www.iea.org/media/weowebsite/2017/WEM_Documentation_WEO2017.pdf
+oil,investment,400,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+oil,lifetime,30,years,ECF2010 in DIW DataDoc http,//hdl.handle.net/10419/80348
+onwind,FOM,2.450549,%/year,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+onwind,VOM,2.3,EUR/MWhel,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+onwind,investment,1040,EUR/kWel,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+onwind,lifetime,30,years,DEA https,//ens.dk/en/our-services/projections-and-models/technology-data
+ror,FOM,2,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+ror,efficiency,0.9,per unit,DIW DataDoc http,//hdl.handle.net/10419/80348
+ror,investment,3000,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+ror,lifetime,80,years,IEA2010,
+solar,FOM,4.166667,%/year,DIW DataDoc http,//hdl.handle.net/10419/80348
+solar,VOM,0.01,EUR/MWhel,RES costs made up to fix curtailment order,
+solar,investment,600,EUR/kWel,DIW DataDoc http,//hdl.handle.net/10419/80348
+solar,lifetime,25,years,IEA2010,
+solar-rooftop,FOM,2,%/year,ETIP PV,
+solar-rooftop,discount rate,0.04,per unit,standard for decentral,
+solar-rooftop,investment,725,EUR/kWel,ETIP PV,
+solar-rooftop,lifetime,25,years,IEA2010,
+solar-utility,FOM,3,%/year,ETIP PV,
+solar-utility,investment,425,EUR/kWel,ETIP PV,
+solar-utility,lifetime,25,years,IEA2010,
+uranium,fuel,3,EUR/MWhth,DIW DataDoc http,//hdl.handle.net/10419/80348
