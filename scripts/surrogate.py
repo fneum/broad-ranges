@@ -69,7 +69,9 @@ def apply_multifidelity(
     if filename is None:
         return model
 
-    hf_dataset = h.load_dataset(filename, dimension, sense, epsilon, fixed, position)
+    hf_dataset = h.load_dataset(
+        filename, dimension, sense, epsilon, fixed, position
+    ).drop("gini", axis=1)
     hf_samples = h.multiindex2df(hf_dataset.index)
     lf_dataset = h.build_pce_prediction(model, hf_samples)
 
