@@ -34,12 +34,15 @@ def build_sklearn_model(cf):
 def rectify_numerical(dataset, filename, dimension, fixed, position):
     # check for solutions with numerical trouble -- careful empirical
     if dimension == "cost":
-        return
+        return dataset
 
     opt_dataset = h.load_dataset(filename, "cost", "min")
     sel = dataset[dimension] == opt_dataset[dimension]
 
-    dataset.loc[sel] = pd.NA
+    if any(sel):
+        print("Rectifying numerical trouble with heuristics!")
+
+    # dataset.loc[sel] = pd.NA
     dataset.loc[sel, dimension] = 0.0
 
     if fixed != "none":

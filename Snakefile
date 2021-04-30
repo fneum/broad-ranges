@@ -1,3 +1,8 @@
+
+# https://unix.stackexchange.com/questions/45583/argument-list-too-long-how-do-i-deal-with-it-without-changing-my-command
+import os
+os.system("ulimit -s 465536")
+
 configfile: "config.yaml"
 
 subworkflow pypsaeur:
@@ -49,7 +54,7 @@ if config["enable"]["collect_samples"]:
         input: experimental_design
         output: "results/dataset_{fidelity}.csv"
         threads: 24
-        resources: mem=20000
+        resources: mem=30000
         script: "scripts/collect.py"
 
 
