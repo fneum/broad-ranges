@@ -67,7 +67,7 @@ multifidelity:
   approach: "additive"
 
 enable:
-  collect_samples: true
+  collect_samples: false
 
 surrogate:
   order: 3
