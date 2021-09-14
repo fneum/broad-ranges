@@ -186,10 +186,10 @@ range.
         \begin{tabular}{cc}
             \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity: \\
             \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and 2-hourly \\
-            \includegraphics[width=0.34\textwidth]{map37.pdf} &
-            \includegraphics[width=0.34\textwidth]{map128.pdf} \\
-            \includegraphics[width=0.34\textwidth]{timeseries37.pdf} &
-            \includegraphics[width=0.34\textwidth]{timeseries128.pdf} \\
+            \includegraphics[width=0.31\textwidth]{map37.pdf} &
+            \includegraphics[width=0.31\textwidth]{map128.pdf} \\
+            \includegraphics[width=0.31\textwidth]{timeseries37.pdf} &
+            \includegraphics[width=0.31\textwidth]{timeseries128.pdf} \\
         \end{tabular}
     \caption[Spatial and temporal resolution of the low and high fidelity model]{Spatial and temporal resolution of the low and high fidelity model.
     Green lines represent controllable HVDC lines. Red lines represent HVAC lines.
@@ -556,7 +556,7 @@ It deals with how many samples are drawn and what sampling method is used.
 
 Traditional Monte-Carlo sampling with pseudo-random numbers is known to
 possess slow convergence properties, % 1 / \sqrt{n}
-especially in high-dimensional parameter spaces \cite{TBD}.
+especially in high-dimensional parameter spaces.
 So-called low-discrepancy series can greatly improve on random sampling.
 Because they are designed to avoid forming large gaps and clusters,
 these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.

@@ -64,6 +64,7 @@ technological learning in that direction.
         \caption{transmission}
         \includegraphics[width=\textwidth]{1D/1D-transmission-H2-high.pdf}
     \end{subfigure}
+    \vspace{-0.3cm}
     \caption{
         % TODO TB Why annuity? Can't we use the overnight cost?
       Sensitivity of capacities towards their own technology cost.
@@ -71,6 +72,28 @@ technological learning in that direction.
       the sensitivity subject to the uncertainty induced by other cost parameters.
     }
     \label{fig:sensitivity}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \caption{first-order Sobol indices [\%]}
+        \label{fig:sobol:first}
+        \includegraphics[width=\textwidth]{sobol/sobol-m-high.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.54\textwidth}
+        \caption{total Sobol indices [\%]}
+        \label{fig:sobol:total}
+        \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
+    \end{subfigure}
+    \vspace{-0.3cm}
+    \caption[First-order and total Sobol indices]{
+      Sobol indices. These sensitivity indices attribute output variance to random input variables
+      and reveal which inputs the outputs are most sensitive to. The first-order Sobol indices
+      quantify the share of output variance due to variations in one input parameter alone.
+      The total Sobol indices further include interactions with other input variables.
+      Total Sobol indices can be greater than 100\% if the contributions are not purely additive.
+    }
+    \label{fig:sobol}
 \end{figure}
 
 \subsection{Parameter Sweeps and Global Sensitivity Indices}
@@ -96,26 +119,7 @@ in the next step we formalise how input uncertainties affect each outcome
 systematically by applying variance-based global sensitivity analysis techniques, which
 have been applied in the context of energy systems e.g.~in \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}.
 
-\begin{figure}
-    \begin{subfigure}[t]{0.45\textwidth}
-        \caption{first-order Sobol indices [\%]}
-        \label{fig:sobol:first}
-        \includegraphics[width=\textwidth]{sobol/sobol-m-high.pdf}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.54\textwidth}
-        \caption{total Sobol indices [\%]}
-        \label{fig:sobol:total}
-        \includegraphics[width=\textwidth]{sobol/sobol-t-high-bar.pdf}
-    \end{subfigure}
-    \caption[First-order and total Sobol indices]{
-      Sobol indices. These sensitivity indices attribute output variance to random input variables
-      and reveal which inputs the outputs are most sensitive to. The first-order Sobol indices
-      quantify the share of output variance due to variations in one input parameter alone.
-      The total Sobol indices further include interactions with other input variables.
-      Total Sobol indices can be greater than 100\% if the contributions are not purely additive.
-    }
-    \label{fig:sobol}
-\end{figure}
+
 
 Sensitivity indices, or Sobol indices, attribute the observed output variance to each input and
 can be computed analytically from the polynomial chaos expansion \cite{sudret_global_2008}.

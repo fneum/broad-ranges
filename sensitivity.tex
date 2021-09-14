@@ -1,6 +1,9 @@
 \documentclass[1p,11pt]{elsarticle}
 
-\journal{TBD}
+\journal{undisclosed}
+
+\widowpenalty10000
+\clubpenalty10000
 
 % Nature Energy
 % https://www.nature.com/nenergy/about/content
@@ -76,15 +79,15 @@
 	\title{Broad Ranges of Investment Configurations for Renewable Power
 	Systems, Robust to Cost Uncertainty and Near-Optimality}
 	
-	\author[kitaddress]{Fabian Neumann\corref{correspondingauthor}}
-	\ead{fabian.neumann@kit.edu}
-	% \author[kitaddress]{Veit Hagenmeyer}
-	\author[kitaddress]{Tom Brown}
-	\cortext[correspondingauthor]{Corresponding author}
+	\author[kitaddress,tubaddress]{Fabian Neumann\corref{correspondingauthor}}
+	% \ead{fneum@mail.tu-berlin.de}
+	\author[tubaddress,kitaddress]{Tom Brown}
+	% \cortext[correspondingauthor]{}
 	\address[kitaddress]{Institute for Automation and Applied Informatics (IAI), Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344, Eggenstein-Leopoldshafen, Germany}
+	\address[tubaddress]{Department of Digital Transformation in Energy Systems, Institute of Energy Technology, Technische Universität Berlin, Fakultät III, Einsteinufer 25 (TA 8), 10587 Berlin, Germany}
 
 	\begin{abstract}
-		\input{sections/abstract.tex}
+		\input{sections/abstract.tex} 
 	\end{abstract}
 
 	% \begin{keyword}
@@ -93,6 +96,7 @@
 
 \end{frontmatter}
 
+\newpage
 \begin{small}
 	\tableofcontents
 \end{small}
@@ -103,7 +107,7 @@
 % \begin{itemize}
 % 	\item none
 % \end{itemize}
-
+ 
 \section{Introduction}
 \label{sec:intro}
 
@@ -135,19 +139,18 @@ The responsibility for the contents lies with the authors.
 \section*{CRediT Author Statement}
 
 \textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation, Software, Validation, Formal analysis, Visualization, Writing -- Original Draft, Writing -- Review \& Editing
-% \textbf{Veit Hagenmeyer:} Writing -- Review \& Editing, Project administration, Funding acquisition
 \textbf{Tom Brown:} Conceptualization, Writing -- Review \& Editing, Supervision, Project administration, Funding acquisition
 
 \section*{Data Availability}
 
-A dataset of the results including selected networks and all graphics is available at \href{TBA}{doi:TBA}. 
-We also refer to the documentation of PyPSA (\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}),
-PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}) and the source code 
-repository
-(\href{https://github.com/fneum/TBA}{github.com/fneum/TBA}).
+% A dataset of the results including selected networks and all graphics is available at \href{TBA}{doi:TBA}. 
+The code to reproduce the experiments is available at \href{https://github.com/fneum/broad-ranges}{github.com/fneum/broad-ranges}.
+We also refer to the documentation of PyPSA (\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}) and
+PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}).
 
 % tidy with https://flamingtempura.github.io/bibtex-tidy/
 \addcontentsline{toc}{section}{References}
+\renewcommand{\ttdefault}{\sfdefault}
 \bibliography{library}
 
 % \begin{appendix}
