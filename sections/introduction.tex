@@ -1,0 +1,162 @@
+% context and motivation
+
+Energy system models have become a pivotal instrument for policy-making to find
+cost-efficient system layouts that satisfy ambitious climate change mitigation
+targets. But even though they have proliferated in spatial, temporal,
+technological and sectoral detail and scope in recent years, least-cost
+optimisation models can easily give a false sense of exactness
+\cite{Trutnevyte2016, pye_modelling_2020}. Frequently, they present just a
+single least-cost solution for a single set of cost assumptions, which not only
+neglects uncertainties inherent to technology cost projections which capacity
+expansion models are susceptible to \cite{trondle_trade-offs_2020, yue_review_2018,
+pye_assessing_2018}, but also hides a wide array of alternative solutions that
+are equally feasible and only marginally more expensive \cite{nearoptimal,
+lombardi_policy_2020, sasse_regional_2020}.
+
+% relevance of trade-offs
+
+Trade-offs revealed by deviating from least-cost solutions are extremely
+attractive for policymakers, because they allow them to make decisions based on
+non-economic criteria without affecting the cost-effectiveness of the system.
+Knowing that many similarly costly but technologically diverse solutions exist,
+helps to accommodate political and social dimensions that are otherwise hard to
+quantify; for instance, rising public opposition towards reinforced transmission
+lines and onshore wind turbines or an uneven distribution of new infrastructure
+\cite{mccollum_energy_2020,sasse_regional_2020,schlachtberger_cost_2018}.
+
+% how to find trade-offs
+
+Techniques like multi-objective optimisation and
+modelling-to-generate-alternatives are designed to find such near-optimal
+solutions. Among others, they have been applied to investment planning models of
+the European \cite{nearoptimal}, the Italian 
+\cite{lombardi_policy_2020}, and the United States power system
+\cite{DeCarolis2016}, pathways to decarbonise the power system of the United
+Kingdom \cite{Li2017}, a single-node sector-coupling model of Germany
+\cite{nacken_integrated_2019}, global integrated assessment models
+\cite{Price2017}, and were combined with a quick hull algorithm to span a
+polytope of low-cost solutions for a single set of cost parameters
+\cite{pedersen_modeling_2020}.
+
+% trade-offs must be robust to cost uncertainty
+
+However, most of the studies above only use a central cost projection for each
+considered technology. But recent decades have shown that many of these
+projections contain a high level of uncertainty, particularly for fast-moving
+technologies like solar, batteries and hydrogen storage. This uncertainty
+propagates through the model to strongly affect the optimal and near-optimal
+system compositions, thus undermining any analysis of the trade-offs. Hence, it
+is crucial that apparent compromises are rigorously tested for robustness to
+technology cost uncertainty to raise confidence in conclusions about viable,
+cost-effective power system designs. To thoroughly sweep the uncertainty space,
+we can fortunately avail of previous works on multi-dimensional global
+sensitivity analysis techniques in the context of least-cost optimisation
+\cite{trondle_trade-offs_2020, mavromatidis_uncertainty_2018,
+pizarro-alonso_uncertainties_2019, fais_impact_2016, usher_value_2015}. We
+expand their application to strengthening insights on the scope of near-optimal
+trade-offs, wherein the novelty of this contribution lies.
+
+% this work / novelty
+
+Here, we systematically explore robust trade-offs near the cost-optimum of a
+fully renewable European electricity system model, and investigate how they are
+affected by uncertain technology cost projections. Thereby, we evaluate both
+compromises between system cost and technology choices, as well as between pairs
+of technologies. We do so by solving numerous spatially and temporally explicit
+long-term investment planning problems that coordinate generation, transmission
+and storage investments subject to multi-period linear optimal power flow
+constraints, while employing methods from global sensitivity analysis to account
+for a wide range of cost projections for wind, solar, battery and hydrogen
+storage technologies.
+
+% computational achievement
+
+To handle the immense computational burden incurred by searching for
+near-optimal alternatives alongside evaluating many different cost parameter
+sets, we employ multi-fidelity surrogate modelling techniques, based on sparse
+polynomial chaos expansion that allow us to merge results from one simpler and
+another more detailed model. This approach has been proven very effective in
+Tröndle et al.~\cite{trondle_trade-offs_2020}. Heavy parallelisation with
+high-performance computing infrastructure allowed us to solve more than 50,000
+resource-intensive optimisation problems which, in combination with surrogate
+modelling, admit spanning a probabilistic space of near-optimal solutions rather
+than putting single scenarios into the foreground.
+
+% results
+
+Thereby, we are able to present alternative solutions beyond least-cost that
+have a high chance of involving a limited cost increase, just as we identify
+regions that are unlikely to be cost-efficient. We derive both ranges of options
+and technology-specific boundary conditions, that are not affected by cost
+uncertainty and must be met to keep the total system cost within a specified
+range. Our results show that indeed many such similarly costly but
+technologically diverse solutions exist regardless of how technology cost
+developments will unfold within the considered ranges.  
+
+% --------------------- unused --------------------------
+
+% - technology cost, useable potentials, discount rate, weather year, climate change, projection and regional distribution electricity demand to only name a few
+% These include
+% which parameters are uncertain and to what extent,
+% what parameters influence outputs the most,
+% how uncertainty propagates to the outputs, and
+% how to hedge against uncertainty with stochastic or robust optimisation techniques.
+% The Karush-Kuhn-Tucker multipliers
+% can tell us about the local sensitivity to small changes in the constraints at the optimal point.
+
+% Two ways:
+% - expand distribution view of cost-optimal capacities by the space of near-optimal solutions
+% - or vice versa: augment the near-optimal solution space by adding variance induced by cost uncertainty
+% For instance, they translate a carbon cap to a carbon price, map a renewable generation target to a required subsidy, limited potentials to a scarcity cost, or even output nodal prices \cite{marketvalue}.
+
+% - related: least-cost solutions for one parameter sample may be within 5\% of the optimum for another parameter sample, or vice versa
+
+% Additionally acknowledging sensitivities towards cost assumptions further raises
+% confidence in modelling results. 
+
+% While in scenario analysis only
+% a handful of potentially biased narratives are developed \cite{DeCarolis2017,soroudi_decision_2013,usher_value_2015},
+
+% If we can understand the key drivers of the
+% cost structure and technology preferences
+% \cite{usher_value_2015,moret_characterization_2017}, central parameters can be
+% targeted for technological learning with policy.
+
+% Manifold techniques exist to assess such parametric uncertainty
+% from a variety of different angles.
+
+% Combining the
+% effects of uncertainty and near-optimality means that results on technology
+% mixes are volatile to small perturbations in the model inputs.
+
+% The structural component to uncertainty can relate to modelling errors
+% caused by the linear approximation of power flows \cite{flowandlosses}, spatial aggregation
+% \cite{hoersch_spatial_2017}, temporal aggregation \cite{kotzur_tsa_2018},
+% technology simplification \cite{DeCarolis2017}, or--as will be studied in this
+% contribution--degrees of freedom near the cost-optimum \cite{nearoptimal}.
+
+% Foremost, previous works have focussed
+% on either investigating near-optimal solutions or parametric uncertainty.
+
+% However, given that only a small fraction of the uncertainty space
+% is sampled by single-parameter variation alone,
+% some decisive interactions may be overlooked \cite{pizarro-alonso_uncertainties_2019}.
+
+% in hindsight
+% developments in the electricity sector have rarely followed cost-optimal paths
+%  \cite{}
+
+% arising
+
+% transmission
+% expansion limits \cite{schlachtberger_benefits_2017}, reference weather years
+% \cite{bloomfield_2021}, distributional equity requirements
+% \cite{sasse_regional_2020,sasse_distributional_2019}, or increasing emission
+% reduction targets
+
+% It is the combination of rigorous uncertainty quantification in the space of
+% near-optimal solutions that makes the novelty of this contribution.
+
+% Herein lies the novelty of this contribution.
+
+% pan-continental

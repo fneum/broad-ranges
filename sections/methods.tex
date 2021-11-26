@@ -1,0 +1,666 @@
+In this section,
+we first outline how we obtain least-cost and near-optimal solutions for a given cost parameter set.
+We then describe the model of the European power system and define the cost uncertainties. 
+Finally, we explain how we make use of multi-fidelity surrogate modelling
+techniques based on polynomial chaos expansions
+and find an experimental design that efficiently covers the parameter space.
+
+\subsection{Least-Cost Investment Planning}
+\label{sec:leastcost}
+
+The objective of long-term power system planning is to minimise the total
+annual system costs, comprising annualised capital costs $c_\star$ for investments at locations $i$
+in generator capacity $G_{i,r}$ of technology $r$, storage capacity $H_{i,s}$ of technology $s$, and transmission line capacities
+$F_{\ell}$, as well as the variable operating costs $o_\star$ for generator dispatch $g_{i,r,t}$:
+\begin{align}
+    \min_{G,H,F,g} \quad \left\{
+        \sum_{i,r}   c_{i,r}  \cdot G_{i,r}  +
+        \sum_{i,s}   c_{i,s}  \cdot H_{i,s}  +
+        \sum_{\ell}  c_{\ell} \cdot F_{\ell} +
+        \sum_{i,r,t} w_t \cdot o_{i,r} \cdot g_{i,r,t}
+    \right\}
+    \label{eq:objective}
+\end{align}
+where the snapshots $t$ are weighted by $w_t$ such that their total duration
+adds up to one year. The objective is subject to a set of linear constraints that define limits on
+(i) the capacities of infrastructure from geographical and technical potentials,
+(ii) the availability of variable renewable energy sources for each location and point in time, and
+(iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations,
+which we describe in more detail in the following.
+
+The capacities of generation, storage and transmission infrastructure are
+limited to their geographical potentials from above and existing infrastructure from below:
+\begin{align}
+    \label{eq:firstA}
+    \underline{G}_{i,r}  \leq G_{i,r}  \leq \overline{G}_{i,r}  &\qquad\forall i, r \\
+    \underline{H}_{i,s}  \leq H_{i,s}  \leq \overline{H}_{i,s}  &\qquad\forall i, s \\
+    \underline{F}_{\ell} \leq F_{\ell} \leq \overline{F}_{\ell} &\qquad\forall \ell
+\end{align}
+
+The dispatch of a renewable generator is constrained by
+its rated capacity and the time- and location-dependent availability $\overline{g}_{i,r,t}$,
+given in per-unit of the generator's capacity:
+\begin{align}
+    0 \leq g_{i,r,t} \leq \overline{g}_{i,r,t} G_{i,r} \qquad\forall i, r, t
+\end{align}
+The dispatch of storage units is described by a charge variable $h_{i,s,t}^+$
+and a discharge variable $h_{i,s,t}^-$, each limited by the power rating $H_{i,s}$.
+\begin{align}
+    0 \leq h_{i,s,t}^+ \leq H_{i,s} &\qquad\forall i, s, t \\
+    0 \leq h_{i,s,t}^- \leq H_{i,s} &\qquad\forall i, s, t
+\end{align}
+The energy levels $e_{i,s,t}$ of all storage units are linked to the dispatch by
+\begin{align}
+    e_{i,s,t} =\: & \eta_{i,s,0}^{w_t} \cdot e_{i,s,t-1} + w_t \cdot h_{i,s,t}^\text{inflow} - w_t \cdot h_{i,s,t}^\text{spillage} & \quad\forall i, s, t \nonumber \\
+    & + \eta_{i,s,+} \cdot w_t \cdot h_{i,s,t}^+ - \eta_{i,s,-}^{-1} \cdot w_t \cdot h_{i,s,t}^-.
+\end{align}
+Storage units can have a standing loss $\eta_{i,s,0}$, a charging efficiency $\eta_{i,s,+}$, a discharging efficiency $\eta_{i,s,-}$,
+natural inflow $h_{i,s,t}^\text{inflow}$ and spillage $h_{i,s,t}^\text{spillage}$.
+The storage energy levels are assumed to be cyclic and are constrained by their energy capacity
+\begin{align}
+    e_{i,s,0} = e_{i,s,T} &\qquad\forall i, s \\
+    0 \leq e_{i,s,t} \leq \overline{T}_s \cdot H_{i,s} &\qquad\forall i, s, t.
+\end{align}
+To reduce the number of decisison variables, we link the energy capacity to
+power ratings with a technology-specific parameter $\overline{T}_s$
+that describes the maximum duration a storage unit can discharge at full power rating.
+
+Kirchhoff's Current Law (KCL) requires local generators and storage units as well as
+incoming or outgoing flows $f_{\ell,t}$ of incident transmission lines $\ell$
+to balance the inelastic electricity demand $d_{i,t}$ at each location $i$ and snapshot $t$
+\begin{align}
+    \sum_r g_{i,r,t} + \sum_s h_{i,s,t} + \sum_\ell K_{i\ell} f_{\ell,t} = d_{i,t} \qquad\forall i,t,
+\end{align}
+where $K_{i\ell}$ is the incidence matrix of the network.
+
+Kichhoff's Voltage Law (KVL) imposes further constraints on the flow of AC lines.
+Using linearised load flow assumptions, the voltage angle difference around every closed cycle in the
+network must add up to zero. We formulate this constraint using a cycle basis $C_{\ell c}$
+of the network graph where the independent cycles $c$ are expressed as
+directed linear combinations of lines $\ell$ \cite{cycleflows}.
+This leads to the constraints
+\begin{align}
+    \sum_\ell C_{\ell c} \cdot x_\ell \cdot f_{\ell,t} = 0 \qquad\forall c,t
+    \label{eq:kvl}
+\end{align}
+where $x_\ell$ is the series inductive reactance of line $\ell$.
+Controllable HVDC links are not affected by this constraint.
+
+Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capacities $F_\ell$
+\begin{align}
+    \abs{f_{\ell,t}} \leq \overline{f}_{\ell} F_{\ell} & \qquad\forall \ell, t,
+    \label{eq:lastA}
+\end{align}
+where $\overline{f}_\ell$ acts as a per-unit buffer capacity
+to protect against the outage of single circuits.
+
+This problem is implemented in the open-source tool PyPSA \cite{pypsa} and is solved by Gurobi.
+Note, that it assumes perfect foresight for a single reference year based on which capacities are optimised.
+It does not include pathway optimisation, nor aspects of reserve power, or system stability.
+Changes of line expansion to line impedance are ignored.
+
+\subsection{Near-Optimal Alternatives}
+\label{sec:nearoptimal}
+
+Using the least-cost solution as an anchor, we use the
+$\epsilon$-constraint method from multi-objective optimisation
+to find near-optimal feasible solutions \cite{nearoptimal,mavrotas_effective_2009}.
+For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
+and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
+in a space of continuous variables, 
+such that the minimised system cost can be represented by
+\begin{equation}
+    C = \min_x\left\{c^\top x \mid Ax\leq b\right\}.
+\end{equation}
+
+% one technology
+
+We then encode the original objective as a constraint 
+such that the cost increase is limited to a given $\epsilon$.
+In other words, the feasible space is cut to solutions that
+are at most $\epsilon$ more expensive than the least-cost solution.
+Given this slack, we can formulate alternative search directions in the objective.
+For instance, we can seek to minimise the sum of solar installations $x_s \subseteq x$ with
+\begin{equation}
+    \overline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C \:\right\}.
+\end{equation}
+To draw a full picture of the boundaries of the near-optimal feasible space, 
+we systematically explore the extremes of various technologies:
+we both minimise and maximise the system-wide investments in
+solar, onshore wind, offshore wind, any wind, hydrogen storage, and battery storage
+capacities, as well as the total volume of transmission network expansion.
+Evaluating each of these technology groups for
+different cost deviations $\epsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
+allows us to observe how the degree of freedom regarding investment decisions
+rises as the optimality tolerance is increased, both at lower and upper ends.
+The boundaries delineate Pareto frontiers on which no criterion,
+neither reducing system cost nor extremising the capacity of a technology,
+can be improved without depressing the other.
+By arguments of convexity, these extremes even define limits
+within which all near-optimal solutions are contained.
+Moreover, although this scheme primarily studies aggregated capacities,
+the solutions are spatially explicit, and we can inspect for each case
+how the capacities of each technology are distributed within the network.
+
+
+% two technologies
+
+The near-optimal analysis above only explores the extremes of one technology at
+a time, i.e.~one direction in the feasible space. But actually the space of
+attainable solutions within $\epsilon$ of the cost-optimum is multi-dimensional.
+To further investigate trade-offs between multiple technologies, in addition to the
+$\epsilon$-constraint and the objective to extremise capacities of a particular
+technology, we formulate a constraint that fixes the capacity of another
+technology. For instance, we search for the minimum amount of wind capacity $x_w
+\subseteq x$ given that a certain amount of solar is built
+\begin{equation}
+    \overline{x_w} = \min_{x_w}\left\{\:1^\top x_w \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C, \quad 1^\top x_s = \underline{x_s} + \alpha \cdot (\overline{x_s}-\underline{x_s}) \:\right\}.
+\end{equation}
+The $\alpha$ denotes the relative position within the near-optimal
+range of solar capacities at given $\epsilon$.
+For example, at $\alpha=0\%$ we look for the least wind capacity
+given that minimal solar capacities are built. 
+An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
+using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}.
+
+% ----------------- unused --------------------------
+% extremes of different technologies cannot be realised simultaneously.
+% This is because technologies that are not part of the objective
+% will act to support the active search direction.
+% For instance, lowering wind capacities will be compensated for
+% by higher solar capacities to satisfy the total energy demand.
+% Thus, extremising one technology narrows the flexibility of a substitute technology.
+
+Due to computational constraints, we focus on technologies which are assumed to
+lend themselves to substitution and limit the corresponding analysis to a single
+cost increase level of $\epsilon=6\%$. We consider the three pairs, (i) wind and
+solar, (ii) offshore and onshore wind, (iii) hydrogen and battery storage, by
+minimising and maximising the former while fixing the latter at positions
+$\alpha \in \{0\%,25\%,50\%,75\%,100\%\}$ within the respective near-optimal
+range.
+
+\subsection{Model Inputs}
+\label{sec:inputs}
+
+\begin{SCfigure}
+        \begin{tabular}{cc}
+            \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity: \\
+            \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and 2-hourly \\
+            \includegraphics[width=0.31\textwidth]{map37.pdf} &
+            \includegraphics[width=0.31\textwidth]{map128.pdf} \\
+            \includegraphics[width=0.31\textwidth]{timeseries37.pdf} &
+            \includegraphics[width=0.31\textwidth]{timeseries128.pdf} \\
+        \end{tabular}
+    \caption[Spatial and temporal resolution of the low and high fidelity model]{Spatial and temporal resolution of the low and high fidelity model.
+    Green lines represent controllable HVDC lines. Red lines represent HVAC lines.
+    The exemplary capacity factors for wind and solar are shown for four days in March
+    at the northernmost node in Germany, alongside the normalised load profile.}
+    \label{fig:pypsaeur}
+\end{SCfigure}
+
+% general
+
+The instances of the coordinated capacity expansion problem
+ (\cref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
+ the European power transmission system that combines high spatial and temporal
+ resolution \cite{pypsaeur}. Because it only uses open data and every processing
+ step is defined in a workflow \cite{snakemake}, we achieve a high level of
+ transparency and reproducibility. In the following, we outline the main
+ features and configurations, and refer to the supplementary material and Hörsch
+ et al.~\cite{pypsaeur} for more details.
+
+\paragraph{Scenario}
+We target a fully renewable electricity system based on variable resources such
+as solar photovoltaics, onshore wind and offshore wind, that has not carbon
+emissions. We pursue a greenfield approach subject to a few notable exceptions.
+The existing hydro-electric infrastructure (run-of-river, hydro dams,
+pumped-storage) is included but not considered to be extendable due to assumed
+geographical constraints. Furthermore, the existing transmission infrastructure
+can only be reinforced continuously but may not be removed. In addition to
+balancing renewables in space with transmission networks, the model includes
+storage options at each node to balance renewables in time. We consider two extendable
+storage technologies: battery storage representing short-term storage suited to
+balancing daily fluctuations and hydrogen storage which exemplifies
+long-term synoptic and seasonal storage.
+
+\paragraph{Spatial and Temporal Resolution}
+Since the spatial and temporal resolution strongly affects the size of the
+optimisation problem, running the model at full resolution is computationally
+infeasible. Throughout the paper, we will therefore make use of two levels of
+aggregation, reflecting a compromise between the computational burden incurred
+by high-resolution models and the growing inaccuracies regarding transmission
+bottlenecks and resource distribution in low-resolution models. We consider a
+low-fidelity model with 37 nodes at a 4-hourly resolution for a full year that
+models power flow via a transport model (i.e.~excluding KVL of \cref{eq:kvl})
+and a high-fidelity model with 128 nodes at a 2-hourly resolution that is
+subject to linearised load flow constraints (\cref{fig:pypsaeur}).
+
+% existing infrastructure (hydro and transmission)
+
+\paragraph{Transmission Grid and Hydro-Electricity}
+The topology of the European transmission network is retrieved from the ENTSO-E
+transparency map and includes all lines at and above 220 kV. Capacities and
+electrical characteristics of transmission lines and substations are inferred
+from standard types for each voltage level, before they are transformed to a
+uniform voltage level. For each line, $N-1$ security is approximated by limiting
+the line loading to 70\% of its nominal rating. The dataset further includes
+existing high-voltage direct current (HVDC) links and planned projects from the
+Ten Year Network Development Plan (TYNDP). Existing run-of-river, hydro-electric
+dams, pumped-hydro storage plants are retrieved from
+\textit{powerplantmatching}, a merged dataset of conventional power plants.
+
+% renewable generation potentials
+
+\paragraph{Renewable Energy Potentials}
+Eligible areas for developing renewable infrastructure are calculated
+per technology and the grid nodes' Voronoi cells, assuming wind and solar installations always connect to the closest substation. 
+How much wind and solar capacity may be built at a location is constrained by
+eligible codes of the CORINE land use database and is further restricted by distance criteria,
+allowed deployment density, and the natural protection areas specified in the NATURA 2000 dataset.
+Moreover, offshore wind farms may not be developed at sea depths exceeding 50 metres,
+as indicated by the GEBCO bathymetry dataset. 
+
+% renewable generation and demand time series
+
+\paragraph{Renewables and Demand Time Series}
+The location-dependent renewables availability time series are generated
+based on two historical weather datasets from the year 2013.
+We retrieve wind speeds, run-off and surface roughness from the ERA5 reanalysis dataset and
+use the satellite-aided SARAH-2 dataset for the direct and diffuse surface solar irradiance.
+Models for wind turbines, solar panels, and the inflow into the basins of hydro-electric dams
+convert the weather data to hourly capacity factors and aggregate these to each grid node.
+Historical country-level load time series are taken from ENTSO-E statistics and are
+heuristically distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
+
+% TODO techno-economic parameters
+
+\subsection{Technology Cost Uncertainty}
+\label{sec:uncertainty}
+
+\begin{SCtable}
+    \begin{small}
+        \begin{tabular}{cccc}
+            \toprule
+            Technology & Lower Annuity & Upper Annuity & Unit  \\ \midrule
+            Onshore Wind & 73 & 109 & EUR/kW/a \\
+            Offshore Wind & 178 & 245 & EUR/kW/a \\ % this includes connection cost!
+            Solar & 36 & 53 & EUR/kW/a \\
+            Battery & 30 & 125 & EUR/kW/a \\
+            Hydrogen & 111 & 259 & EUR/kW/a \\ \bottomrule
+        \end{tabular}
+    \end{small}
+    \caption[Technology Cost Uncertainty]{Technology cost uncertainty using optimistic and pessimistic assumptions from the Danish Energy Agency \cite{DEA}.}
+    \label{tab:costuncertainty}
+\end{SCtable}   
+
+% General
+
+Uncertainty of technology cost projections is driven by two main factors: 
+unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
+unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
+As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019},
+% While uncertainty about the latter could generally be addressed by modelling endogeneous
+% learning in an approach that includes multiple investment periods,
+% the exponential influence of the learning rate raises the computational complexity immensely
+technology cost uncertainty is typically defined exogenously by an interval within which costs may vary
+and a distribution that specifies which segments are more probable.
+
+% Ranges
+
+Ranges of cost projections are best chosen as wide as possible to avoid
+excluding any plausible scenarios
+\cite{moret_characterization_2017,mccollum_energy_2020}. When uncertainty has
+been considered in the literature, cost assumptions have commonly been modelled
+to vary between $\pm20\%$ and $\pm65\%$ depending on the technology's maturity
+\cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
+In this study, we consider uncertainty regarding the annuities of onshore wind,
+offshore wind, solar PV, battery and hydrogen storage systems. The latter
+comprises the cost of electrolysis, cavern storage, and fuel cells. For solar PV
+we assume an even split between utility-scale PV and residential rooftop PV.
+Evaluating uncertainties based on annuities has a distinct advantage. They can
+be seen to simultaneously incorporate uncertainties about the overnight
+investments, fixed operation and maintenance costs, their lifetime, and the
+discount rate, since multiple combinations lead to the same annuity. We built
+the uncertainty ranges presented in \cref{tab:costuncertainty} from the
+optimistic and pessimistic technology cost and lifetime projections for the year
+2050 from the Danish Energy Agency, which correspond to 90\% confidence
+intervals \cite{DEA}. In cases where no uncertainty ranges were provided
+for the year 2050, such as for rooftop PV, projections for the year 2030
+define the upper end of the uncertainty interval. 
+
+% Distributions
+
+Distributions of cost projections have been assumed to follow normal
+\cite{mavromatidis_uncertainty_2018} or triangular distributions
+\cite{li_using_2020}. But independent uniform distributions are the most
+prevalent assumption
+\cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}.
+This approach is backed by the maximum entropy approach
+\cite{trondle_trade-offs_2020}, which states that given the persistent lack of knowledge
+about the distribution the independent uniform distribution, that makes fewest
+assumptions, is most appropriate. Although the assumed independence may neglect
+synergies between technologies, for example, between offshore and onshore wind
+turbine development, we follow the literature by assuming that the cost are
+independent and uniformly distributed within the ranges specified in
+\cref{tab:costuncertainty}.
+
+\subsection{Surrogate Modelling with Polynomial Chaos Expansion}
+\label{sec:surrogate}
+
+% problem
+
+Searching for least-cost solutions (\cref{sec:leastcost}) and many associated near-optimal alternatives (\cref{sec:nearoptimal}) of a highly resolved power system model (\cref{sec:inputs}) on its own
+is already labour-intensive from a computational perspective.
+Repeating this search for a large variety of cost assumptions (\cref{sec:uncertainty}), 
+to be able to make statements about the robustness of
+investment flexibility near the optimum under uncertainty,
+adds another layer to the computational burden.
+
+% idea of surrogate models
+
+Surrogate models\footnote{Surrogate names are also known by names such as approximation models, response surface methods, metamodels and emulators.}
+offer a solution for such cases, where the outcome of the
+original model cannot be obtained easily.
+In contrast to the full model, they only imitate the input/output behaviour for a selection of aggregated outputs, but take much less time to compute \cite{palar_multi-fidelity_2016}.
+Like other machine learning techniques, they generalise from a
+training dataset that comprises only a limited number of samples.
+As surrogate models interpolate gaps in the parameter space that are not contained in the sample set,
+which would otherwise be computationally expensive to fill,
+they are well suited to use cases such as parameter space exploration and sensitivity analysis.
+
+% this paper
+
+Consequently, in this paper we will make use of surrogate models that map the
+cost of onshore wind, offshore wind, solar, hydrogen, and battery storage (\cref{tab:costuncertainty})
+onto a selection of eight system-level outputs.
+These are the total system cost and the installed onshore wind, offshore wind, solar, hydrogen, battery, and transmission network capacities.
+We construct surrogate models for least-cost and near-optimal solutions separately
+for each system cost slack, search direction, fixed total capacity, and output variable. This results in a collection of 808 individual surrogate models based on 101 solved optimisation problems
+per set of cost assumptions.
+The method we choose from an abundance of alternatives is based on polynomial chaos expansion (PCE)
+\cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
+We select this approach because the resulting approximations
+allow efficient analytical statistical evaluation \cite{sudret_global_2008} and
+can conveniently combine training data from variously detailed models \cite{palar_multi-fidelity_2016}.
+
+% general idea
+
+The general idea of surrogate models based on PCE is to
+represent uncertain model outputs as a linear combination of orthogonal basis functions 
+of the random input variables weighted by deterministic coefficients \cite{muhlpfordt_uncertainty_2020}.
+It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
+Building the surrogate model consists of the following steps:
+(i) sampling a set of cost projections from the parameter space,
+(ii) solving the least-cost or near-optimal investment planning problem for each sample,
+(iii) selecting an expansion of orthogonal polynomials within the parameter space,
+(iv) performing a regression to calculate the polynomial coefficients, and ultimately
+(v) using the model approximation for statistical analysis.
+In the following, we will formalise this approach mathematically,
+which we implemented using the \textit{chaospy} toolbox \cite{feinberg_chaospy_2015},
+and elaborate on individual aspects in more detail.
+
+We start by defining the vector of random input variables as
+\begin{equation}
+    \x = \{\mathsf{x}_1, \dots , \mathsf{x}_m\}
+\end{equation}
+that represents the $m$ uncertain cost projections.
+Further, we let
+\begin{equation}
+    \mathsf{y} = f(\x)
+\end{equation}
+describe how the uncertainty of inputs $\x$ propagates
+through the computationally intensive model $f$
+(i.e.~the solving a large optimisation problem)
+to the outputs $\mathsf{y} \in \mathbb{R}$.
+% For simplicity, we limit the subsequent explanation to a scalar output,
+% but it is straightforward to expand the theory to vectorised outputs.
+
+We can represent the computational model $f$ with its polynomial chaos expansion
+\begin{equation}
+    \mathsf{y} = f(\x) = \sum_{\ba \,\in\, \mathbb{N}^m} r_{\ba} \psi_{\ba}(\x),
+    \label{eq:pce}
+\end{equation}
+where $\psi_\ba$ denotes multivariate orthogonal polynomials that form
+a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients \cite{sudret_global_2008}. The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$ 
+denotes the degree of the polynomial $\psi_\ba$ in each of the $m$ random input variables $\mathsf{x}_i$.
+As \cref{eq:pce} features an infinite number of unknown coefficients,
+it is common practice to approximate by truncating the expansion to get a finite number of coefficients
+\begin{equation}
+    f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba(\x).
+\end{equation}
+In the standard truncation scheme \cite{gratiet_metamodel-based_2015,sudret_global_2008},
+all polynomials in $m$ input variables where the total degree is less than $p$ are selected.
+We can write this as a set of indices
+\begin{equation}
+    \cA^{m,p} = \left\{\ba \in \mathbb{N}^m \,:\, \abs{\ba} \leq p\right\},
+\end{equation}
+where $\abs{\ba} = \sum_{i=1}^m \alpha_i$.
+Given the joint distribution of $\x$ and a maximum degree,
+a suitable collection of orthogonal polynomials can be constructed
+using a three terms recurrence algorithm \cite{feinberg_chaospy_2015}.
+The cardinality of the truncated PCE,
+\begin{equation}
+    q = \card \cA^{m,p} = \left(\begin{matrix}
+        m+p \\
+        p
+    \end{matrix}\right) = \frac{(m+p)!}{m!p!},
+    \label{eq:cardinality}
+\end{equation}
+indicates the number of unknown polynomial coefficients.
+
+We determine these coefficicients by a regression based on
+a set of cost parameter samples
+and the corresponding outputs,
+\begin{equation}
+    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad 
+    \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }.
+\end{equation}
+Using this training dataset, we minimise the least-square residual of the polynomial approximation across all observations.
+We add an extra $L_1$ regularisation term, % LASSO regression
+that induces a preference for fewer non-zero coefficients, and solve
+\begin{equation}
+    \hat{\bm{r}} = \argmin_{\bm{r} \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
+        f\left(\bm x^{(i)}\right) - \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba\left(\bm x^{(i)}\right)
+        \right)^2  + \lambda \norm{\bm{r}}_1 \right],
+        \label{eq:regression}
+    \end{equation}
+where we set the regularisation penalty to $\lambda=0.005$.
+This results in a sparse PCE that has proven to
+improve approximations in high-dimensional uncertainty spaces
+and to reduce the required number of samples for comparable approximation errors \cite{gratiet_metamodel-based_2015}.
+Knowing the optimised regression coefficients, we can now assemble the complete surrogate model
+\begin{equation}
+    \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
+\end{equation}
+
+\subsection{Multifidelity Approach}
+\label{sec:multifidelity}
+
+% idea
+
+To construct a sufficiently precise PCE-based surrogate model, it is desirable
+to base it on many samples from a high-fidelity model. However, this is likely
+prohibitively time-consuming. On the other hand, relying only on samples from a
+low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}. For
+example, an investment model that features only a single node per country will
+underestimate transmission bottlenecks and regionally uneven resource or demand
+distribution. In \cref{sec:inputs} we already alluded to using two models with
+varying spatial and temporal resolution in this paper. We integrate both in a
+multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016},
+and demonstrate how we can simultaneously avail of high coverage of the
+parameter space by sampling the simpler model many times, and the high
+spatio-temporal detail yielded by fewer more complex model runs.
+
+% method
+
+The idea of the multi-fidelity approach is to build a corrective surrogate model $\Delta'(\x)$ for the
+error of the low-fidelity model $f_\ell$ compared to the high-fidelity model $f_h$ 
+\begin{equation}
+    \Delta(\x) = f_h(\x) - f_\ell(\x),
+\end{equation}
+and add it to a surrogate model of the low-fidelity model to approximate the behaviour of the
+high-fidelity model
+\begin{equation}
+    f_h'(\x) = f_\ell'(\x) + \Delta'(\x).
+\end{equation}
+Typically, the corrective PCE rectifies only the lower order effects
+of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
+The advantage is that this way the correction function can be determined
+based on fewer samples analogous to \cref{sec:surrogate}.
+To sample the errors, it is only required that the
+high-fidelity samples are a subset of the low-fidelity samples, e.g.
+\begin{equation}
+    \mathcal{X}_h = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}} \quad\text{and}\quad
+    \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}},
+\end{equation}
+which we can easily guarantee by using deterministic low-discrepancy series
+in the experimental design (\cref{sec:sampling}).
+With $p_c < p_\ell$ and consequently $\cA_c \subset \cA_\ell$,
+the multi-fidelity surrogate model can be written as a combination of low-fidelity
+and corrective polynomial coefficients
+\begin{equation}
+    f_h' (\x) = \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\cap\, \cA_c^{m,p_c}}
+    \left(
+     r_{\ell,\ba} + r_{c,\ba}
+    \right) \psi_\ba(\x) + 
+    \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\setminus\, \cA_c^{m,p_c}}
+    r_{\ell,\ba} \psi_\ba(\x).
+\end{equation}
+
+% this paper
+
+In this work, we apply a multi-fidelity surrogate model that considers
+effects up to order three observed in the low-fidelity model. These are then corrected with linear terms derived from insights from the high-fidelity model.
+We justify this choice by experimentation in \cref{sec:validation},
+by testing against other typical choices between orders one to five \cite{gratiet_metamodel-based_2015}.
+Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
+
+\subsection{Experimental Design}
+\label{sec:sampling}
+
+% competition/benchmark: \cite{trondle_trade-offs_2020}
+% - high fidelity: 10 samples, 400 nodes, 4-hourly;
+% - low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
+% uncertain parameters
+%12 in \cite{trondle_trade-offs_2020}
+%36 in \cite{pilpola_analyzing_2020}
+%5 in \cite{shirizadeh_how_2019}
+
+% general
+
+The experimental design covers strategies to find sufficiently high coverage
+of the parameter space at low computational cost \cite{fajraoui_optimal_2017,usher_value_2015}.
+It deals with how many samples are drawn and what sampling method is used.
+
+% sampling method
+
+Traditional Monte-Carlo sampling with pseudo-random numbers is known to
+possess slow convergence properties, % 1 / \sqrt{n}
+especially in high-dimensional parameter spaces.
+So-called low-discrepancy series can greatly improve on random sampling.
+Because they are designed to avoid forming large gaps and clusters,
+these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.
+Thus, we choose to draw our samples from a low-discrepancy Halton sequence.
+
+% how many samples
+
+For the question about how many samples should be drawn,
+we resort to the oversampling ratio (OSR) as a guideline.
+The OSR is defined as the ratio between the number of samples
+and the number of unknown coefficients \cite{palar_multi-fidelity_2016}.
+The literature recommends values between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
+In other words, for a sufficiently accurate approximation,
+there should be significantly more samples than unknown coefficients.
+If the OSR is lower, the regression is prone to the risk of overfitting.
+On the other hand, a high OSR may lead to a very coarse approximation \cite{palar_multi-fidelity_2016}.
+
+According to \cref{eq:cardinality}, targeting an OSR of two
+and considering the five uncertain technology cost parameters (\cref{tab:costuncertainty}),
+approximating linear effects would require at least 12 samples, whereas cubic relations
+would already need 112 samples. Even 504 samples would be necessary to model the dynamics of order 5.
+To investigate the quality of different PCE orders
+and retain a validation dataset,
+we draw 500 samples for the low-fidelity model.
+Due to the computational burden carried by the high-fidelity models,
+we settle on a linear correction in advance, such that
+15 samples for the high-fidelity model are acceptable.
+In combination with 101 least-cost and near-optimal optimisation
+runs for each sample, this setup results in a total number of
+50,500 runs of the low-fidelity model and
+1,515 runs of the high-fidelity model.
+On average a single high-fidelity model run took 20 GB of memory and 5 hours to solve.
+Each low-fidelity model run on average consumed 3 GB of memory and completed within 5 minutes. 
+This setup profits tremendously from parallelisation as it involves
+numerous independent optimisation runs.
+Moreover, it would have been infeasible to carry out without high-performance computing.
+
+\subsection{Model Validation}
+\label{sec:validation}
+
+\begin{figure}
+    \noindent\makebox[\textwidth]{
+        \begin{subfigure}[t]{1.4\textwidth}
+            \caption{number of samples}
+            \label{fig:error:samples}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mape-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-samples-order-3-sklearn.pdf}
+            \includegraphics[height=.2\textwidth]{error/error-rmse-vs-samples-order-3-sklearn.pdf}
+        \end{subfigure}
+    }
+    \noindent\makebox[\textwidth]{
+        \begin{subfigure}[t]{1.4\textwidth}
+            \caption{polynomial order}
+            \label{fig:error:poly}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-r2-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mape-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth, trim=0cm 0cm 4.5cm 0cm, clip]{error/error-mae-vs-order-sklearn.pdf}
+            \includegraphics[height=.2\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
+        \end{subfigure}
+    }
+    \caption[Cross-validation errors]{Cross-validation errors by output for varying sample sizes and polynomial orders
+    of least-cost low-fidelity surrogate models.}
+    \label{fig:error}
+\end{figure}
+
+We justify the use of surrogate modelling by cross-validation.
+Out of the 500 low-fidelity samples,
+100 samples are not used in the regression.
+This validation dataset is unknown to the surrogate model and is
+consulted to assess the approximation's quality.
+Because the high-fidelity sample size is limited and
+approximating near-optimal solutions is not assumed to fundamentally differ,
+we base the validation on low-fidelity least-cost solutions only.
+We experimentally evaluate the approximation errors between predicted and observed data
+for different combinations of polynomial order and sample size
+to decide on a suitable parameterisation.
+We present the coefficient of determination (R$^2$)
+for the variance captured,
+the mean absolute (percentage) errors (MAE/MAPE) for absolute and relative deviations,
+and the root mean squared error (RMSE).
+
+Regarding the number of samples required, \cref{fig:error:samples}
+foremost illustrates that, given enough samples, we achieve
+average relative errors of less than 4\% for most output variables.
+This is comparable to the cross-validation errors from Tröndle et al.~\cite{trondle_trade-offs_2020}
+at rates below 5\%.
+Only for offshore wind and battery storage, we observe larger errors.
+However, this can be explained by a distortion of the relative measure
+when these technologies are hardly built for some cost projections.
+On the contrary, the prediction of total system costs is remarkably accurate.
+\cref{fig:error:samples} also demonstrates that for a polynomial order of 3,
+we gain no significant improvement with more than 200 samples.
+In fact, thanks to the regularisation term used in the regression,
+we already attain acceptable levels of accuracy with as few as 50 samples.
+Moreover, the high R$^2$ values underline that the surrogate model can explain 
+most of the output variance.
+
+Regarding the polynomial order, \cref{fig:error:poly} shows that
+an order of 2 and below may be too simple to capture the
+interaction between different parameters. On the other hand, 
+an order of 4 and above yields no improvement and,
+were it not for the moderating regularisation term,
+would even result in a loss of generalisation properties due to overfitting.
+As higher-order approximations require significantly more samples,
+an order of 3 appears to be a suitable compromise
+to limit the computational burden.
