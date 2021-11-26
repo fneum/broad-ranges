@@ -1,6 +1,6 @@
 In this section,
 we first outline how we obtain least-cost and near-optimal solutions for a given cost parameter set.
-We then describe the model of the European power system and define the cost uncertainties. 
+We then describe the model of the European power system and define the cost uncertainties.
 Finally, we explain how we make use of multi-fidelity surrogate modelling
 techniques based on polynomial chaos expansions
 and find an experimental design that efficiently covers the parameter space.
@@ -107,7 +107,7 @@ $\epsilon$-constraint method from multi-objective optimisation
 to find near-optimal feasible solutions \cite{nearoptimal,mavrotas_effective_2009}.
 For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
 and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
-in a space of continuous variables, 
+in a space of continuous variables,
 such that the minimised system cost can be represented by
 \begin{equation}
     C = \min_x\left\{c^\top x \mid Ax\leq b\right\}.
@@ -115,7 +115,7 @@ such that the minimised system cost can be represented by
 
 % one technology
 
-We then encode the original objective as a constraint 
+We then encode the original objective as a constraint
 such that the cost increase is limited to a given $\epsilon$.
 In other words, the feasible space is cut to solutions that
 are at most $\epsilon$ more expensive than the least-cost solution.
@@ -124,7 +124,7 @@ For instance, we can seek to minimise the sum of solar installations $x_s \subse
 \begin{equation}
     \overline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C \:\right\}.
 \end{equation}
-To draw a full picture of the boundaries of the near-optimal feasible space, 
+To draw a full picture of the boundaries of the near-optimal feasible space,
 we systematically explore the extremes of various technologies:
 we both minimise and maximise the system-wide investments in
 solar, onshore wind, offshore wind, any wind, hydrogen storage, and battery storage
@@ -159,7 +159,7 @@ technology. For instance, we search for the minimum amount of wind capacity $x_w
 The $\alpha$ denotes the relative position within the near-optimal
 range of solar capacities at given $\epsilon$.
 For example, at $\alpha=0\%$ we look for the least wind capacity
-given that minimal solar capacities are built. 
+given that minimal solar capacities are built.
 An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
 using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}.
 
@@ -253,12 +253,12 @@ dams, pumped-hydro storage plants are retrieved from
 
 \paragraph{Renewable Energy Potentials}
 Eligible areas for developing renewable infrastructure are calculated
-per technology and the grid nodes' Voronoi cells, assuming wind and solar installations always connect to the closest substation. 
+per technology and the grid nodes' Voronoi cells, assuming wind and solar installations always connect to the closest substation.
 How much wind and solar capacity may be built at a location is constrained by
 eligible codes of the CORINE land use database and is further restricted by distance criteria,
 allowed deployment density, and the natural protection areas specified in the NATURA 2000 dataset.
 Moreover, offshore wind farms may not be developed at sea depths exceeding 50 metres,
-as indicated by the GEBCO bathymetry dataset. 
+as indicated by the GEBCO bathymetry dataset.
 
 % renewable generation and demand time series
 
@@ -291,11 +291,11 @@ heuristically distributed to each grid node to 40\% by population density and to
     \end{small}
     \caption[Technology Cost Uncertainty]{Technology cost uncertainty using optimistic and pessimistic assumptions from the Danish Energy Agency \cite{DEA}.}
     \label{tab:costuncertainty}
-\end{SCtable}   
+\end{SCtable}
 
 % General
 
-Uncertainty of technology cost projections is driven by two main factors: 
+Uncertainty of technology cost projections is driven by two main factors:
 unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
 unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
 As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019},
@@ -326,7 +326,7 @@ optimistic and pessimistic technology cost and lifetime projections for the year
 2050 from the Danish Energy Agency, which correspond to 90\% confidence
 intervals \cite{DEA}. In cases where no uncertainty ranges were provided
 for the year 2050, such as for rooftop PV, projections for the year 2030
-define the upper end of the uncertainty interval. 
+define the upper end of the uncertainty interval.
 
 % Distributions
 
@@ -351,7 +351,7 @@ independent and uniformly distributed within the ranges specified in
 
 Searching for least-cost solutions (\cref{sec:leastcost}) and many associated near-optimal alternatives (\cref{sec:nearoptimal}) of a highly resolved power system model (\cref{sec:inputs}) on its own
 is already labour-intensive from a computational perspective.
-Repeating this search for a large variety of cost assumptions (\cref{sec:uncertainty}), 
+Repeating this search for a large variety of cost assumptions (\cref{sec:uncertainty}),
 to be able to make statements about the robustness of
 investment flexibility near the optimum under uncertainty,
 adds another layer to the computational burden.
@@ -386,7 +386,7 @@ can conveniently combine training data from variously detailed models \cite{pala
 % general idea
 
 The general idea of surrogate models based on PCE is to
-represent uncertain model outputs as a linear combination of orthogonal basis functions 
+represent uncertain model outputs as a linear combination of orthogonal basis functions
 of the random input variables weighted by deterministic coefficients \cite{muhlpfordt_uncertainty_2020}.
 It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
 Building the surrogate model consists of the following steps:
@@ -421,7 +421,7 @@ We can represent the computational model $f$ with its polynomial chaos expansion
     \label{eq:pce}
 \end{equation}
 where $\psi_\ba$ denotes multivariate orthogonal polynomials that form
-a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients \cite{sudret_global_2008}. The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$ 
+a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients \cite{sudret_global_2008}. The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$
 denotes the degree of the polynomial $\psi_\ba$ in each of the $m$ random input variables $\mathsf{x}_i$.
 As \cref{eq:pce} features an infinite number of unknown coefficients,
 it is common practice to approximate by truncating the expansion to get a finite number of coefficients
@@ -452,7 +452,7 @@ We determine these coefficicients by a regression based on
 a set of cost parameter samples
 and the corresponding outputs,
 \begin{equation}
-    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad 
+    \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad
     \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }.
 \end{equation}
 Using this training dataset, we minimise the least-square residual of the polynomial approximation across all observations.
@@ -494,7 +494,7 @@ spatio-temporal detail yielded by fewer more complex model runs.
 % method
 
 The idea of the multi-fidelity approach is to build a corrective surrogate model $\Delta'(\x)$ for the
-error of the low-fidelity model $f_\ell$ compared to the high-fidelity model $f_h$ 
+error of the low-fidelity model $f_\ell$ compared to the high-fidelity model $f_h$
 \begin{equation}
     \Delta(\x) = f_h(\x) - f_\ell(\x),
 \end{equation}
@@ -522,7 +522,7 @@ and corrective polynomial coefficients
     f_h' (\x) = \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\cap\, \cA_c^{m,p_c}}
     \left(
      r_{\ell,\ba} + r_{c,\ba}
-    \right) \psi_\ba(\x) + 
+    \right) \psi_\ba(\x) +
     \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\setminus\, \cA_c^{m,p_c}}
     r_{\ell,\ba} \psi_\ba(\x).
 \end{equation}
@@ -589,7 +589,7 @@ runs for each sample, this setup results in a total number of
 50,500 runs of the low-fidelity model and
 1,515 runs of the high-fidelity model.
 On average a single high-fidelity model run took 20 GB of memory and 5 hours to solve.
-Each low-fidelity model run on average consumed 3 GB of memory and completed within 5 minutes. 
+Each low-fidelity model run on average consumed 3 GB of memory and completed within 5 minutes.
 This setup profits tremendously from parallelisation as it involves
 numerous independent optimisation runs.
 Moreover, it would have been infeasible to carry out without high-performance computing.
@@ -652,12 +652,12 @@ On the contrary, the prediction of total system costs is remarkably accurate.
 we gain no significant improvement with more than 200 samples.
 In fact, thanks to the regularisation term used in the regression,
 we already attain acceptable levels of accuracy with as few as 50 samples.
-Moreover, the high R$^2$ values underline that the surrogate model can explain 
+Moreover, the high R$^2$ values underline that the surrogate model can explain
 most of the output variance.
 
 Regarding the polynomial order, \cref{fig:error:poly} shows that
 an order of 2 and below may be too simple to capture the
-interaction between different parameters. On the other hand, 
+interaction between different parameters. On the other hand,
 an order of 4 and above yields no improvement and,
 were it not for the moderating regularisation term,
 would even result in a loss of generalisation properties due to overfitting.
