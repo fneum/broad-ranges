@@ -1,6 +1,7 @@
 """[summary]"""
 
 import os
+
 os.environ["NUMEXPR_MAX_THREADS"] = "1"
 os.environ["OPENBLAS_MAIN_FREE"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -148,6 +149,7 @@ def retrieve_data(fn):
 
 def parse2multiindex(df):
     print("start parse")
+
     def parse(fn):
         data = {}
         fn_split = fn[:-3].split("_E")
@@ -205,8 +207,8 @@ if __name__ == "__main__":
         print(f"chunks: {chunksize}")
         data = pool.map(retrieve_data, files, chunksize)
 
-    #data = []
-    #for i in snakemake.input:
+    # data = []
+    # for i in snakemake.input:
     #    data.append(retrieve_data(i))
     print("list done")
 
