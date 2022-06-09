@@ -59,15 +59,15 @@ trade-offs, wherein the novelty of this contribution lies.
 % this work / novelty
 
 Here, we systematically explore robust trade-offs near the cost-optimum of a
-fully renewable European electricity system model, and investigate how they are
-affected by uncertain technology cost projections. Thereby, we evaluate both
-compromises between system cost and technology choices, as well as between pairs
-of technologies. We do so by solving numerous spatially and temporally explicit
-long-term investment planning problems that coordinate generation, transmission
-and storage investments subject to multi-period linear optimal power flow
-constraints, while employing methods from global sensitivity analysis to account
-for a wide range of cost projections for wind, solar, battery and hydrogen
-storage technologies.
+fully renewable European electricity system model, PyPSA-Eur, and investigate
+how they are affected by uncertain technology cost projections. Thereby, we
+evaluate both compromises between system cost and technology choices, as well as
+between pairs of technologies. We do so by solving numerous spatially and
+temporally explicit long-term investment planning problems that coordinate
+generation, transmission and storage investments subject to multi-period linear
+optimal power flow constraints, while employing methods from global sensitivity
+analysis to account for a wide range of cost projections for wind, solar,
+battery and hydrogen storage technologies.
 
 % computational achievement
 
@@ -75,8 +75,9 @@ To handle the immense computational burden incurred by searching for
 near-optimal alternatives alongside evaluating many different cost parameter
 sets, we employ multi-fidelity surrogate modelling techniques, based on sparse
 polynomial chaos expansion that allow us to merge results from one simpler and
-another more detailed model. This approach has been proven very effective in
-Tröndle et al.~\cite{trondle_trade-offs_2020}. Heavy parallelisation with
+another more detailed model (37 regions at 4-hourly resolution versus 128
+regions at 2-hourly resolution). This approach has been proven very effective
+in Tröndle et al.~\cite{trondle_trade-offs_2020}. Heavy parallelisation with
 high-performance computing infrastructure allowed us to solve more than 50,000
 resource-intensive optimisation problems which, in combination with surrogate
 modelling, admit spanning a probabilistic space of near-optimal solutions rather
@@ -92,6 +93,18 @@ uncertainty and must be met to keep the total system cost within a specified
 range. Our results show that indeed many such similarly costly but
 technologically diverse solutions exist regardless of how technology cost
 developments will unfold within the considered ranges.
+
+% presentation
+
+We approach the presentation of these results in two steps: we first show the
+propagation of uncertainties in least-cost solutions, including a global
+sensitivity analysis that identifies the most influential cost parameters. We
+then expand the uncertainty analysis to the space of nearly cost-optimal
+solutions.
+
+% , which yields us insights about the consistency of near-optimal
+% alternatives across a variety of cost parameters.
+
 
 % --------------------- unused --------------------------
 

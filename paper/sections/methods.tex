@@ -1,12 +1,11 @@
-In this section,
-we first outline how we obtain least-cost and near-optimal solutions for a given cost parameter set.
-We then describe the model of the European power system and define the cost uncertainties.
-Finally, we explain how we make use of multi-fidelity surrogate modelling
-techniques based on polynomial chaos expansions
-and find an experimental design that efficiently covers the parameter space.
+In this section, we first outline how we obtain least-cost and near-optimal
+solutions for a given cost parameter set. We then describe the model of the
+European power system and define the cost uncertainties. Finally, we explain how
+we make use of multi-fidelity surrogate modelling techniques based on polynomial
+chaos expansions and find an experimental design that efficiently covers the
+parameter space.
 
-\subsection{Least-Cost Investment Planning}
-\label{sec:leastcost}
+\usubsection{Least-Cost Investment Planning}{sec:leastcost}
 
 The objective of long-term power system planning is to minimise the total
 annual system costs, comprising annualised capital costs $c_\star$ for investments at locations $i$
@@ -99,8 +98,7 @@ Note, that it assumes perfect foresight for a single reference year based on whi
 It does not include pathway optimisation, nor aspects of reserve power, or system stability.
 Changes of line expansion to line impedance are ignored.
 
-\subsection{Near-Optimal Alternatives}
-\label{sec:nearoptimal}
+\usubsection{Near-Optimal Alternatives}{sec:nearoptimal}
 
 Using the least-cost solution as an anchor, we use the
 $\epsilon$-constraint method from multi-objective optimisation
@@ -179,8 +177,7 @@ minimising and maximising the former while fixing the latter at positions
 $\alpha \in \{0\%,25\%,50\%,75\%,100\%\}$ within the respective near-optimal
 range.
 
-\subsection{Model Inputs}
-\label{sec:inputs}
+\usubsection{Open Electricity Sector Model PyPSA-Eur}{sec:inputs}
 
 \begin{SCfigure}
         \begin{tabular}{cc}
@@ -201,7 +198,7 @@ range.
 % general
 
 The instances of the coordinated capacity expansion problem
- (\cref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
+ (see \nameref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
  the European power transmission system that combines high spatial and temporal
  resolution \cite{pypsaeur}. Because it only uses open data and every processing
  step is defined in a workflow \cite{snakemake}, we achieve a high level of
@@ -226,7 +223,7 @@ long-term synoptic and seasonal storage.
 \paragraph{Spatial and Temporal Resolution}
 Since the spatial and temporal resolution strongly affects the size of the
 optimisation problem, running the model at full resolution is computationally
-infeasible. Throughout the paper, we will therefore make use of two levels of
+infeasible. In our analysis, we therefore make use of two levels of
 aggregation, reflecting a compromise between the computational burden incurred
 by high-resolution models and the growing inaccuracies regarding transmission
 bottlenecks and resource distribution in low-resolution models. We consider a
@@ -274,8 +271,7 @@ heuristically distributed to each grid node to 40\% by population density and to
 
 % TODO techno-economic parameters
 
-\subsection{Technology Cost Uncertainty}
-\label{sec:uncertainty}
+\usubsection{Technology Cost Uncertainty}{sec:uncertainty}
 
 \begin{SCtable}
     \begin{small}
@@ -298,7 +294,7 @@ heuristically distributed to each grid node to 40\% by population density and to
 Uncertainty of technology cost projections is driven by two main factors:
 unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
 unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
-As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019},
+As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019,lisa_learning2022},
 % While uncertainty about the latter could generally be addressed by modelling endogeneous
 % learning in an approach that includes multiple investment periods,
 % the exponential influence of the learning rate raises the computational complexity immensely
@@ -344,14 +340,13 @@ turbine development, we follow the literature by assuming that the cost are
 independent and uniformly distributed within the ranges specified in
 \cref{tab:costuncertainty}.
 
-\subsection{Surrogate Modelling with Polynomial Chaos Expansion}
-\label{sec:surrogate}
+\usubsection{Surrogate Modelling with Polynomial Chaos Expansion}{sec:surrogate}
 
 % problem
 
-Searching for least-cost solutions (\cref{sec:leastcost}) and many associated near-optimal alternatives (\cref{sec:nearoptimal}) of a highly resolved power system model (\cref{sec:inputs}) on its own
+Searching for least-cost solutions (see \nameref{sec:leastcost}) and many associated near-optimal alternatives (see \nameref{sec:nearoptimal}) of a highly resolved power system model (see \nameref{sec:inputs}) on its own
 is already labour-intensive from a computational perspective.
-Repeating this search for a large variety of cost assumptions (\cref{sec:uncertainty}),
+Repeating this search for a large variety of cost assumptions (see \nameref{sec:uncertainty}),
 to be able to make statements about the robustness of
 investment flexibility near the optimum under uncertainty,
 adds another layer to the computational burden.
@@ -370,7 +365,7 @@ they are well suited to use cases such as parameter space exploration and sensit
 
 % this paper
 
-Consequently, in this paper we will make use of surrogate models that map the
+Consequently, in this paper we make use of surrogate models that map the
 cost of onshore wind, offshore wind, solar, hydrogen, and battery storage (\cref{tab:costuncertainty})
 onto a selection of eight system-level outputs.
 These are the total system cost and the installed onshore wind, offshore wind, solar, hydrogen, battery, and transmission network capacities.
@@ -395,7 +390,7 @@ Building the surrogate model consists of the following steps:
 (iii) selecting an expansion of orthogonal polynomials within the parameter space,
 (iv) performing a regression to calculate the polynomial coefficients, and ultimately
 (v) using the model approximation for statistical analysis.
-In the following, we will formalise this approach mathematically,
+In the following, we formalise this approach mathematically,
 which we implemented using the \textit{chaospy} toolbox \cite{feinberg_chaospy_2015},
 and elaborate on individual aspects in more detail.
 
@@ -473,8 +468,7 @@ Knowing the optimised regression coefficients, we can now assemble the complete 
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
 \end{equation}
 
-\subsection{Multifidelity Approach}
-\label{sec:multifidelity}
+\usubsection{Multifidelity Approach in Surrogate Modelling}{sec:multifidelity}
 
 % idea
 
@@ -484,7 +478,7 @@ prohibitively time-consuming. On the other hand, relying only on samples from a
 low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}. For
 example, an investment model that features only a single node per country will
 underestimate transmission bottlenecks and regionally uneven resource or demand
-distribution. In \cref{sec:inputs} we already alluded to using two models with
+distribution. In the section on \nameref{sec:inputs} we already alluded to using two models with
 varying spatial and temporal resolution in this paper. We integrate both in a
 multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016},
 and demonstrate how we can simultaneously avail of high coverage of the
@@ -506,7 +500,7 @@ high-fidelity model
 Typically, the corrective PCE rectifies only the lower order effects
 of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
 The advantage is that this way the correction function can be determined
-based on fewer samples analogous to \cref{sec:surrogate}.
+based on fewer samples analogous to the previous section \nameref{sec:surrogate}.
 To sample the errors, it is only required that the
 high-fidelity samples are a subset of the low-fidelity samples, e.g.
 \begin{equation}
@@ -514,7 +508,7 @@ high-fidelity samples are a subset of the low-fidelity samples, e.g.
     \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}},
 \end{equation}
 which we can easily guarantee by using deterministic low-discrepancy series
-in the experimental design (\cref{sec:sampling}).
+in the experimental design (see \nameref{sec:sampling}).
 With $p_c < p_\ell$ and consequently $\cA_c \subset \cA_\ell$,
 the multi-fidelity surrogate model can be written as a combination of low-fidelity
 and corrective polynomial coefficients
@@ -531,12 +525,11 @@ and corrective polynomial coefficients
 
 In this work, we apply a multi-fidelity surrogate model that considers
 effects up to order three observed in the low-fidelity model. These are then corrected with linear terms derived from insights from the high-fidelity model.
-We justify this choice by experimentation in \cref{sec:validation},
+We justify this choice by experimentation in the \nameref{sec:validation},
 by testing against other typical choices between orders one to five \cite{gratiet_metamodel-based_2015}.
 Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
 
-\subsection{Experimental Design}
-\label{sec:sampling}
+\usubsection{Experimental Design for Surrogate Model}{sec:sampling}
 
 % competition/benchmark: \cite{trondle_trade-offs_2020}
 % - high fidelity: 10 samples, 400 nodes, 4-hourly;
@@ -594,8 +587,7 @@ This setup profits tremendously from parallelisation as it involves
 numerous independent optimisation runs.
 Moreover, it would have been infeasible to carry out without high-performance computing.
 
-\subsection{Model Validation}
-\label{sec:validation}
+\usubsection{Validation of Surrogate Model}{sec:validation}
 
 \begin{figure}
     \noindent\makebox[\textwidth]{
@@ -664,3 +656,26 @@ would even result in a loss of generalisation properties due to overfitting.
 As higher-order approximations require significantly more samples,
 an order of 3 appears to be a suitable compromise
 to limit the computational burden.
+
+\usubsection{Critical Appraisal}{sec:sub:limitations}
+
+The need to solve models for many cost projections and near-optimal search
+directions in reasonable time means that compromises had to be made in other
+modelling dimensions. For instance, the analysis would profit from a richer set
+of technologies and further uncertain input parameters, including efficiencies
+of fuel cells and electrolysis or the consideration of concentrating solar
+power, geothermal energy, biomass, and nuclear to name just a few. But as the
+number of considered technologies and parameters rises, so does the
+computational burden. Given the already considerable computational efforts
+involved in procuring our results, considering the full breadth of technologies
+and uncertainties would not have been feasible with the computational resources
+available. Moreover, limitations apply to the scope of the analysis which is
+limited to the electricity sector does not consider coupling to other energy
+sectors. However, accounting for interactions across sectors at high resolution
+in similarly set future studies is desirable and in development. Additionally,
+we assess no path dependencies via multi-period investments and endogenous
+learning, but optimise for an emission reduction in a particular target year
+based on annualised costs. We further disregard interannual variations of
+weather data by basing the analysis just on a single weather year for computational
+reasons. Lastly, aspects such as reserves, system adequacy and inertia have not
+been considered.

@@ -83,6 +83,19 @@
 \def\card{\text{card}\,}
 \def\x{\boldsymbol{\mathsf{x}}}
 
+
+\newcommand{\usection}[2]{
+	\section*{#1}
+	\label{#2}
+	\addcontentsline{toc}{section}{\nameref{#2}}
+}
+
+\newcommand{\usubsection}[2]{
+	\subsection*{#1}
+	\label{#2}
+	\addcontentsline{toc}{subsection}{\nameref{#2}}
+}
+
 \urlstyle{sf}
 
 \begin{document}
@@ -103,9 +116,9 @@
 		\input{sections/abstract.tex}
 	\end{abstract}
 
-	% \begin{keyword}
-		% none
-	% \end{keyword}
+	\begin{keyword}
+		renewable power system, capacity expansion planning, modelling-to-generate-alternatives, uncertainty quantification, global sensitivity analysis, multi-objective optimisation
+	\end{keyword}
 
 \end{frontmatter}
 
@@ -114,32 +127,30 @@
 	\tableofcontents
 \end{small}
 
-% \addcontentsline{toc}{section}{Highlights}
-% \section*{Highlights}
+\addcontentsline{toc}{section}{Highlights}
+\section*{Highlights}
 
-% \begin{itemize}
-% 	\item none
-% \end{itemize}
+\begin{itemize}
+	\item none
+	\item none
+	\item none
+\end{itemize}
 
-\section{Introduction}
-\label{sec:intro}
+\newpage
+
+\usection{Introduction}{sec:intro}
 
 \input{sections/introduction.tex}
 
-\section{Methods}
-\label{sec:methods}
-
-\input{sections/methods.tex}
-
-\section{Results and Discussion}
-\label{sec:results}
-
 \input{sections/results.tex}
 
-\section{Conclusion}
-\label{sec:conclusion}
+\usection{Discussion and Conclusion}{sec:conclusion}
 
 \input{sections/conclusion.tex}
+
+\usection{Experimental Procedures}{sec:methods}
+
+\input{sections/methods.tex}
 
 \section*{Acknowledgement}
 
@@ -156,7 +167,7 @@ The responsibility for the contents lies with the authors.
 
 \section*{Data Availability}
 
-% A dataset of the results including selected networks and all graphics is available at \href{TBA}{doi:TBA}.
+A dataset of the results including selected networks and all graphics is available at \href{TBA}{doi:TBA}.
 The code to reproduce the experiments is available at \href{https://github.com/fneum/broad-ranges}{github.com/fneum/broad-ranges}.
 We also refer to the documentation of PyPSA (\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}) and
 PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}).
