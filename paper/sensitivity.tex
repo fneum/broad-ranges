@@ -1,6 +1,6 @@
 \documentclass[1p,11pt]{elsarticle}
 
-\journal{undisclosed}
+\journal{Nature Energy}
 
 \widowpenalty10000
 \clubpenalty10000
@@ -122,23 +122,18 @@
 
 \end{frontmatter}
 
-\newpage
-\begin{small}
-	\tableofcontents
-\end{small}
+% \addcontentsline{toc}{section}{Highlights}
+% \section*{Highlights}
 
-\addcontentsline{toc}{section}{Highlights}
-\section*{Highlights}
-
-\begin{itemize}
-	\item none
-	\item none
-	\item none
-\end{itemize}
+% \begin{itemize}
+% 	\item none
+% 	\item none
+% 	\item none
+% \end{itemize}
 
 \newpage
 
-\usection{Introduction}{sec:intro}
+\addcontentsline{toc}{section}{Introduction}
 
 \input{sections/introduction.tex}
 
@@ -148,7 +143,7 @@
 
 \input{sections/conclusion.tex}
 
-\usection{Experimental Procedures}{sec:methods}
+\usection{Methods}{sec:methods}
 
 \input{sections/methods.tex}
 
@@ -176,6 +171,9 @@ PyPSA-Eur (\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}).
 \addcontentsline{toc}{section}{References}
 \renewcommand{\ttdefault}{\sfdefault}
 \bibliography{library}
+
+\newpage
+\tableofcontents
 
 % \begin{appendix}
 % 	\input{sections/appendix.tex}
