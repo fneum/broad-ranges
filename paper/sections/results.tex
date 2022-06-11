@@ -22,15 +22,17 @@ The cost optimum gravitates towards hydrogen storage rather than battery storage
 unless battery storage becomes very cheap. There are no least-cost solutions
 without hydrogen, only some without battery storage. Transmission network
 expansion is least affected by cost uncertainty and consistently doubled
-compared to today's capacities. Although these results outline the extent to
-which cost uncertainty affects cost-optimal designs, the insights from the
-observed ranges are limited because they are not robust when we look beyond the
-least-cost solutions and acknowledge structural modelling uncertainties, such as
-social constraints to the expansion of grids and wind turbines. Moreover, the
-pure distribution of outputs does not yet convey information about how sensitive
-results are to particular cost assumptions. But knowing the technologies for
-which lowering overnight costs has a significant impact is important to promote
-technological learning in that direction.
+compared to today's capacities.
+
+Although these results outline the extent to which cost uncertainty affects
+cost-optimal designs, the insights from the observed ranges are limited because
+they are not robust when we look beyond the least-cost solutions and acknowledge
+structural modelling uncertainties, such as social constraints to the expansion
+of grids and wind turbines. Moreover, the pure distribution of outputs does not
+yet convey information about how sensitive results are to particular cost
+assumptions. But knowing the technologies for which lowering overnight costs has
+a significant impact is important to promote technological learning in that
+direction.
 
 \begin{figure}
     \begin{subfigure}[t]{0.32\textwidth}
@@ -91,16 +93,16 @@ technological learning in that direction.
 
 \usection{Local Parameter Sweeps and Global Sensitivity Indices}{sec:sub:sobol}
 
-Therefore, \cref{fig:sensitivity} expands the previous view by showing how the
-cost of a technology influences its deployment while displaying the remaining
-uncertainty induced by other cost parameters. The overall tendency is easily
-explained: the cheaper a technology becomes, the more it is built. However,
-changes of slope and effects on the uncertainty range as one cost parameter is
-swept are insightful nonetheless. For instance, \cref{fig:sensitivity} reveals
-that battery storage becomes significantly more attractive economically once its
-annuity falls below 75 EUR/kW/a (including 6h energy capacity at full power
-output) hydrogen storage features a steady slope. A low cost of onshore wind
-makes building much onshore wind capacity attractive with low uncertainty,
+Therefore, \cref{fig:sensitivity} expands the previous view by additionally
+showing how the cost of a technology influences its deployment while displaying
+the remaining uncertainty induced by other cost parameters. The overall tendency
+is easily explained: the cheaper a technology becomes, the more it is built.
+However, changes of slope and effects on the uncertainty range as one cost
+parameter is swept are insightful still. For instance, \cref{fig:sensitivity}
+reveals that battery storage becomes significantly more attractive economically
+once its annuity falls below 75 EUR/kW/a (including 6h energy capacity at full
+power output) hydrogen storage features a steady slope. A low cost of onshore
+wind makes building much onshore wind capacity attractive with low uncertainty,
 whereas if onshore wind costs are high how much is built greatly depends on
 other cost parameters. The opposite behaviour is observed for offshore wind and
 solar. The cost of hydrogen storage mostly causes the limited uncertainty about
@@ -145,12 +147,12 @@ towards inputs at least-cost solutions only. Yet, it has been previously shown
 that even for a single cost parameter set a wide array of technologically
 diverse but similarly costly solutions exists \cite{nearoptimal}. Hence, we now
 examine how technology cost uncertainty affects the shape of the space of
-near-optimal solutions.
+near-optimal alternatives within 8\% of the least-cost solution.
 
-By identifying feasible alternatives common to all, few or no cost samples, we
-outline low-cost solutions common to most parameter sets (e.g. above 90\%
-contour) as well as system layouts that do not meet low-cost criteria under
-nearly no circumstances for varying $\epsilon$ in \cref{fig:fuzzycone}. For each
+By identifying feasible alternatives common to all, few or no cost samples, in
+\cref{fig:fuzzycone} we outline low-cost solutions common to most parameter sets
+(e.g. above 90\% contour) as well as system layouts that do not meet low-cost
+criteria under nearly no circumstances for varying $\epsilon$. For each
 technology and cost sample, the minimum and maximum capacities obtained for
 increasing cost penalties $\epsilon$ form a cone of an upper and a lower Pareto
 front, starting from a common least-cost solution. These Pareto fronts delineate
@@ -158,7 +160,7 @@ boundaries beyond which no criterion, neither reducing system cost nor
 extremising the capacity of a technology, can be improved without depressing the
 other. By arguments of convexity, the capacity ranges contained by the cone can
 be near-optimal and feasible, given a degree of freedom in the other
-technologies. From optimisation theory, we know that the cones widen up for
+technologies. From optimisation theory, we also know that the cones widen up for
 increased slacks. As we consider technology cost uncertainty, the cone will look
 slightly different for each sample causing the fuzziness of the boundaries. The
 contour lines represent the frequency a solution is inside the near-optimal cone
