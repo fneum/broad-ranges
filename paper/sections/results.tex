@@ -5,24 +5,32 @@
     \includegraphics[width=.95\textwidth]{violins/violin-capacities-high-prediction.pdf}
     \caption{
       Distribution of system cost, generation, storage, and transmission
-      in least-cost solutions.
+      in least-cost solutions. The dashed line in the
+      transmission line chart indicates today's existing transmission
+      capacities for comparison.
     }
     \label{fig:violin}
 \end{figure}
 
-Based on the uncertainty of cost inputs, the total annual system costs vary
-between 160 and 220 billion Euro per year, as displayed in \cref{fig:violin}.
-This means the most pessimistic cost projections entail about 40\% higher cost
-than the most optimistic projections. All least-cost solutions build at least
-350 GW solar and 600 GW wind, but no more than 1100 GW. While wind capacities
-tend towards higher values, solar capacities tend towards lower values. We
-observe that least-cost solutions clearly prefer onshore over offshore wind, yet
-onshore wind features the highest uncertainty range alongside battery storage.
-The cost optimum gravitates towards hydrogen storage rather than battery storage
-unless battery storage becomes very cheap. There are no least-cost solutions
-without hydrogen, only some without battery storage. Transmission network
-expansion is least affected by cost uncertainty and consistently doubled
-compared to today's capacities.
+\todo{explain here the bars and dots?}
+
+We explore the impacts of cost uncertainty in a spatially and temporally
+resolved model of the European power system with fully renewable generation and
+zero direct carbon dioxide emissions. Based on sampling the uncertainty of cost
+inputs given by the DEA \cite{DEA}, the total annual system costs vary between
+160 and 220 billion Euro per year, as displayed in \cref{fig:violin}. This means
+the most pessimistic cost projections entail about 40\% higher cost than the
+most optimistic projections. All least-cost solutions build at least 350 GW
+solar and 600 GW wind, but none more than 1100 GW of wind. While wind capacities
+tend to cluster towards higher values, solar capacities tend towards lower
+values. We observe that least-cost solutions clearly prefer onshore over
+offshore wind, yet onshore wind features the highest uncertainty range alongside
+battery storage. The cost optimum gravitates towards hydrogen storage rather
+than battery storage unless battery storage becomes very cheap. There are no
+least-cost solutions without the long-duration storage provided by hydrogen,
+only some without battery storage. Transmission network expansion is least
+affected by cost uncertainty and consistently doubled compared to today's
+capacities.
 
 Although these results outline the extent to which cost uncertainty affects
 cost-optimal designs, the insights from the observed ranges are limited because
@@ -100,7 +108,7 @@ is easily explained: the cheaper a technology becomes, the more it is built.
 However, changes of slope and effects on the uncertainty range as one cost
 parameter is swept are insightful still. For instance, \cref{fig:sensitivity}
 reveals that battery storage becomes significantly more attractive economically
-once its annuity falls below 75 EUR/kW/a (including 6h energy capacity at full
+once its annuity falls below 75 EUR/kW/a\todo{translate into CAPEX!} (including 6h energy capacity at full
 power output) hydrogen storage features a steady slope. A low cost of onshore
 wind makes building much onshore wind capacity attractive with low uncertainty,
 whereas if onshore wind costs are high how much is built greatly depends on
@@ -110,7 +118,7 @@ cost-optimal levels of grid expansion. As the cost of hydrogen storage falls,
 less grid reinforcement is chosen.
 
 But since the presented sensitivity of capacities towards their own cost only
-exhibit a fraction of all sensitivities, we further apply a more systematic a
+exhibit a fraction of all sensitivities, we further apply a more systematic
 variance-based global sensitivity analysis, which have been applied in energy
 systems analysis e.g.~in
 \cite{trondle_trade-offs_2020,mavromatidis_uncertainty_2018}. Sensitivity
@@ -133,21 +141,23 @@ and battery costs. The amount of hydrogen storage is influenced by battery and
 hydrogen storage cost alike. Although there are noticeable higher-order effects,
 which are most extensive for transmission, the first-order effects dominate.
 Strikingly, the volume of transmission network expansion strongly depends on the
-cost of hydrogen storage, which can be explained by the synoptic spatio-temporal
-scale of wind power variability across the European continent which both
-hydrogen storage and transmission networks can balance. While hydrogen storage
-typically balances multi-week variations in time, continent-spanning
-transmission networks exploit the circumstance that as weather systems traverse
-the continent, it is likely always to be windy somewhere in Europe.
+cost of hydrogen storage. This can be explained because they both compete to
+balance out the large weather systems crossing the continent which cause in
+particular wind variations. Hydrogen storage can balance the multi-week transit
+of weather systems in time, whereas transmission networks can smooth them in space.
+While hydrogen storage typically balances multi-week variations in time,
+continent-spanning transmission networks exploit the circumstance that as
+weather systems traverse the continent, it is likely always to be windy
+somewhere in Europe.
 
 \usection{Fuzzy Near-Optimal Corridors with Increasing Cost Slack}{sec:sub:fuzzy}
 
 So far, we quantified the output uncertainty and analysed the sensitivity
-towards inputs at least-cost solutions only. Yet, it has been previously shown
+towards inputs at least-cost solutions only. However, it has been previously shown
 that even for a single cost parameter set a wide array of technologically
-diverse but similarly costly solutions exists \cite{nearoptimal}. Hence, we now
+diverse but similarly costly solutions exists \cite{nearoptimal}. We now
 examine how technology cost uncertainty affects the shape of the space of
-near-optimal alternatives within 8\% of the least-cost solution.
+near-optimal alternatives within 8\%\todo{why 8\%?} of the least-cost solution.
 
 By identifying feasible alternatives common to all, few or no cost samples, in
 \cref{fig:fuzzycone} we outline low-cost solutions common to most parameter sets
@@ -163,9 +173,9 @@ be near-optimal and feasible, given a degree of freedom in the other
 technologies. From optimisation theory, we also know that the cones widen up for
 increased slacks. As we consider technology cost uncertainty, the cone will look
 slightly different for each sample causing the fuzziness of the boundaries. The
-contour lines represent the frequency a solution is inside the near-optimal cone
+contour lines represent the frequency with which a solution is inside the near-optimal cone
 over the whole parameter space. This is calculated from the overlap of many
-cones, each representing a set of cost assumptions. The wider the displayed
+cones, each representing a different set of cost assumptions. The wider the displayed
 contour lines are apart, the more uncertainty exists about the boundaries. The
 closer contour lines are together, the more specific the limits are. The height
 of the quantiles quantifies flexibility for a given level of certainty and
@@ -244,14 +254,14 @@ between 100 GW and 1000 GW appears feasible as long as other substituting
 technologies are built and suitably sited. In comparison to onshore wind, the
 uncertainty about minimal solar requirements is smaller.
 
-The level of required transmission expansion is least affected by the cost uncertainty.
+The level of required transmission expansion is least affected by the cost uncertainty.\todo{Perhaps because we didn't include cost uncertainty on transmission?}
 To remain within $\epsilon=8\%$ it is just as likely feasible to
 plan for moderate grid reinforcement by 30\% as
 is initiating extensive remodelling of the grid by tripling the transmission volume
 compared to what is currently in operation.
 These results indicate that in any case some transmission reinforcement
 to balance renewable variations across the continent appears to be essential.
-Hydrogen storage, symbolising long-term storage, also gives the impression of a vital technology in many cases.
+Hydrogen storage, symbolising long-term storage, also is a vital technology in many cases.
 Building 100 GW of hydrogen storage capacity is likely viable within 2\% of the cost optimum
 and, even at $\epsilon=8\%$, only 25\% of cost samples require no long-term storage;
 when battery costs are exceptionally low.
@@ -300,12 +310,18 @@ However, especially battery storage exhibits a large degree of freedom to build 
     }
     \vspace{1cm}
     \caption{
-      Space of near-optimal solutions by selected pairs of technologies under cost uncertainty (a)-(c).
-    Just like in \cref{fig:fuzzycone}, the contour lines depict the overlap of the space of near-optimal alternatives across the parameter space.
-    It can be thought of as the cross-section of the probabilistic near-optimal feasible space for a given $\epsilon$
-    in two technology dimensions and highlights that the extremes of two technologies from \cref{fig:fuzzycone} cannot be achieved simultaneously.
-    Plots (d)-(e) show the distribution of total system cost, generation, storage, and transmission capacities
-    for two near-optimal search directions with $\epsilon=8\%$ system cost slack.
+      Space of near-optimal solutions by selected pairs of technologies
+      under cost uncertainty (a)-(c). Just like in \cref{fig:fuzzycone}, the
+      contour lines depict the overlap of the space of near-optimal alternatives
+      across the parameter space. It can be thought of as the cross-section of
+      the probabilistic near-optimal feasible space for a given $\epsilon$ in
+      two technology dimensions and highlights that the extremes of two
+      technologies from \cref{fig:fuzzycone} cannot be achieved simultaneously.
+      Plots (d)-(e) show the distribution of total system cost, generation,
+      storage, and transmission capacities for two near-optimal search
+      directions with $\epsilon=8\%$ system cost slack. The dashed line in the
+      transmission line chart indicates today's existing transmission
+      capacities.
     }
     \label{fig:dependencies}
 \end{figure}
@@ -314,7 +330,7 @@ The fuzzy cones from \cref{fig:fuzzycone} look at trade-offs between system cost
 and single techologies, assuming that the siting and deployment of other
 technologies can be heavily optimised. But as there are dependencies between the
 technologies, in \crefrange{fig:dependencies:ws}{fig:dependencies:hb} we
-furthermore evaluate trade-offs between technologies for three selected pairs at
+furthermore evaluate trade-offs between technologies for three selected pairs of technologies at
 fixed system cost increase of $\epsilon=6\%$, addressing which
 \textit{combinations} of wind and solar capacity, offshore and onshore turbines,
 and hydrogen and battery storage are likely to be cost-efficient.
