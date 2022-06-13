@@ -7,12 +7,11 @@
       Distribution of system cost, generation, storage, and transmission
       in least-cost solutions. The dashed line in the
       transmission line chart indicates today's existing transmission
-      capacities for comparison.
+      capacities for comparison. Violin range is limited to the range of observed data.
+      Boxplots show median, interquartile range, and upper/lower quartile $\pm 1.5$ times interquartile range.
     }
     \label{fig:violin}
 \end{figure}
-
-\todo{explain here the bars and dots?}
 
 We explore the impacts of cost uncertainty in a spatially and temporally
 resolved model of the European power system with fully renewable generation and
@@ -69,7 +68,6 @@ direction.
     \end{subfigure}
     \vspace{-0.3cm}
     \caption{
-        % TODO TB Why annuity? Can't we use the overnight cost?
       Sensitivity of capacities towards their own technology cost.
       The median (Q50) alongside the 5\%, 25\%, 75\%, and 95\% quantiles (Q5--Q95) display
       the sensitivity subject to the uncertainty induced by other cost parameters.
@@ -153,11 +151,12 @@ somewhere in Europe.
 \usection{Fuzzy Near-Optimal Corridors with Increasing Cost Slack}{sec:sub:fuzzy}
 
 So far, we quantified the output uncertainty and analysed the sensitivity
-towards inputs at least-cost solutions only. However, it has been previously shown
-that even for a single cost parameter set a wide array of technologically
-diverse but similarly costly solutions exists \cite{nearoptimal}. We now
-examine how technology cost uncertainty affects the shape of the space of
-near-optimal alternatives within 8\%\todo{why 8\%?} of the least-cost solution.
+towards inputs at least-cost solutions only. However, it has been previously
+shown that even for a single cost parameter set a wide array of technologically
+diverse but similarly costly solutions exists \cite{nearoptimal}. We now examine
+how technology cost uncertainty affects the shape of the space of near-optimal
+alternatives within 8\% of the least-cost solution. We do not extend beyond this
+value because most Pareto fronts have flattened out at that point.
 
 By identifying feasible alternatives common to all, few or no cost samples, in
 \cref{fig:fuzzycone} we outline low-cost solutions common to most parameter sets
@@ -254,20 +253,21 @@ between 100 GW and 1000 GW appears feasible as long as other substituting
 technologies are built and suitably sited. In comparison to onshore wind, the
 uncertainty about minimal solar requirements is smaller.
 
-The level of required transmission expansion is least affected by the cost uncertainty.\todo{Perhaps because we didn't include cost uncertainty on transmission?}
-To remain within $\epsilon=8\%$ it is just as likely feasible to
-plan for moderate grid reinforcement by 30\% as
-is initiating extensive remodelling of the grid by tripling the transmission volume
-compared to what is currently in operation.
-These results indicate that in any case some transmission reinforcement
-to balance renewable variations across the continent appears to be essential.
-Hydrogen storage, symbolising long-term storage, also is a vital technology in many cases.
-Building 100 GW of hydrogen storage capacity is likely viable within 2\% of the cost optimum
-and, even at $\epsilon=8\%$, only 25\% of cost samples require no long-term storage;
-when battery costs are exceptionally low.
-Overall, 90\% of cases appear to function without any short-term battery storage
-while the system cost rises by 4\% at most.
-However, especially battery storage exhibits a large degree of freedom to build more.
+The level of required transmission expansion is least affected by the cost
+uncertainty. To remain within $\epsilon=8\%$ it is just as likely feasible to
+plan for moderate grid reinforcement by 30\% as is initiating extensive
+remodelling of the grid by tripling the transmission volume compared to what is
+currently in operation. One reason for this is perhaps that cost uncertainty on
+building new transmission lines was not included as it is a quite mature
+technology. These results indicate that in any case some transmission
+reinforcement to balance renewable variations across the continent appears to be
+essential. Hydrogen storage, symbolising long-term storage, also is a vital
+technology in many cases. Building 100 GW of hydrogen storage capacity is likely
+viable within 2\% of the cost optimum and, even at $\epsilon=8\%$, only 25\% of
+cost samples require no long-term storage; when battery costs are exceptionally
+low. Overall, 90\% of cases appear to function without any short-term battery
+storage while the system cost rises by 4\% at most. However, especially battery
+storage exhibits a large degree of freedom to build more.
 
 \usection{Probabilistic Near-Optimal Feasible Space in Two Technology Dimensions}{sec:sub:two-dim}
 
