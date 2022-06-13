@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.2.0
+  rev: v4.2.0
   hooks:
   - id: trailing-whitespace
   #- id: end-of-file-fixer
@@ -13,11 +13,11 @@ repos:
 #   hooks:
 #   - id: reuse
 - repo: https://github.com/psf/black
-  rev: 20.8b1
+  rev: 22.3.0
   hooks:
   - id: black
 - repo: https://github.com/aflc/pre-commit-jupyter
-  rev: v1.0.0
+  rev: v1.2.1
   hooks:
   - id: jupyter-notebook-cleanup
     args:
