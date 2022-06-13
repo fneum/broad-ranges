@@ -270,27 +270,24 @@ convert the weather data to hourly capacity factors and aggregate these to each 
 Historical country-level load time series are taken from ENTSO-E statistics and are
 heuristically distributed to each grid node to 40\% by population density and to 60\% by gross domestic product.
 
-% TODO techno-economic parameters
-
 \usubsection{Technology Cost Uncertainty}{sec:uncertainty}
 
 \begin{SCtable}
     \begin{small}
         \begin{tabular}{cccc}
             \toprule
-            Technology & Lower Annuity & Upper Annuity & Unit  \\ \midrule
-            Onshore Wind & 73 & 109 & EUR/kW/a \\
-            Offshore Wind & 178 & 245 & EUR/kW/a \\ % this includes connection cost!
-            Solar & 36 & 53 & EUR/kW/a \\
-            Battery & 30 & 125 & EUR/kW/a \\
-            Hydrogen & 111 & 259 & EUR/kW/a \\ \bottomrule
+            Technology & Lower CAPEX & Upper CAPEX & Unit  \\ \midrule
+            Onshore Wind & 800 & 1190 & EUR/kW \\
+            Offshore Wind & 1420 & 1950 & EUR/kW \\ % no connection cost
+            Solar & 420 & 620 & EUR/kW \\
+            Battery & 316 & 1306 & EUR/kW \\
+            Hydrogen & 668 & 2002 & EUR/kW \\ \bottomrule
+            % FOM and lifetime may also vary!
         \end{tabular}
     \end{small}
     \caption[Technology Cost Uncertainty]{Technology cost uncertainty using optimistic and pessimistic assumptions from the Danish Energy Agency \cite{DEA}.}
     \label{tab:costuncertainty}
 \end{SCtable}
-
-\todo{convert to CAPEX+FOM with lifetime and discount rate}
 
 % General
 

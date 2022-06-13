@@ -8,7 +8,7 @@
       in least-cost solutions. The dashed line in the
       transmission line chart indicates today's existing transmission
       capacities for comparison. Violin range is limited to the range of observed data.
-      Boxplots show median, interquartile range, and upper/lower quartile $\pm 1.5$ times interquartile range.
+      Boxplots show median, interquartile range, and upper/lower quartile $\pm 1.5$ times the interquartile range.
     }
     \label{fig:violin}
 \end{figure}
@@ -44,33 +44,34 @@ direction.
 \begin{figure}
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{onshore wind}
-        \includegraphics[width=\textwidth]{1D/1D-onwind-onwind-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-onwind-onwind-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{offshore wind}
-        \includegraphics[width=\textwidth]{1D/1D-offwind-offwind-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-offwind-offwind-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{solar}
-        \includegraphics[width=\textwidth]{1D/1D-solar-solar-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-solar-solar-high.pdf}
     \end{subfigure} \\
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{battery storage}
-        \includegraphics[width=\textwidth]{1D/1D-battery-battery-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-battery-battery-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{hydrogen storage}
-        \includegraphics[width=\textwidth]{1D/1D-H2-H2-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-H2-H2-high.pdf}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \caption{transmission}
-        \includegraphics[width=\textwidth]{1D/1D-transmission-H2-high.pdf}
+        \includegraphics[width=\textwidth]{../notebooks/graphics/1D/1D-transmission-H2-high.pdf}
     \end{subfigure}
     \vspace{-0.3cm}
     \caption{
       Sensitivity of capacities towards their own technology cost.
       The median (Q50) alongside the 5\%, 25\%, 75\%, and 95\% quantiles (Q5--Q95) display
       the sensitivity subject to the uncertainty induced by other cost parameters.
+      Dots represent samples of the high-fidelity model runs.
     }
     \label{fig:sensitivity}
 \end{figure}
@@ -106,7 +107,7 @@ is easily explained: the cheaper a technology becomes, the more it is built.
 However, changes of slope and effects on the uncertainty range as one cost
 parameter is swept are insightful still. For instance, \cref{fig:sensitivity}
 reveals that battery storage becomes significantly more attractive economically
-once its annuity falls below 75 EUR/kW/a\todo{translate into CAPEX!} (including 6h energy capacity at full
+once its cost falls below 785 EUR/kW (including 6-hour energy capacity at full
 power output) hydrogen storage features a steady slope. A low cost of onshore
 wind makes building much onshore wind capacity attractive with low uncertainty,
 whereas if onshore wind costs are high how much is built greatly depends on
