@@ -34,7 +34,3 @@ License: MIT
 Files: rules/*.smk
 Copyright: : 2021-2022 Fabian Neumann, Tom Brown
 License: MIT
-
-<!-- Files: */*.ipynb, scripts/*, Snakefile, */*.smk, notebooks/*
-Copyright: : 2021-2022 Fabian Neumann, Tom Brown
-License: MIT -->
