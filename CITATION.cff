@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "Broad Ranges of Investment Configurations for Renewable Power Systems, Robust to Cost Uncertainty and Near-Optimality"
+repository: https://github.com/fneum/broad-ranges
+version: 0.1.0
+doi: "N/A"
+date-released: "14-06-2022"
+license: MIT
+authors:
+  - family-names: Neumann
+    given-names: Fabian
+    orcid: https://orcid.org/0000-0001-8551-1480
+  - family-names: Brown
+    given-names: Tom
+    orcid: https://orcid.org/0000-0001-5898-1911
