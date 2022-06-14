@@ -6,12 +6,13 @@ results
 *.ipynb_checkpoints
 *.ipynb
 summary
-*.nc
 *.log
+*_*
+
+## git lfs
 *.pdf
 *.png
-*_*
-losses.pdf
+*.nc
 
 dconf/
 ## Core latex/pdflatex auxiliary files:
