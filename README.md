@@ -3,7 +3,7 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/fneum/broad-ranges)](https://api.reuse.software/info/github.com/fneum/broad-ranges)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/fneum/broad-ranges?include_prereleases)
 ![Size](https://img.shields.io/github/repo-size/fneum/broad-ranges)
-[![Zenodo](https://zenodo.org/badge/DOI/TBA.svg)](https://doi.org/TBA)
+[![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.6642651.svg)](https://doi.org/10.5281/zenodo.6642651)
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.0.0-brightgreen.svg?style=flat)](https://snakemake.readthedocs.io)
 
 This repository contains the entire scientific project, including code and manuscript.

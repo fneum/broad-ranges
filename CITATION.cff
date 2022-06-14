@@ -2,7 +2,7 @@ cff-version: 1.2.0
 title: "Broad Ranges of Investment Configurations for Renewable Power Systems, Robust to Cost Uncertainty and Near-Optimality"
 repository: https://github.com/fneum/broad-ranges
 version: 0.1.0
-doi: "N/A"
+doi: "10.5281/zenodo.6642651"
 date-released: "14-06-2022"
 license: MIT
 authors:
