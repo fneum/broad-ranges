@@ -4,4 +4,4 @@
 
 ## License
 
-[MIT](LICENSE)
+Different licenses apply to different parts of the repository.

@@ -1,0 +1,40 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: broad-ranges
+Upstream-Contact: Fabian Neumann <f.neumann@tu-berlin.de>
+Source: https://github.com/fneum/broad-ranges
+
+Files: *
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: CC0-1.0
+
+Files: notebooks/2021-11-graphics/*
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: CC-BY-4.0
+
+Files: results/*
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: CC-BY-4.0
+
+Files: data/*
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: CC-BY-4.0
+
+Files: paper/*
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: CC-BY-4.0
+
+Files: notebooks/*.ipynb
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: MIT
+
+Files: Snakefile
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: MIT
+
+Files: rules/*.smk
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: MIT
+
+<!-- Files: */*.ipynb, scripts/*, Snakefile, */*.smk, notebooks/*
+Copyright: : 2021-2022 Fabian Neumann, Tom Brown
+License: MIT -->

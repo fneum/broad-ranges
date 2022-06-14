@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: : 2021-2022 Fabian Neumann, Tom Brown
+#
+# SPDX-License-Identifier: MIT
+
 """
 Helper functions and classes used within multiple snakemake rules.
 """
