@@ -1,0 +1,282 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Trutnevyte2016}
+E.~Trutnevyte, Does cost optimization approximate the real-world energy
+  transition?, Energy 106 (2016) 182--193.
+\newblock \href {https://doi.org/10/f8vrcz} {\path{doi:10/f8vrcz}}.
+
+\bibitem{pye_modelling_2020}
+S.~Pye, O.~Broad, C.~Bataille, P.~Brockway, H.~E. Daly, R.~Freeman, A.~Gambhir,
+  O.~Geden, F.~Rogan, S.~Sanghvi, J.~Tomei, I.~Vorushylo, J.~Watson, Modelling
+  net-zero emissions energy systems requires a change in approach, Climate
+  Policy (2020) 1--10\href {https://doi.org/10/ghdkp9} {\path{doi:10/ghdkp9}}.
+
+\bibitem{trondle_trade-offs_2020}
+T.~Tröndle, J.~Lilliestam, S.~Marelli, S.~Pfenninger, Trade-{Offs} between
+  {Geographic} {Scale}, {Cost}, and {Infrastructure} {Requirements} for {Fully}
+  {Renewable} {Electricity} in {Europe}, Joule (2020) S2542435120303366\href
+  {https://doi.org/10/gg8zk2} {\path{doi:10/gg8zk2}}.
+
+\bibitem{yue_review_2018}
+X.~Yue, S.~Pye, J.~DeCarolis, F.~G. Li, F.~Rogan, B.~O. Gallach\`oir, A review
+  of approaches to uncertainty assessment in energy system optimization models,
+  Energy Strategy Reviews 21 (2018) 204--217.
+\newblock \href {https://doi.org/10/gf75x4} {\path{doi:10/gf75x4}}.
+
+\bibitem{pye_assessing_2018}
+S.~Pye, F.~G. Li, A.~Petersen, O.~Broad, W.~McDowall, J.~Price, W.~Usher,
+  Assessing qualitative and quantitative dimensions of uncertainty in energy
+  modelling for policy support in the {United} {Kingdom}, Energy Research \&
+  Social Science 46 (2018) 332--344.
+\newblock \href {https://doi.org/10/gf8nvv} {\path{doi:10/gf8nvv}}.
+
+\bibitem{nearoptimal}
+F.~Neumann, T.~Brown, The near-optimal feasible space of a renewable power
+  system model, Electric Power Systems Research 190 (2021) 106690,
+  arXiv:1910.01891.
+\newblock \href {https://doi.org/10/ghcpr2} {\path{doi:10/ghcpr2}}.
+
+\bibitem{lombardi_policy_2020}
+F.~Lombardi, B.~Pickering, E.~Colombo, S.~Pfenninger, Policy {Decision}
+  {Support} for {Renewables} {Deployment} through {Spatially} {Explicit}
+  {Practically} {Optimal} {Alternatives}, Joule (2020) S2542435120303482\href
+  {https://doi.org/10/gg8z6v} {\path{doi:10/gg8z6v}}.
+
+\bibitem{sasse_regional_2020}
+J.-P. Sasse, E.~Trutnevyte, Regional impacts of electricity system transition
+  in {Central} {Europe} until 2035, Nature Communications 11~(1) (2020) 4972.
+\newblock \href {https://doi.org/10/ghdwjs} {\path{doi:10/ghdwjs}}.
+
+\bibitem{mccollum_energy_2020}
+D.~L. McCollum, A.~Gambhir, J.~Rogelj, C.~Wilson, Energy modellers should
+  explore extremes more systematically in scenarios, Nature Energy 5~(2) (2020)
+  104--107.
+\newblock \href {https://doi.org/10/ggk3hj} {\path{doi:10/ggk3hj}}.
+
+\bibitem{schlachtberger_cost_2018}
+D.~P. Schlachtberger, T.~Brown, M.~Schäfer, S.~Schramm, M.~Greiner, Cost
+  optimal scenarios of a future highly renewable {European} electricity system:
+  {Exploring} the influence of weather data, cost parameters and policy
+  constraints, Energy 163 (2018) 100--114.
+\newblock \href {https://doi.org/10/gfk5cj} {\path{doi:10/gfk5cj}}.
+
+\bibitem{DeCarolis2016}
+J.~F. DeCarolis, S.~Babaee, B.~Li, S.~Kanungo, Modelling to generate
+  alternatives with an energy system optimization model, Environmental
+  Modelling and Software 79 (2016) 300--310.
+\newblock \href {https://doi.org/10/f8n923} {\path{doi:10/f8n923}}.
+
+\bibitem{Li2017}
+F.~G. Li, E.~Trutnevyte, Investment appraisal of cost-optimal and near-optimal
+  pathways for the {UK} electricity sector transition to 2050, Applied Energy
+  189 (2017) 89--109.
+\newblock \href {https://doi.org/10/f9qtrf} {\path{doi:10/f9qtrf}}.
+
+\bibitem{nacken_integrated_2019}
+L.~Nacken, F.~Krebs, T.~Fischer, C.~Hoffmann, Integrated renewable energy
+  systems for {Germany} – {A} model-based exploration of the decision space,
+  2019, p.~8.
+
+\bibitem{Price2017}
+J.~Price, I.~Keppo, Modelling to generate alternatives: {A} technique to
+  explore uncertainty in energy-environment-economy models, Applied Energy 195
+  (2017) 356--369.
+\newblock \href {https://doi.org/10/ggfzqq} {\path{doi:10/ggfzqq}}.
+
+\bibitem{pedersen_modeling_2020}
+T.~T. Pedersen, M.~Victoria, M.~G. Rasmussen, G.~B. Andresen, Modeling all
+  alternative solutions for highly renewable energy systems, arXiv:2010.00836
+  (Oct. 2020).
+
+\bibitem{ludererImpactDeclining2021}
+G.~Luderer, S.~Madeddu, L.~Merfort, F.~Ueckerdt, M.~Pehl, R.~Pietzcker,
+  M.~Rottoli, F.~Schreyer, N.~Bauer, L.~Baumstark, C.~Bertram, A.~Dirnaichner,
+  F.~Humpenöder, A.~Levesque, A.~Popp, R.~Rodrigues, J.~Strefler, E.~Kriegler,
+  Impact of declining renewable energy costs on electrification in low-emission
+  scenarios, Nature Energy (Nov. 2021).
+\newblock \href {https://doi.org/10.1038/s41560-021-00937-z}
+  {\path{doi:10.1038/s41560-021-00937-z}}.
+
+\bibitem{victoriaSolarPhotovoltaics2021}
+M.~Victoria, N.~Haegel, I.~M. Peters, R.~Sinton, A.~{Jäger-Waldau}, C.~{del
+  Cañizo}, C.~Breyer, M.~Stocks, A.~Blakers, I.~Kaizuka, K.~Komoto, A.~Smets,
+  Solar photovoltaics is ready to power a sustainable future, Joule (2021)
+  S2542435121001008\href {https://doi.org/10/gjk5bx} {\path{doi:10/gjk5bx}}.
+
+\bibitem{jaxa-rozenSourcesUncertainty2021}
+M.~{Jaxa-Rozen}, E.~Trutnevyte, Sources of uncertainty in long-term global
+  scenarios of solar photovoltaic technology, Nature Climate Change 11~(3)
+  (2021) 266--273.
+\newblock \href {https://doi.org/10/fzt4} {\path{doi:10/fzt4}}.
+
+\bibitem{mavromatidis_uncertainty_2018}
+G.~Mavromatidis, K.~Orehounig, J.~Carmeliet, Uncertainty and global sensitivity
+  analysis for the optimal design of distributed energy systems, Applied Energy
+  214 (2018) 219--238.
+\newblock \href {https://doi.org/10/gc6n48} {\path{doi:10/gc6n48}}.
+
+\bibitem{pizarro-alonso_uncertainties_2019}
+A.~Pizarro-Alonso, H.~Ravn, M.~Münster, Uncertainties towards a fossil-free
+  system with high integration of wind energy in long-term planning, Applied
+  Energy 253 (2019) 113528.
+\newblock \href {https://doi.org/10/ghfgtx} {\path{doi:10/ghfgtx}}.
+
+\bibitem{fais_impact_2016}
+B.~Fais, I.~Keppo, M.~Zeyringer, W.~Usher, H.~Daly, Impact of technology
+  uncertainty on future low-carbon pathways in the {UK}, Energy Strategy
+  Reviews 13-14 (2016) 154--168.
+\newblock \href {https://doi.org/10/f9gmpd} {\path{doi:10/f9gmpd}}.
+
+\bibitem{usher_value_2015}
+W.~Usher, The {Value} of {Global} {Sensitivity} {Analysis} for {Energy}
+  {System} {Modelling} (2015) 29.
+
+\bibitem{pypsaeur}
+J.~H\"orsch, F.~Hofmann, D.~Schlachtberger, T.~Brown, {PyPSA}-{Eur}: {An} open
+  optimisation model of the {European} transmission system, Energy Strategy
+  Reviews 22 (2018) 207--215, arXiv:1806.01613.
+\newblock \href {https://doi.org/10/d294} {\path{doi:10/d294}}.
+
+\bibitem{DEA}
+{Danish Energy Agency},
+  \href{https://ens.dk/en/our-services/projections-and-models/technology-data}{Technology
+  data} (2020).
+\newline\urlprefix\url{https://ens.dk/en/our-services/projections-and-models/technology-data}
+
+\bibitem{sudret_global_2008}
+B.~Sudret, Global sensitivity analysis using polynomial chaos expansions,
+  Reliability Engineering \& System Safety 93~(7) (2008) 964--979.
+\newblock \href {https://doi.org/10/bjjp5r} {\path{doi:10/bjjp5r}}.
+
+\bibitem{cycleflows}
+J.~H\"orsch, H.~Ronellenfitsch, D.~Witthaut, T.~Brown, Linear optimal power
+  flow using cycle flows, Electric Power Systems Research 158 (2018) 126--135,
+  arXiv:1704.01881.
+\newblock \href {https://doi.org/10/gdb8kx} {\path{doi:10/gdb8kx}}.
+
+\bibitem{pypsa}
+T.~Brown, J.~H\"orsch, D.~Schlachtberger, {PyPSA}: {Python} for {Power}
+  {System} {Analysis}, Journal of Open Research Software 6 (2018) 4,
+  arXiv:1707.09913.
+\newblock \href {https://doi.org/10/gfb7m9} {\path{doi:10/gfb7m9}}.
+
+\bibitem{mavrotas_effective_2009}
+G.~Mavrotas, Effective implementation of the $\epsilon$-constraint method in
+  {Multi}-{Objective} {Mathematical} {Programming} problems, Applied
+  Mathematics and Computation 213~(2) (2009) 455--465.
+\newblock \href {https://doi.org/10/bwkzrt} {\path{doi:10/bwkzrt}}.
+
+\bibitem{snakemake}
+J.~Köster, S.~Rahmann, {Snakemake—a scalable bioinformatics workflow
+  engine}, Bioinformatics 28~(19) (2012) 2520--2522.
+\newblock \href {https://doi.org/10/gd2xzq} {\path{doi:10/gd2xzq}}.
+
+\bibitem{gritsevskyi_modeling_2000}
+A.~Gritsevskyi, N.~Nakićenovi, Modeling uncertainty of induced technological
+  change, Energy Policy 28~(13) (2000) 907--921.
+\newblock \href {https://doi.org/10/d4rkhb} {\path{doi:10/d4rkhb}}.
+
+\bibitem{yeh_review_2012}
+S.~Yeh, E.~S. Rubin, A review of uncertainties in technology experience curves,
+  Energy Economics 34~(3) (2012) 762--771.
+\newblock \href {https://doi.org/10/dzc2b4} {\path{doi:10/dzc2b4}}.
+
+\bibitem{heuberger_power_2017}
+C.~F. Heuberger, E.~S. Rubin, I.~Staffell, N.~Shah, N.~Mac~Dowell, Power
+  capacity expansion planning considering endogenous technology cost learning,
+  Applied Energy 204 (2017) 831--845.
+\newblock \href {https://doi.org/10/gcgs2v} {\path{doi:10/gcgs2v}}.
+
+\bibitem{mattsson_learning_2019}
+N.~Mattsson, Learning by modeling energy systems, Ph.D. thesis (2019).
+
+\bibitem{lisa_learning2022}
+E.~Zeyen, M.~Victoria, T.~Brown, Endogenous learning for green hydrogen in a
+  sector-coupled energy model for europeArXiv:2205.11901 (2022).
+\newblock \href {https://doi.org/10.48550/arXiv.2205.11901}
+  {\path{doi:10.48550/arXiv.2205.11901}}.
+
+\bibitem{moret_characterization_2017}
+S.~Moret, V.~Codina~Gironès, M.~Bierlaire, F.~Maréchal, Characterization of
+  input uncertainties in strategic energy planning models, Applied Energy 202
+  (2017) 597--617.
+\newblock \href {https://doi.org/10/gbsxmz} {\path{doi:10/gbsxmz}}.
+
+\bibitem{shirizadeh_how_2019}
+B.~Shirizadeh, Q.~Perrier, P.~Quirion, How sensitive are optimal fully
+  renewable power systems to technology cost uncertainty? (2019) 45.
+
+\bibitem{li_using_2020}
+P.-H. Li, S.~Pye, I.~Keppo, Using clustering algorithms to characterise
+  uncertain long-term decarbonisation pathways, Applied Energy 268 (2020)
+  114947.
+\newblock \href {https://doi.org/10/ghchgg} {\path{doi:10/ghchgg}}.
+
+\bibitem{moret_robust_2016}
+S.~Moret, M.~Bierlaire, F.~Maréchal, Robust {Optimization} for {Strategic}
+  {Energy} {Planning}, Informatica 27~(3) (2016) 625--648.
+\newblock \href {https://doi.org/10/f87mh8} {\path{doi:10/f87mh8}}.
+
+\bibitem{pilpola_analyzing_2020}
+S.~Pilpola, P.~D. Lund, Analyzing the effects of uncertainties on the modelling
+  of low-carbon energy system pathways, Energy 201 (2020) 117652.
+\newblock \href {https://doi.org/10/ggtk2r} {\path{doi:10/ggtk2r}}.
+
+\bibitem{Trutnevyte2013}
+E.~Trutnevyte, {EXPANSE} methodology for evaluating the economic potential of
+  renewable energy from an energy mix perspective, Applied Energy 111 (2013)
+  593--601.
+\newblock \href {https://doi.org/10/ftdb} {\path{doi:10/ftdb}}.
+
+\bibitem{lopion_cost_2019}
+{Lopion}, {Markewitz}, {Stolten}, {Robinius}, Cost {Uncertainties} in {Energy}
+  {System} {Optimization} {Models}: {A} {Quadratic} {Programming} {Approach}
+  for {Avoiding} {Penny} {Switching} {Effects}, Energies 12~(20) (2019) 4006.
+\newblock \href {https://doi.org/10/ghchff} {\path{doi:10/ghchff}}.
+
+\bibitem{palar_multi-fidelity_2016}
+P.~S. Palar, T.~Tsuchiya, G.~T. Parks, Multi-fidelity non-intrusive polynomial
+  chaos based on regression, Computer Methods in Applied Mechanics and
+  Engineering 305 (2016) 579--606.
+\newblock \href {https://doi.org/10/f8jsb6} {\path{doi:10/f8jsb6}}.
+
+\bibitem{fajraoui_optimal_2017}
+N.~Fajraoui, S.~Marelli, B.~Sudret, On optimal experimental designs for
+  {Sparse} {Polynomial} {Chaos} {Expansions}, arXiv:1703.05312 (Mar. 2017).
+
+\bibitem{gratiet_metamodel-based_2015}
+L.~L. Gratiet, S.~Marelli, B.~Sudret, Metamodel-based sensitivity analysis:
+  {Polynomial} chaos expansions and {Gaussian} processes, arXiv:1606.04273
+  (2015) 1--37\href {https://doi.org/10/ggxtbp} {\path{doi:10/ggxtbp}}.
+
+\bibitem{muhlpfordt_uncertainty_2020}
+T.~Mühlpfordt, Uncertainty {Quantification} via {Polynomial} {Chaos}
+  {Expansion} – {Methods} and {Applications} for {Optimization} of {Power}
+  {Systems} (2020).
+\newblock \href {https://doi.org/10/ggxtbr} {\path{doi:10/ggxtbr}}.
+
+\bibitem{feinberg_chaospy_2015}
+J.~Feinberg, H.~P. Langtangen, Chaospy: {An} open source tool for designing
+  methods of uncertainty quantification, Journal of Computational Science 11
+  (2015) 46--57.
+\newblock \href {https://doi.org/10/gddwzk} {\path{doi:10/gddwzk}}.
+
+\bibitem{ng_multifidelity_2012}
+L.~W.-T. Ng, M.~Eldred, Multifidelity {Uncertainty} {Quantification} {Using}
+  {Non}-{Intrusive} {Polynomial} {Chaos} and {Stochastic} {Collocation}, in:
+  53rd {AIAA}/{ASME}/{ASCE}/{AHS}/{ASC} {Structures}, {Structural} {Dynamics}
+  and {Materials} {Conference}, American Institute of Aeronautics and
+  Astronautics, Honolulu, Hawaii, 2012.
+\newblock \href {https://doi.org/10/ghknms} {\path{doi:10/ghknms}}.
+
+\bibitem{hosder2007}
+S.~Hosder, R.~Walters, M.~Balch, Efficient Sampling for Non-Intrusive
+  Polynomial Chaos Applications with Multiple Uncertain Input Variables.
+\newblock \href {https://doi.org/10/ftdc} {\path{doi:10/ftdc}}.
+
+\end{thebibliography}
