@@ -76,7 +76,7 @@ Kichhoff's Voltage Law (KVL) imposes further constraints on the flow of AC lines
 Using linearised load flow assumptions, the voltage angle difference around every closed cycle in the
 network must add up to zero. We formulate this constraint using a cycle basis $C_{\ell c}$
 of the network graph where the independent cycles $c$ are expressed as
-directed linear combinations of lines $\ell$ \cite{cycleflows}.
+directed linear combinations of lines $\ell$.\cite{cycleflows}
 This leads to the constraints
 \begin{align}
     \sum_\ell C_{\ell c} \cdot x_\ell \cdot f_{\ell,t} = 0 \qquad\forall c,t
@@ -93,7 +93,7 @@ Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capac
 where $\overline{f}_\ell$ acts as a per-unit buffer capacity
 to protect against the outage of single circuits.
 
-This problem is implemented in the open-source tool PyPSA \cite{pypsa} and is solved by Gurobi.
+This problem is implemented in the open-source tool PyPSA\cite{pypsa} and is solved by Gurobi.
 Note, that it assumes perfect foresight for a single reference year based on which capacities are optimised.
 It does not include pathway optimisation, nor aspects of reserve power, or system stability.
 Changes of line expansion to line impedance are ignored.
@@ -102,7 +102,7 @@ Changes of line expansion to line impedance are ignored.
 
 Using the least-cost solution as an anchor, we use the
 $\epsilon$-constraint method from multi-objective optimisation
-to find near-optimal feasible solutions \cite{nearoptimal,mavrotas_effective_2009}.
+to find near-optimal feasible solutions.\cite{nearoptimal,mavrotas_effective_2009}
 For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
 and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
 in a space of continuous variables,
@@ -159,7 +159,7 @@ range of solar capacities at given $\epsilon$.
 For example, at $\alpha=0\%$ we look for the least wind capacity
 given that minimal solar capacities are built.
 An alternative but more complex approach to spanning the space of near-optimal solutions in multiple dimensions at a time
-using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}.
+using a quick hull algorithm was presented by Pedersen et al.~\cite{pedersen_modeling_2020}
 
 % ----------------- unused --------------------------
 % extremes of different technologies cannot be realised simultaneously.
@@ -201,8 +201,8 @@ range.
 The instances of the coordinated capacity expansion problem
  (see \nameref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
  the European power transmission system that combines high spatial and temporal
- resolution \cite{pypsaeur}. Because it only uses open data and every processing
- step is defined in a workflow \cite{snakemake}, we achieve a high level of
+ resolution.\cite{pypsaeur} Because it only uses open data and every processing
+ step is defined in a workflow,\cite{snakemake} we achieve a high level of
  transparency and reproducibility. In the following, we outline the main
  features and configurations, and refer to the supplementary material and Hörsch
  et al.~\cite{pypsaeur} for more details.
@@ -293,8 +293,8 @@ heuristically distributed to each grid node to 40\% by population density and to
 
 Uncertainty of technology cost projections is driven by two main factors:
 unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
-unclear deployment rates (i.e.~how much capacity will be built in the future) \cite{gritsevskyi_modeling_2000,yeh_review_2012}.
-As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails \cite{heuberger_power_2017,mattsson_learning_2019,lisa_learning2022},
+unclear deployment rates (i.e.~how much capacity will be built in the future).\cite{gritsevskyi_modeling_2000,yeh_review_2012}
+As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails,\cite{heuberger_power_2017,mattsson_learning_2019,lisa_learning2022}
 % While uncertainty about the latter could generally be addressed by modelling endogeneous
 % learning in an approach that includes multiple investment periods,
 % the exponential influence of the learning rate raises the computational complexity immensely
@@ -304,11 +304,11 @@ and a distribution that specifies which segments are more probable.
 % Ranges
 
 Ranges of cost projections are best chosen as wide as possible to avoid
-excluding any plausible scenarios
-\cite{moret_characterization_2017,mccollum_energy_2020}. When uncertainty has
+excluding any plausible scenarios.
+\cite{moret_characterization_2017,mccollum_energy_2020} When uncertainty has
 been considered in the literature, cost assumptions have commonly been modelled
-to vary between $\pm20\%$ and $\pm65\%$ depending on the technology's maturity
-\cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}.
+to vary between $\pm20\%$ and $\pm65\%$ depending on the technology's maturity.
+\cite{moret_characterization_2017,shirizadeh_how_2019,pizarro-alonso_uncertainties_2019,li_using_2020,trondle_trade-offs_2020}
 In this study, we consider uncertainty regarding the annuities of onshore wind,
 offshore wind, solar PV, battery and hydrogen storage systems. The latter
 comprises the cost of electrolysis, cavern storage, and fuel cells. For solar PV
@@ -320,24 +320,23 @@ discount rate, since multiple combinations lead to the same annuity. We built
 the uncertainty ranges presented in \cref{tab:costuncertainty} from the
 optimistic and pessimistic technology cost and lifetime projections for the year
 2050 from the Danish Energy Agency, which correspond to 90\% confidence
-intervals \cite{DEA}. In cases where no uncertainty ranges were provided
+intervals.\cite{DEA} In cases where no uncertainty ranges were provided
 for the year 2050, such as for rooftop PV, projections for the year 2030
 define the upper end of the uncertainty interval.
 
 % Distributions
 
-Distributions of cost projections have been assumed to follow normal
-\cite{mavromatidis_uncertainty_2018} or triangular distributions
-\cite{li_using_2020}. But independent uniform distributions are the most
-prevalent assumption
-\cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}.
-This approach is backed by the maximum entropy approach
-\cite{trondle_trade-offs_2020}, which states that given the persistent lack of knowledge
-about the distribution the independent uniform distribution, that makes fewest
-assumptions, is most appropriate. Although the assumed independence may neglect
-synergies between technologies, for example, between offshore and onshore wind
-turbine development, we follow the literature by assuming that the cost are
-independent and uniformly distributed within the ranges specified in
+Distributions of cost projections have been assumed to follow
+normal\cite{mavromatidis_uncertainty_2018} or triangular\cite{li_using_2020}
+distributions. But independent uniform distributions are the most prevalent
+assumption.\cite{moret_characterization_2017,moret_robust_2016,shirizadeh_how_2019,trondle_trade-offs_2020,pilpola_analyzing_2020,Li2017,Trutnevyte2013,lopion_cost_2019}
+This approach is backed by the maximum entropy approach,
+\cite{trondle_trade-offs_2020} which states that given the persistent lack of
+knowledge about the distribution the independent uniform distribution, that
+makes fewest assumptions, is most appropriate. Although the assumed independence
+may neglect synergies between technologies, for example, between offshore and
+onshore wind turbine development, we follow the literature by assuming that the
+cost are independent and uniformly distributed within the ranges specified in
 \cref{tab:costuncertainty}.
 
 \usubsection{Surrogate Modelling with Polynomial Chaos Expansion}{sec:surrogate}
@@ -353,37 +352,41 @@ adds another layer to the computational burden.
 
 % idea of surrogate models
 
-Surrogate models\footnote{Surrogate names are also known by names such as approximation models, response surface methods, metamodels and emulators.}
-offer a solution for such cases, where the outcome of the
-original model cannot be obtained easily.
-In contrast to the full model, they only imitate the input/output behaviour for a selection of aggregated outputs, but take much less time to compute \cite{palar_multi-fidelity_2016}.
-Like other machine learning techniques, they generalise from a
-training dataset that comprises only a limited number of samples.
-As surrogate models interpolate gaps in the parameter space that are not contained in the sample set,
-which would otherwise be computationally expensive to fill,
-they are well suited to use cases such as parameter space exploration and sensitivity analysis.
+Surrogate models offer a solution for such cases, where the outcome of the
+original model cannot be obtained easily. Surrogate names are also known by
+names such as approximation models, response surface methods, metamodels and
+emulators. In contrast to the full model, they only imitate the input/output
+behaviour for a selection of aggregated outputs, but take much less time to
+compute.\cite{palar_multi-fidelity_2016} Like other machine learning
+techniques, they generalise from a training dataset that comprises only a
+limited number of samples. As surrogate models interpolate gaps in the parameter
+space that are not contained in the sample set, which would otherwise be
+computationally expensive to fill, they are well suited to use cases such as
+parameter space exploration and sensitivity analysis.
 
 % this paper
 
-Consequently, in this paper we make use of surrogate models that map the
-cost of onshore wind, offshore wind, solar, hydrogen, and battery storage (\cref{tab:costuncertainty})
-onto a selection of eight system-level outputs.
-These are the total system cost and the installed onshore wind, offshore wind, solar, hydrogen, battery, and transmission network capacities.
-We construct surrogate models for least-cost and near-optimal solutions separately
-for each system cost slack, search direction, fixed total capacity, and output variable. This results in a collection of 808 individual surrogate models based on 101 solved optimisation problems
-per set of cost assumptions.
-The method we choose from an abundance of alternatives is based on polynomial chaos expansion (PCE)
-\cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
-We select this approach because the resulting approximations
-allow efficient analytical statistical evaluation \cite{sudret_global_2008} and
-can conveniently combine training data from variously detailed models \cite{palar_multi-fidelity_2016}.
+Consequently, in this paper we make use of surrogate models that map the cost of
+onshore wind, offshore wind, solar, hydrogen, and battery storage
+(\cref{tab:costuncertainty}) onto a selection of eight system-level outputs.
+These are the total system cost and the installed onshore wind, offshore wind,
+solar, hydrogen, battery, and transmission network capacities. We construct
+surrogate models for least-cost and near-optimal solutions separately for each
+system cost slack, search direction, fixed total capacity, and output variable.
+This results in a collection of 808 individual surrogate models based on 101
+solved optimisation problems per set of cost assumptions. The method we choose
+from an abundance of alternatives is based on polynomial chaos expansion (PCE).
+\cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015} We
+select this approach because the resulting approximations allow efficient
+analytical statistical evaluation\cite{sudret_global_2008} and can conveniently
+combine training data from variously detailed models.\cite{palar_multi-fidelity_2016}
 
 % general idea
 
 The general idea of surrogate models based on PCE is to
 represent uncertain model outputs as a linear combination of orthogonal basis functions
-of the random input variables weighted by deterministic coefficients \cite{muhlpfordt_uncertainty_2020}.
-It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components \cite{muhlpfordt_uncertainty_2020}.
+of the random input variables weighted by deterministic coefficients.\cite{muhlpfordt_uncertainty_2020}
+It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components.\cite{muhlpfordt_uncertainty_2020}
 Building the surrogate model consists of the following steps:
 (i) sampling a set of cost projections from the parameter space,
 (ii) solving the least-cost or near-optimal investment planning problem for each sample,
@@ -391,7 +394,7 @@ Building the surrogate model consists of the following steps:
 (iv) performing a regression to calculate the polynomial coefficients, and ultimately
 (v) using the model approximation for statistical analysis.
 In the following, we formalise this approach mathematically,
-which we implemented using the \textit{chaospy} toolbox \cite{feinberg_chaospy_2015},
+which we implemented using the \textit{chaospy} toolbox,\cite{feinberg_chaospy_2015}
 and elaborate on individual aspects in more detail.
 
 We start by defining the vector of random input variables as
@@ -416,14 +419,14 @@ We can represent the computational model $f$ with its polynomial chaos expansion
     \label{eq:pce}
 \end{equation}
 where $\psi_\ba$ denotes multivariate orthogonal polynomials that form
-a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients \cite{sudret_global_2008}. The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$
+a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients.\cite{sudret_global_2008} The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$
 denotes the degree of the polynomial $\psi_\ba$ in each of the $m$ random input variables $\mathsf{x}_i$.
 As \cref{eq:pce} features an infinite number of unknown coefficients,
 it is common practice to approximate by truncating the expansion to get a finite number of coefficients
 \begin{equation}
     f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba(\x).
 \end{equation}
-In the standard truncation scheme \cite{gratiet_metamodel-based_2015,sudret_global_2008},
+In the standard truncation scheme,\cite{gratiet_metamodel-based_2015,sudret_global_2008}
 all polynomials in $m$ input variables where the total degree is less than $p$ are selected.
 We can write this as a set of indices
 \begin{equation}
@@ -432,7 +435,7 @@ We can write this as a set of indices
 where $\abs{\ba} = \sum_{i=1}^m \alpha_i$.
 Given the joint distribution of $\x$ and a maximum degree,
 a suitable collection of orthogonal polynomials can be constructed
-using a three terms recurrence algorithm \cite{feinberg_chaospy_2015}.
+using a three terms recurrence algorithm.\cite{feinberg_chaospy_2015}
 The cardinality of the truncated PCE,
 \begin{equation}
     q = \card \cA^{m,p} = \left(\begin{matrix}
@@ -462,7 +465,7 @@ that induces a preference for fewer non-zero coefficients, and solve
 where we set the regularisation penalty to $\lambda=0.005$.
 This results in a sparse PCE that has proven to
 improve approximations in high-dimensional uncertainty spaces
-and to reduce the required number of samples for comparable approximation errors \cite{gratiet_metamodel-based_2015}.
+and to reduce the required number of samples for comparable approximation errors.\cite{gratiet_metamodel-based_2015}
 Knowing the optimised regression coefficients, we can now assemble the complete surrogate model
 \begin{equation}
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
@@ -475,12 +478,12 @@ Knowing the optimised regression coefficients, we can now assemble the complete 
 To construct a sufficiently precise PCE-based surrogate model, it is desirable
 to base it on many samples from a high-fidelity model. However, this is likely
 prohibitively time-consuming. On the other hand, relying only on samples from a
-low-fidelity model may be too inaccurate \cite{ng_multifidelity_2012}. For
+low-fidelity model may be too inaccurate.\cite{ng_multifidelity_2012} For
 example, an investment model that features only a single node per country will
 underestimate transmission bottlenecks and regionally uneven resource or demand
 distribution. In the section on \nameref{sec:inputs} we already alluded to using two models with
 varying spatial and temporal resolution in this paper. We integrate both in a
-multi-fidelity approach \cite{ng_multifidelity_2012,palar_multi-fidelity_2016},
+multi-fidelity approach,\cite{ng_multifidelity_2012,palar_multi-fidelity_2016}
 and demonstrate how we can simultaneously avail of high coverage of the
 parameter space by sampling the simpler model many times, and the high
 spatio-temporal detail yielded by fewer more complex model runs.
@@ -498,7 +501,7 @@ high-fidelity model
     f_h'(\x) = f_\ell'(\x) + \Delta'(\x).
 \end{equation}
 Typically, the corrective PCE rectifies only the lower order effects
-of the low-fidelity surrogate model \cite{palar_multi-fidelity_2016}.
+of the low-fidelity surrogate model.\cite{palar_multi-fidelity_2016}
 The advantage is that this way the correction function can be determined
 based on fewer samples analogous to the previous section \nameref{sec:surrogate}.
 To sample the errors, it is only required that the
@@ -526,7 +529,7 @@ and corrective polynomial coefficients
 In this work, we apply a multi-fidelity surrogate model that considers
 effects up to order three observed in the low-fidelity model. These are then corrected with linear terms derived from insights from the high-fidelity model.
 We justify this choice by experimentation in the \nameref{sec:validation},
-by testing against other typical choices between orders one to five \cite{gratiet_metamodel-based_2015}.
+by testing against other typical choices between orders one to five.\cite{gratiet_metamodel-based_2015}
 Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
 
 \usubsection{Experimental Design for Surrogate Modelling}{sec:sampling}
@@ -542,7 +545,7 @@ Given the polynomial expansion order, the remaining question is how many samples
 % general
 
 The experimental design covers strategies to find sufficiently high coverage
-of the parameter space at low computational cost \cite{fajraoui_optimal_2017,usher_value_2015}.
+of the parameter space at low computational cost.\cite{fajraoui_optimal_2017,usher_value_2015}
 It deals with how many samples are drawn and what sampling method is used.
 
 % sampling method
@@ -552,7 +555,7 @@ possess slow convergence properties, % 1 / \sqrt{n}
 especially in high-dimensional parameter spaces.
 So-called low-discrepancy series can greatly improve on random sampling.
 Because they are designed to avoid forming large gaps and clusters,
-these deterministic sequences efficiently sample from the parameter space \cite{fajraoui_optimal_2017}.
+these deterministic sequences efficiently sample from the parameter space.\cite{fajraoui_optimal_2017}
 Thus, we choose to draw our samples from a low-discrepancy Halton sequence.
 
 % how many samples
@@ -560,12 +563,12 @@ Thus, we choose to draw our samples from a low-discrepancy Halton sequence.
 For the question about how many samples should be drawn,
 we resort to the oversampling ratio (OSR) as a guideline.
 The OSR is defined as the ratio between the number of samples
-and the number of unknown coefficients \cite{palar_multi-fidelity_2016}.
-The literature recommends values between two and three \cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}.
+and the number of unknown coefficients.\cite{palar_multi-fidelity_2016}
+The literature recommends values between two and three.\cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
 In other words, for a sufficiently accurate approximation,
 there should be significantly more samples than unknown coefficients.
 If the OSR is lower, the regression is prone to the risk of overfitting.
-On the other hand, a high OSR may lead to a very coarse approximation \cite{palar_multi-fidelity_2016}.
+On the other hand, a high OSR may lead to a very coarse approximation.\cite{palar_multi-fidelity_2016}
 
 According to \cref{eq:cardinality}, targeting an OSR of two
 and considering the five uncertain technology cost parameters (\cref{tab:costuncertainty}),

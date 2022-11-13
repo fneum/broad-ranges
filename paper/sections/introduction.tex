@@ -4,15 +4,15 @@ Energy system models have become a pivotal instrument for policy-making to find
 cost-efficient system layouts that satisfy ambitious climate change mitigation
 targets. But even though they have proliferated in spatial, temporal,
 technological and sectoral detail and scope in recent years, least-cost
-optimisation models can easily give a false sense of exactness
-\cite{Trutnevyte2016, pye_modelling_2020}. Frequently, they present just a
-single least-cost solution for a single set of cost assumptions, which not only
-neglects uncertainties inherent to technology cost projections which can have a
-strong effect on the results of capacity expansion models
-\cite{trondle_trade-offs_2020, yue_review_2018, pye_assessing_2018}, but also
+optimisation models can easily give a false sense of
+exactness.\cite{Trutnevyte2016, pye_modelling_2020} Frequently, they present
+just a single least-cost solution for a single set of cost assumptions, which
+not only neglects uncertainties inherent to technology cost projections which
+can have a strong effect on the results of capacity expansion models,
+\cite{trondle_trade-offs_2020, yue_review_2018, pye_assessing_2018} but also
 hides a wide array of alternative solutions that are equally feasible and only
-marginally more expensive \cite{nearoptimal, lombardi_policy_2020,
-sasse_regional_2020}.
+marginally more expensive.\cite{nearoptimal, lombardi_policy_2020,
+sasse_regional_2020}
 
 % relevance of trade-offs
 
@@ -22,30 +22,29 @@ non-economic criteria without affecting the cost-effectiveness of the system.
 Knowing that many similarly costly but technologically diverse solutions exist,
 helps to accommodate political and social dimensions that are otherwise hard to
 quantify; for instance, rising public opposition towards new transmission
-lines and onshore wind turbines or an uneven distribution of new infrastructure
-\cite{mccollum_energy_2020,sasse_regional_2020,schlachtberger_cost_2018}.
+lines and onshore wind turbines or an uneven distribution of new infrastructure.
+\cite{mccollum_energy_2020,sasse_regional_2020,schlachtberger_cost_2018}
 
 % how to find trade-offs
 
 Techniques like multi-objective optimisation and
 modelling-to-generate-alternatives are designed to find such near-optimal
 solutions. They have been applied to investment planning models of
-the European \cite{nearoptimal}, the Italian
-\cite{lombardi_policy_2020}, and the United States power system
-\cite{DeCarolis2016}, pathways to decarbonise the power system of the United
-Kingdom \cite{Li2017}, a single-node sector-coupling model of Germany
-\cite{nacken_integrated_2019}, global integrated assessment models
-\cite{Price2017}, and were combined with a quick hull algorithm to span a
-polytope of low-cost solutions for a single set of cost parameters
-\cite{pedersen_modeling_2020}.
+the European,\cite{nearoptimal} the Italian,
+\cite{lombardi_policy_2020} and the United States power system,
+\cite{DeCarolis2016} pathways to decarbonise the power system of the United
+Kingdom,\cite{Li2017} a single-node sector-coupling model of Germany,
+\cite{nacken_integrated_2019} global integrated assessment models,
+\cite{Price2017} and were combined with a quick hull algorithm to span a
+polytope of low-cost solutions for a single set of cost parameters.\cite{pedersen_modeling_2020}
 
 % trade-offs must be robust to cost uncertainty
 
 However, most of the studies above only use a central cost projection for each
 considered technology. Recent decades have shown that many of these
 projections contain a high level of uncertainty, particularly for fast-moving
-technologies like solar, wind, batteries and hydrogen storage
-\cite{ludererImpactDeclining2021,victoriaSolarPhotovoltaics2021,jaxa-rozenSourcesUncertainty2021}. This
+technologies like solar, wind, batteries and hydrogen storage.
+\cite{ludererImpactDeclining2021,victoriaSolarPhotovoltaics2021,jaxa-rozenSourcesUncertainty2021} This
 uncertainty propagates through the model to strongly affect the optimal and
 near-optimal system compositions, thus undermining any analysis of the
 trade-offs. Hence, it is crucial that apparent compromises are rigorously tested
@@ -53,17 +52,17 @@ for robustness to technology cost uncertainty to raise confidence in conclusions
 about viable, cost-effective power system designs. To thoroughly sweep this
 uncertainty space, we can avail of previous works on
 multi-dimensional global sensitivity analysis techniques in the context of
-least-cost optimisation \cite{trondle_trade-offs_2020,
+least-cost optimisation.\cite{trondle_trade-offs_2020,
 mavromatidis_uncertainty_2018, pizarro-alonso_uncertainties_2019,
-fais_impact_2016, usher_value_2015}.
+fais_impact_2016, usher_value_2015}
 
 % this work / novelty
 
 In this paper, for the first time, we bring together near-optimal analysis with
 global sensitivity sweeps over uncertainty. This allows us to systematically
 explore robust trade-offs near the cost-optimum of a fully renewable European
-electricity system model, PyPSA-Eur \cite{pypsaeur}, and investigate how they
-are affected by uncertain technology cost projections. We evaluate compromise
+electricity system model, PyPSA-Eur,\cite{pypsaeur} and investigate how they are
+affected by uncertain technology cost projections. We evaluate compromise
 solutions between system cost and technology choices by minimising and
 maximising the use of on- and offshore wind, solar photovoltaics, transmission,
 batteries and hydrogen storage respectively in order to identify near-optimal
@@ -79,8 +78,8 @@ subject to multi-period linear optimal power flow constraints. The capacity
 optimisation is supplemented with global sensitivity analysis methods to account
 for a wide range of cost projections for wind, solar, battery and hydrogen
 storage technologies. These cost projections are assumed to be uniformly
-distributed based on ranges from the Danish Energy Agency for the year 2050
-\cite{DEA}.
+distributed based on ranges from the Danish Energy Agency for the year
+2050.\cite{DEA}
 
 % computational achievement
 

@@ -1,13 +1,14 @@
 \documentclass[1p,11pt]{elsarticle}
 
-\journal{Nature Energy}
+\journal{Joule}
 
 \widowpenalty10000
 \clubpenalty10000
 
 %% `Elsevier LaTeX' style
 \bibliographystyle{elsarticle-num}
-\biboptions{numbers,sort&compress}
+\biboptions{numbers,sort&compress,super}
+\abstracttitle{Summary}
 
 % format hacks
 \usepackage{libertine}
@@ -73,7 +74,9 @@
 
 \usepackage[prependcaption,textsize=scriptsize]{todonotes}
 
-\usepackage{lineno}
+% \usepackage{lineno}
+
+\usepackage{orcidlink}
 
 \urlstyle{sf}
 
@@ -84,9 +87,9 @@
 	\title{Broad Ranges of Investment Configurations for Renewable Power
 	Systems, Robust to Cost Uncertainty and Near-Optimality}
 
-	\author[tubaddress,kitaddress]{Fabian Neumann\corref{correspondingauthor}}
+	\author[tubaddress,kitaddress]{Fabian Neumann\,\orcidlink{0000-0001-8551-1480}\corref{correspondingauthor}}
 	\ead{f.neumann@tu-berlin.de}
-	\author[tubaddress,kitaddress]{Tom Brown}
+	\author[tubaddress,kitaddress]{Tom Brown\,\orcidlink{0000-0001-5898-1911}}
 	\cortext[correspondingauthor]{Corresponding author}
 	\address[tubaddress]{Department of Digital Transformation in Energy Systems, Institute of Energy Technology, Technische Universität Berlin (TUB), Einsteinufer 25 (TA 8), 10587, Berlin, Germany}
 	\address[kitaddress]{Institute for Automation and Applied Informatics (IAI), Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344, Eggenstein-Leopoldshafen, Germany}
@@ -101,7 +104,7 @@
 
 \end{frontmatter}
 
-\linenumbers
+% \linenumbers
 
 % \addcontentsline{toc}{section}{Highlights}
 % \section*{Highlights}
@@ -114,7 +117,51 @@
 
 \newpage
 
-\addcontentsline{toc}{section}{Introduction}
+\newgeometry{top=2cm, bottom=3cm}
+
+\par\noindent\rule{\textwidth}{0.4pt}
+
+\section*{Graphical Abstract}
+
+\includegraphics[width=\textwidth]{graphics/graphical-abstract.png}
+
+\par\noindent\rule{\textwidth}{0.4pt}
+
+\section*{Highlights}
+
+\begin{itemize}
+	\item uses open electricity system model PyPSA-Eur to explore near-optimal trade-offs
+	\item wide range of options to design renewable power systems within 8\% of optimum
+	\item many of these options are robust to uncertain technology cost developments
+	\item few boundary conditions exist: some long-term storage and network expansion
+	\item degrees of freedom can help policymakers to circumvent public acceptance issues
+\end{itemize}
+
+\par\noindent\rule{\textwidth}{0.4pt}
+
+\section*{Context \& Scale}
+
+We address the perils of narrowly following optimisation results in renewable
+electricity system planning by presenting a wide range of almost equally
+cost-effective system designs that are technologically diverse and robust to
+uncertain technology cost projections. Especially along dimensions that affect
+levels of social acceptance, like the development of new overhead power lines or
+onshore wind turbines, we want to improve our understanding of what actions are
+likely viable within given cost ranges. We present system designs with a high
+chance of involving a limited cost increase, just as we identify those that are
+unlikely to be cost-efficient. Knowledge of the vast degrees of freedom we find
+in our analysis is highly policy-relevant. Policymakers can leverage these weak
+trade-offs to circumvent building infrastructure for which there is limited
+public support.
+% \par\noindent\rule{\textwidth}{0.4pt}
+
+% \section*{Words}
+% 3278 (excl. preamble, captions, and \nameref{sec:methods})
+
+\restoregeometry
+
+\newpage
+\usection{Introduction}{sec:introduction}
 
 \input{sections/introduction.tex}
 
@@ -124,7 +171,7 @@
 
 \input{sections/conclusion.tex}
 
-\usection{Methods}{sec:methods}
+\usection{Experimental Procedures}{sec:methods}
 
 \input{sections/methods.tex}
 
@@ -136,15 +183,15 @@ authors.
 
 \section*{License}
 
-This work is licensed under a \href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0
-International License (CC-BY-4.0)}.
+\href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0
+International License (CC-BY-4.0)}
 
 \section*{CRediT Author Statement}
 
 \textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation, Software, Validation, Formal analysis, Visualization, Writing -- Original Draft, Writing -- Review \& Editing
 \textbf{Tom Brown:} Conceptualization, Writing -- Review \& Editing, Supervision, Project administration, Funding acquisition
 
-\section*{Data Availability}
+\section*{Data and Code Availability}
 
 The code to reproduce the experiments as well as results dat including selected
 networks and all graphics is available at
