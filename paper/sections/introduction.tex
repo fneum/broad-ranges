@@ -29,57 +29,61 @@ lines and onshore wind turbines or an uneven distribution of new infrastructure.
 
 Techniques like multi-objective optimisation and
 modelling-to-generate-alternatives are designed to find such near-optimal
-solutions. They have been applied to investment planning models of
-the European,\cite{nearoptimal} the Italian,
-\cite{lombardi_policy_2020} and the United States power system,
-\cite{DeCarolis2016} pathways to decarbonise the power system of the United
-Kingdom,\cite{Li2017} a single-node sector-coupling model of Germany,
-\cite{nacken_integrated_2019} global integrated assessment models,
+solutions. They have been applied to investment planning models of the
+European,\cite{nearoptimal} the Italian, \cite{lombardi_policy_2020} and the
+United States power system, \cite{DeCarolis2016} pathways to decarbonise the
+power system of the United Kingdom,\cite{Li2017} the European sector-coupled
+energy system,\cite{pickeringDiversityOptions2022}, a single-node energy model of Germany,
+\cite{nacken_integrated_2019}, global integrated assessment models,
 \cite{Price2017} and were combined with a quick hull algorithm to span a
 polytope of low-cost solutions for a single set of cost parameters.\cite{pedersen_modeling_2020}
 
 % trade-offs must be robust to cost uncertainty
 
 However, most of the studies above only use a central cost projection for each
-considered technology. Recent decades have shown that many of these
-projections contain a high level of uncertainty, particularly for fast-moving
-technologies like solar, wind, batteries and hydrogen storage.
-\cite{ludererImpactDeclining2021,victoriaSolarPhotovoltaics2021,jaxa-rozenSourcesUncertainty2021} This
-uncertainty propagates through the model to strongly affect the optimal and
+considered technology. Recent decades have shown that many of these projections
+contain a high level of uncertainty, particularly for fast-moving technologies
+like solar, wind, batteries and hydrogen storage.
+\cite{ludererImpactDeclining2021,victoriaSolarPhotovoltaics2021,jaxa-rozenSourcesUncertainty2021}
+This uncertainty propagates through the model to strongly affect the optimal and
 near-optimal system compositions, thus undermining any analysis of the
 trade-offs. Hence, it is crucial that apparent compromises are rigorously tested
 for robustness to technology cost uncertainty to raise confidence in conclusions
 about viable, cost-effective power system designs. To thoroughly sweep this
-uncertainty space, we can avail of previous works on
-multi-dimensional global sensitivity analysis techniques in the context of
-least-cost optimisation.\cite{trondle_trade-offs_2020,
-mavromatidis_uncertainty_2018, pizarro-alonso_uncertainties_2019,
-fais_impact_2016, usher_value_2015}
+uncertainty space, we can avail of previous works on multi-dimensional global
+sensitivity analysis techniques in the context of least-cost
+optimisation.\cite{trondle_trade-offs_2020, mavromatidis_uncertainty_2018,
+pizarro-alonso_uncertainties_2019, fais_impact_2016, usher_value_2015} In this
+context, it is also important to note that this methodology can also be used to
+address many further uncertainties, for instance, regarding weather variability
+between years, demand projections and the level of cross-sectoral integration
+that can be realised.
 
 % this work / novelty
 
-In this paper, for the first time, we bring together near-optimal analysis with
-global sensitivity sweeps over uncertainty. This allows us to systematically
-explore robust trade-offs near the cost-optimum of a fully renewable European
-electricity system model, PyPSA-Eur,\cite{pypsaeur} and investigate how they are
-affected by uncertain technology cost projections. We evaluate compromise
-solutions between system cost and technology choices by minimising and
-maximising the use of on- and offshore wind, solar photovoltaics, transmission,
-batteries and hydrogen storage respectively in order to identify near-optimal
-alternatives that are no more than 8\% more expensive than the least-cost
-option. This discretionary choice is low enough to argue that such solutions are
-nearly cost-optimal, and high enough such that most trade-offs have flattened
-out at this point. Given a fixed allowed cost penalty of 6\%, we also analyse
-trade-offs for pairs of technologies; namely between wind and solar, battery and
-hydrogen storage, and offshore and onshore wind. For this research, we solve
-numerous spatially and temporally explicit long-term investment planning
-problems that coordinate generation, transmission and storage investments
-subject to multi-period linear optimal power flow constraints. The capacity
-optimisation is supplemented with global sensitivity analysis methods to account
-for a wide range of cost projections for wind, solar, battery and hydrogen
-storage technologies. These cost projections are assumed to be uniformly
-distributed based on ranges from the Danish Energy Agency for the year
-2050.\cite{DEA}
+In this paper, we bring together near-optimal analysis with global sensitivity
+sweeps over uncertainty. This allows us to systematically explore more robust
+trade-offs near the cost-optimum of a fully renewable European electricity
+system model, PyPSA-Eur,\cite{pypsaeur} and investigate how they are affected by
+uncertain technology cost projections. We evaluate compromise solutions between
+system cost and technology choices by minimising and maximising the use of on-
+and offshore wind, solar photovoltaics, transmission, batteries and hydrogen
+storage respectively in order to identify near-optimal alternatives that are no
+more than 8\% more expensive than the least-cost option. This discretionary
+choice is low enough to argue that such solutions are nearly cost-optimal, and
+high enough such that most trade-offs have flattened out at this point. However,
+more expensive solutions may still be acceptable to the public, in particular
+when they are more widely accepted or if they could be implemented more quickly.
+We also show examples of trade-offs for pairs of technologies and a chosen allowed
+cost penalty of 6\%; namely between wind and solar, battery and hydrogen
+storage, and offshore and onshore wind. For this research, we solve numerous
+spatially and temporally explicit long-term investment planning problems that
+coordinate generation, transmission and storage investments subject to
+multi-period linear optimal power flow constraints. The capacity optimisation is
+supplemented with global sensitivity analysis methods to account for a wide
+range of cost projections for wind, solar, battery and hydrogen storage
+technologies. These cost projections are assumed to be uniformly distributed
+based on ranges from the Danish Energy Agency for the year 2050.\cite{DEA}
 
 % computational achievement
 
@@ -88,21 +92,27 @@ alternatives alongside evaluating many different cost parameter sets, we employ
 multi-fidelity surrogate modelling techniques, based on sparse polynomial chaos
 expansion, that allow us to merge results from one simpler and another more
 detailed model. One covers 37 regions at 4-hourly and the other 128 regions at
-2-hourly resolution over a full year. This approach has been proven very
-effective in Tröndle et al.~\cite{trondle_trade-offs_2020}. Heavy
-parallelisation with high-performance computing infrastructure allows us to
-solve more than 50,000 resource-intensive optimisation problems which, in
-combination with surrogate modelling, can span a probabilistic space of
-near-optimal solutions rather than putting single scenarios into the foreground.
+2-hourly resolution over a full year (see \nameref{sec:multifidelity} for
+details). This approach has been proven very effective in Tröndle et
+al.~\cite{trondle_trade-offs_2020}. Heavy parallelisation with high-performance
+computing infrastructure allows us to solve more than 50,000 resource-intensive
+optimisation problems which, in combination with surrogate modelling, can span a
+probabilistic space of near-optimal solutions with respect to cost uncertainties
+rather than putting single technology cost futures into the foreground. While
+the methodology is general enough to be applied to other uncertainties like
+interannual weather variability or demand projections, our application addresses
+the probabilistic space of technology cost projections.
+
 
 % results
 
-Thereby, we are able to present alternative solutions beyond least-cost that
+In this way, we are able to present alternative solutions beyond least-cost that
 have a high chance of involving a limited cost increase, just as we identify
-regions that are unlikely to be cost-efficient. We derive both ranges of options
-and technology-specific boundary conditions that are not affected by cost
-uncertainty and must be met to keep the total system cost within a specified
-range. Our results show that indeed many such similarly costly but
+regions that are unlikely to be cost-efficient for realising a fully renewable
+electricity system. We derive both ranges of options and technology-specific
+capacity expansion ranges that are not affected by cost uncertainty and should
+be met to keep the total system cost within a specified range, given the model
+setup. Our results show that indeed many such similarly costly but
 technologically diverse solutions exist regardless of how technology cost
 developments will unfold within the considered ranges.
 

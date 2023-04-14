@@ -1,6 +1,6 @@
 \documentclass[1p,11pt]{elsarticle}
 
-\journal{Joule}
+\journal{iScience}
 
 \widowpenalty10000
 \clubpenalty10000
@@ -8,6 +8,7 @@
 %% `Elsevier LaTeX' style
 \bibliographystyle{elsarticle-num}
 \biboptions{numbers,sort&compress,super}
+
 \abstracttitle{Summary}
 
 % format hacks
@@ -117,13 +118,13 @@
 
 \newpage
 
-\newgeometry{top=2cm, bottom=3cm}
+% \newgeometry{top=2cm, bottom=3cm}
 
 \par\noindent\rule{\textwidth}{0.4pt}
 
 \section*{Graphical Abstract}
 
-\includegraphics[width=\textwidth]{graphics/graphical-abstract.png}
+\includegraphics[width=\textwidth]{graphics/graphical-abstract-v2.png}
 
 \par\noindent\rule{\textwidth}{0.4pt}
 
@@ -137,70 +138,49 @@
 	\item degrees of freedom can help policymakers to circumvent public acceptance issues
 \end{itemize}
 
-\par\noindent\rule{\textwidth}{0.4pt}
-
-\section*{Context \& Scale}
-
-We address the perils of narrowly following optimisation results in renewable
-electricity system planning by presenting a wide range of almost equally
-cost-effective system designs that are technologically diverse and robust to
-uncertain technology cost projections. Especially along dimensions that affect
-levels of social acceptance, like the development of new overhead power lines or
-onshore wind turbines, we want to improve our understanding of what actions are
-likely viable within given cost ranges. We present system designs with a high
-chance of involving a limited cost increase, just as we identify those that are
-unlikely to be cost-efficient. Knowledge of the vast degrees of freedom we find
-in our analysis is highly policy-relevant. Policymakers can leverage these weak
-trade-offs to circumvent building infrastructure for which there is limited
-public support.
-% \par\noindent\rule{\textwidth}{0.4pt}
-
-% \section*{Words}
-% 3278 (excl. preamble, captions, and \nameref{sec:methods})
-
-\restoregeometry
+% \restoregeometry
 
 \newpage
 \usection{Introduction}{sec:introduction}
 
 \input{sections/introduction.tex}
 
+\usection{Results}{sec:results}
+
 \input{sections/results.tex}
+
+\usection{Limitations of the Study}{sec:limitations}
+
+\input{sections/limitations.tex}
 
 \usection{Discussion and Conclusion}{sec:conclusion}
 
 \input{sections/conclusion.tex}
 
-\usection{Experimental Procedures}{sec:methods}
+\usection{Star$\star$ Methods}{sec:methods}
 
 \input{sections/methods.tex}
 
-\section*{Acknowledgement}
+\section*{Acknowledgements}
 
 F.N. and T.B. gratefully acknowledge funding from the Helmholtz Association
 under grant no. VH-NG-1352. The responsibility for the contents lies with the
 authors.
+
 
 \section*{License}
 
 \href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0
 International License (CC-BY-4.0)}
 
-\section*{CRediT Author Statement}
+\section*{Author Contributions}
 
 \textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation, Software, Validation, Formal analysis, Visualization, Writing -- Original Draft, Writing -- Review \& Editing
 \textbf{Tom Brown:} Conceptualization, Writing -- Review \& Editing, Supervision, Project administration, Funding acquisition
 
-\section*{Data and Code Availability}
+\section*{Declaration of Interests}
 
-The code to reproduce the experiments as well as results dat including selected
-networks and all graphics is available at
-\href{https://github.com/fneum/broad-ranges}{github.com/fneum/broad-ranges} and
-archived at
-\href{https://doi.org/10.5281/zenodo.6641551}{doi:10.5281/zenodo.6641551}. We
-also refer to the documentation of PyPSA
-(\href{https://pypsa.readthedocs.io}{pypsa.readthedocs.io}) and PyPSA-Eur
-(\href{https://pypsa-eur.readthedocs.io}{pypsa-eur.readthedocs.io}).
+The authors declare no competing interests.
 
 % tidy with https://flamingtempura.github.io/bibtex-tidy/
 \addcontentsline{toc}{section}{References}
