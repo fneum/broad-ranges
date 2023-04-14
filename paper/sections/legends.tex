@@ -1,0 +1,100 @@
+\begin{figure}[H]
+    \caption{ {\bf Distribution of system cost, generation, storage, and transmission
+      in least-cost solutions.} The dashed line in the transmission line chart
+      indicates today's existing transmission capacities for comparison. Violin
+      range is limited to the range of observed data. Boxplots show median,
+      interquartile range, and upper/lower quartile $\pm 1.5$ times the
+      interquartile range. }
+    \label{fig:violin}
+\end{figure}
+
+
+\begin{figure}[H]
+    \caption{ { \bf Sensitivity of capacities towards their own technology cost.} The
+      median (Q50) alongside the 5\%, 25\%, 75\%, and 95\% quantiles (Q5--Q95)
+      display the sensitivity subject to the uncertainty induced by other cost
+      parameters. Dots represent samples of the high-fidelity model runs. }
+    \label{fig:sensitivity}
+\end{figure}
+
+\begin{figure}[H]
+    \caption{ {\bf First-order and total Sobol indices.} These
+      sensitivity indices attribute output variance to random input variables
+      and reveal which inputs the outputs are most sensitive to. The first-order
+      Sobol indices quantify the share of output variance due to variations in
+      one input parameter alone. The total Sobol indices further include
+      interactions with other input variables. Total Sobol indices can be
+      greater than 100\% if the contributions are not purely additive. }
+    \label{fig:sobol}
+\end{figure}
+
+
+\begin{figure}[H]
+    \caption{ { \bf Space of near-optimal solutions by technology under cost
+    uncertainty. } For each technology and cost sample, the minimum and maximum
+    capacities obtained for increasing cost penalties $\epsilon$ form a cone of
+    an upper and a lower Pareto front, starting from a common least-cost
+    solution. By arguments of convexity, the capacity ranges contained by the
+    cone can be near-optimal and feasible, given a degree of freedom in the
+    other technologies. From optimisation theory, we know that the cones widen
+    up for increased slacks. As we consider technology cost uncertainty, the
+    cone will look slightly different for each sample. The contour lines
+    represent the frequency a solution is inside the near-optimal cone over the
+    whole parameter space. This is calculated from the overlap of many cones,
+    each representing a set of cost assumptions. Due to discrete sampling points
+    in the $\epsilon$-dimension, the plots further apply quadratic interpolation
+    and a Gaussian filter for smoothing. }
+    \label{fig:fuzzycone}
+\end{figure}
+
+
+\begin{figure}[H]
+    \caption{ {\bf Space of near-optimal solutions by selected pairs of technologies
+      under cost uncertainty (a)-(c).} Just like in \cref{fig:fuzzycone}, the
+      contour lines depict the overlap of the space of near-optimal alternatives
+      across the parameter space. It can be thought of as the cross-section of
+      the probabilistic near-optimal feasible space for a given $\epsilon$ in
+      two technology dimensions and highlights that the extremes of two
+      technologies from \cref{fig:fuzzycone} cannot be achieved simultaneously.
+      Plots (d)-(e) show the distribution of total system cost, generation,
+      storage, and transmission capacities for two near-optimal search
+      directions with $\epsilon=8\%$ system cost slack. The dashed line in the
+      transmission line chart indicates today's existing transmission
+      capacities. }
+    \label{fig:dependencies}
+\end{figure}
+
+\begin{figure}[H]
+    \caption{ {\bf Spatial and temporal resolution of the low and high fidelity model. }
+    Green lines represent controllable HVDC lines. Red lines represent HVAC
+    lines. Examples for capacity factors for wind and solar are shown for four
+    days in March at the northernmost node in Germany, alongside the normalised
+    load profile.}
+    \label{fig:pypsaeur}
+\end{figure}
+
+\begin{table}[H]
+    \begin{small}
+        \begin{tabular}{lrrl}
+            \toprule
+            Technology & Lower CAPEX & Upper CAPEX & Unit  \\ \midrule Onshore
+            Wind & 800 & 1190 & EUR/kW \\
+            Offshore Wind & 1420 & 1950 & EUR/kW \\
+            Solar & 420 & 620 & EUR/kW \\
+            Battery & 316 & 1306 & EUR/kW \\
+            Hydrogen & 668 & 2002 & EUR/kW \\ \bottomrule
+        \end{tabular}
+    \end{small}
+    \caption{ {\bf Technology cost uncertainty using
+    optimistic and pessimistic assumptions from the Danish Energy
+    Agency.\cite{DEA} }}
+    \label{tab:costuncertainty}
+\end{table}
+
+
+\begin{figure}[H]
+    \caption{ {\bf Cross-validation errors by output for
+    varying sample sizes and polynomial orders of least-cost low-fidelity
+    surrogate models. }}
+    \label{fig:error}
+\end{figure}

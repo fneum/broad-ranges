@@ -213,27 +213,6 @@ range.
 
 \usubsection{Open Electricity Sector Model PyPSA-Eur}{sec:inputs}
 
-\begin{figure}
-    \centering
-        \begin{tabular}{cc}
-            \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity:
-            \\
-            \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and
-            2-hourly \\
-            \includegraphics[width=0.49\textwidth]{map37.pdf} &
-            \includegraphics[width=0.49\textwidth]{map128.pdf} \\
-            \includegraphics[width=0.49\textwidth]{timeseries37.pdf} &
-            \includegraphics[width=0.49\textwidth]{timeseries128.pdf} \\
-        \end{tabular}
-    \caption[Spatial and temporal resolution of the low and high fidelity
-    model]{Spatial and temporal resolution of the low and high fidelity model.
-    Green lines represent controllable HVDC lines. Red lines represent HVAC
-    lines. Examples for capacity factors for wind and solar are shown for four
-    days in March at the northernmost node in Germany, alongside the normalised
-    load profile.}
-    \label{fig:pypsaeur}
-\end{figure}
-
 % general
 
 The instances of the coordinated capacity expansion problem (see
@@ -317,24 +296,6 @@ population density and to 60\% by gross domestic product.
 
 \usubsection{Technology Cost Uncertainty}{sec:uncertainty}
 
-\begin{SCtable}
-    \begin{small}
-        \begin{tabular}{cccc}
-            \toprule
-            Technology & Lower CAPEX & Upper CAPEX & Unit  \\ \midrule Onshore
-            Wind & 800 & 1190 & EUR/kW \\
-            Offshore Wind & 1420 & 1950 & EUR/kW \\ % no connection cost
-            Solar & 420 & 620 & EUR/kW \\
-            Battery & 316 & 1306 & EUR/kW \\
-            Hydrogen & 668 & 2002 & EUR/kW \\ \bottomrule
-            % FOM and lifetime may also vary!
-        \end{tabular}
-    \end{small}
-    \caption[Technology Cost Uncertainty]{Technology cost uncertainty using
-    optimistic and pessimistic assumptions from the Danish Energy
-    Agency.\cite{DEA}}
-    \label{tab:costuncertainty}
-\end{SCtable}
 
 % General
 
@@ -641,38 +602,6 @@ computing.
 
 \usubsection{Validation of the Surrogate Models}{sec:validation}
 
-\begin{figure}
-    % \noindent\makebox[\textwidth]{
-        \begin{subfigure}[t]{.48\textwidth}
-            \centering
-            \caption{number of samples}
-            \label{fig:error:samples}
-            \includegraphics[height=.6\textwidth]{error/error-r2-vs-samples-order-3-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-mape-vs-samples-order-3-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-mae-vs-samples-order-3-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-rmse-vs-samples-order-3-sklearn.pdf}
-        \end{subfigure}
-        \begin{subfigure}[t]{.48\textwidth}
-            \centering
-            \caption{polynomial order}
-            \label{fig:error:poly}
-            \includegraphics[height=.6\textwidth]{error/error-r2-vs-order-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-mape-vs-order-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-mae-vs-order-sklearn.pdf}
-            \\
-            \includegraphics[height=.6\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
-        \end{subfigure}
-    % }
-    \caption[Cross-validation errors]{Cross-validation errors by output for
-    varying sample sizes and polynomial orders of least-cost low-fidelity
-    surrogate models.}
-    \label{fig:error}
-\end{figure}
 
 We justify the use of surrogate modelling by cross-validation. Out of the 500
 low-fidelity samples, 100 samples are not used in the regression. This
@@ -686,7 +615,7 @@ a suitable parameterisation. We present the coefficient of determination (R$^2$)
 for the variance captured, the mean absolute (percentage) errors (MAE/MAPE) for
 absolute and relative deviations, and the root mean squared error (RMSE).
 
-Regarding the number of samples required, \cref{fig:error:samples} foremost
+Regarding the number of samples required, \cref{fig:error} foremost
 illustrates that, given enough samples, we achieve average relative errors of
 less than 4\% for most output variables. This is comparable to the
 cross-validation errors from Tröndle et al.~\cite{trondle_trade-offs_2020} at
@@ -694,13 +623,13 @@ rates below 5\%. Only for offshore wind and battery storage, we observe larger
 errors. However, this can be explained by a distortion of the relative measure
 when these technologies are hardly built for some cost projections. On the
 contrary, the prediction of total system costs is remarkably accurate.
-\cref{fig:error:samples} also demonstrates that for a polynomial order of 3, we
+\cref{fig:error} also demonstrates that for a polynomial order of 3, we
 gain no significant improvement with more than 200 samples. In fact, thanks to
 the regularisation term used in the regression, we already attain acceptable
 levels of accuracy with as few as 50 samples. Moreover, the high R$^2$ values
 underline that the surrogate model can explain most of the output variance.
 
-Regarding the polynomial order, \cref{fig:error:poly} shows that an order of 2
+Regarding the polynomial order, \cref{fig:error} shows that an order of 2
 and below may be too simple to capture the interaction between different
 parameters. On the other hand, an order of 4 and above yields no improvement
 and, were it not for the moderating regularisation term, would even result in a

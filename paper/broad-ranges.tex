@@ -1,22 +1,11 @@
-\documentclass[1p,11pt]{elsarticle}
+\documentclass[3p]{elsarticle}
 
 \journal{iScience}
 
-\widowpenalty10000 \clubpenalty10000
-
-%% `Elsevier LaTeX' style
 \bibliographystyle{elsarticle-num}
 \biboptions{numbers,sort&compress,super}
 
 \abstracttitle{Summary}
-
-% format hacks
-\usepackage{libertine}
-\usepackage{libertinust1math}
-% \renewcommand*\familydefault{\sfdefault} % biolinum
-% \usepackage[margin=3.5cm]{geometry}
-
-% \usepackage[latin1]{inputenc} \usepackage{amsfonts} \usepackage{amssymb}
 
 \usepackage{amsmath}
 \usepackage{bbold}
@@ -25,20 +14,11 @@
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage{booktabs}
-\usepackage{epstopdf}
 \usepackage{xfrac}
 \usepackage{bm}
+\usepackage{float}
 \usepackage[colorlinks]{hyperref}
-\usepackage[nameinlink,sort&compress,capitalise,noabbrev]{cleveref}
-\usepackage[leftcaption,raggedright]{sidecap}
-\usepackage{subcaption}
-\usepackage{blindtext}
-
-\usepackage[parfill]{parskip}
-
-\graphicspath{{../notebooks/2021-11-graphics/}}
-
-% \usepackage[ type={CC}, modifier={by}, version={4.0}, ]{doclicense}
+\usepackage[nameinlink,sort&compress,capitalise,noabbrev]{cleveref} 
 
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
@@ -47,7 +27,6 @@
 \def\cN{\mathcal{N}} \def\cT{\mathcal{T}} \def\cM{\mathcal{M}}
 \def\cA{\mathcal{A}} \def\ba{{\bm{\alpha}}} \def\card{\text{card}\,}
 \def\x{\boldsymbol{\mathsf{x}}}
-
 
 \newcommand{\usection}[2]{
 	\section*{#1}
@@ -59,14 +38,6 @@
 	\label{#2}
 	\addcontentsline{toc}{subsection}{\nameref{#2}} }
 
-\usepackage[prependcaption,textsize=scriptsize]{todonotes}
-
-% \usepackage{lineno}
-
-\usepackage{orcidlink}
-
-\urlstyle{sf}
-
 \begin{document}
 
 \begin{frontmatter}
@@ -75,9 +46,9 @@
 	Systems, Robust to Cost Uncertainty and Near-Optimality}
 
 	\author[tubaddress,kitaddress]{Fabian
-	Neumann\,\orcidlink{0000-0001-8551-1480}\corref{correspondingauthor}}
+	Neumann\corref{correspondingauthor}}
 	\ead{f.neumann@tu-berlin.de}
-	\author[tubaddress,kitaddress]{Tom Brown\,\orcidlink{0000-0001-5898-1911}}
+	\author[tubaddress,kitaddress]{Tom Brown}
 	\cortext[correspondingauthor]{Corresponding author}
 	\address[tubaddress]{Department of Digital Transformation in Energy Systems, Institute of Energy Technology, Technische Universität Berlin (TUB), Einsteinufer 25 (TA 8), 10587, Berlin, Germany}
 	\address[kitaddress]{Institute for Automation and Applied Informatics (IAI), Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344, Eggenstein-Leopoldshafen, Germany}
@@ -85,51 +56,9 @@
 	\begin{abstract}
 		\input{sections/abstract.tex}
 	\end{abstract}
-
-	\begin{keyword}
-		renewable power system, capacity expansion planning,
-		modelling-to-generate-alternatives, uncertainty quantification, global
-		sensitivity analysis, multi-objective optimisation
-	\end{keyword}
-
+ 
 \end{frontmatter}
 
-% \linenumbers
-
-% \addcontentsline{toc}{section}{Highlights} \section*{Highlights}
-
-% \begin{itemize} \item none \item none \item none \end{itemize}
-
-\newpage
-
-% \newgeometry{top=2cm, bottom=3cm}
-
-\par\noindent\rule{\textwidth}{0.4pt}
-
-\section*{Graphical Abstract}
-
-\includegraphics[width=\textwidth]{graphics/graphical-abstract-v2.png}
-
-\par\noindent\rule{\textwidth}{0.4pt}
-
-\section*{Highlights}
-
-\begin{itemize}
-	\item uses open electricity system model PyPSA-Eur to explore near-optimal
-	trade-offs
-	\item wide range of options to design renewable power systems within 8\% of
-	optimum
-	\item many of these options are robust to uncertain technology cost
-	developments
-	\item few boundary conditions exist: some long-term storage and network
-	expansion
-	\item degrees of freedom can help policymakers to circumvent public
-	acceptance issues
-\end{itemize}
-
-% \restoregeometry
-
-\newpage
 \usection{Introduction}{sec:introduction}
 
 \input{sections/introduction.tex}
@@ -138,7 +67,7 @@
 
 \input{sections/results.tex}
 
-\usection{Limitations of the Study}{sec:limitations}
+\usection{Limitations of Study}{sec:limitations}
 
 \input{sections/limitations.tex}
 
@@ -146,41 +75,32 @@
 
 \input{sections/conclusion.tex}
 
-\usection{Star$\star$ Methods}{sec:methods}
-
-\input{sections/methods.tex}
-
 \section*{Acknowledgements}
 
 F.N. and T.B. gratefully acknowledge funding from the Helmholtz Association
 under grant no. VH-NG-1352. The responsibility for the contents lies with the
 authors.
 
-
-\section*{License}
-
-\href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution
-4.0 International License (CC-BY-4.0)}
-
 \section*{Author Contributions}
 
-\textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation,
+\textbf{F.N.} Conceptualization, Methodology, Investigation,
 Software, Validation, Formal analysis, Visualization, Writing -- Original Draft,
-Writing -- Review \& Editing \textbf{Tom Brown:} Conceptualization, Writing --
+Writing -- Review \& Editing \textbf{T.B.} Conceptualization, Writing --
 Review \& Editing, Supervision, Project administration, Funding acquisition
 
 \section*{Declaration of Interests}
 
 The authors declare no competing interests.
 
-% tidy with https://flamingtempura.github.io/bibtex-tidy/
+\section*{Figure and Table Legends}
+
+\input{sections/legends.tex} 
+
+\usection{Star Methods}{sec:methods}
+
+\input{sections/methods.tex}
+
 \addcontentsline{toc}{section}{References}
-\renewcommand{\ttdefault}{\sfdefault}
 \bibliography{library}
-
-\newpage
-\tableofcontents
-
-% \begin{appendix} \input{sections/appendix.tex} \end{appendix}
 
 \end{document}

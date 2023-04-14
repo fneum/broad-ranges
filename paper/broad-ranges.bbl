@@ -77,10 +77,18 @@ F.~G. Li, E.~Trutnevyte, Investment appraisal of cost-optimal and near-optimal
   189 (2017) 89--109.
 \newblock \href {https://doi.org/10/f9qtrf} {\path{doi:10/f9qtrf}}.
 
+\bibitem{pickeringDiversityOptions2022}
+B.~Pickering, F.~Lombardi, S.~Pfenninger, Diversity of options to eliminate
+  fossil fuels and reach carbon neutrality across the entire {{European}}
+  energy system, Joule 6~(6) (2022) 1253--1276.
+\newblock \href {https://doi.org/10.1016/j.joule.2022.05.009}
+  {\path{doi:10.1016/j.joule.2022.05.009}}.
+
 \bibitem{nacken_integrated_2019}
 L.~Nacken, F.~Krebs, T.~Fischer, C.~Hoffmann, Integrated renewable energy
   systems for {Germany} – {A} model-based exploration of the decision space,
-  2019, p.~8.
+  16th International Conference on the European Energy Market (2019) 8\href
+  {https://doi.org/10/fzt8} {\path{doi:10/fzt8}}.
 
 \bibitem{Price2017}
 J.~Price, I.~Keppo, Modelling to generate alternatives: {A} technique to
@@ -90,15 +98,17 @@ J.~Price, I.~Keppo, Modelling to generate alternatives: {A} technique to
 
 \bibitem{pedersen_modeling_2020}
 T.~T. Pedersen, M.~Victoria, M.~G. Rasmussen, G.~B. Andresen, Modeling all
-  alternative solutions for highly renewable energy systems, arXiv:2010.00836
-  (Oct. 2020).
+  alternative solutions for highly renewable energy systems, Energy 234 (2021)
+  121294.
+\newblock \href {https://doi.org/10.1016/j.energy.2021.121294}
+  {\path{doi:10.1016/j.energy.2021.121294}}.
 
 \bibitem{ludererImpactDeclining2021}
 G.~Luderer, S.~Madeddu, L.~Merfort, F.~Ueckerdt, M.~Pehl, R.~Pietzcker,
   M.~Rottoli, F.~Schreyer, N.~Bauer, L.~Baumstark, C.~Bertram, A.~Dirnaichner,
   F.~Humpenöder, A.~Levesque, A.~Popp, R.~Rodrigues, J.~Strefler, E.~Kriegler,
   Impact of declining renewable energy costs on electrification in low-emission
-  scenarios, Nature Energy (Nov. 2021).
+  scenarios, Nature Energy 7 (2022) 32--42.
 \newblock \href {https://doi.org/10.1038/s41560-021-00937-z}
   {\path{doi:10.1038/s41560-021-00937-z}}.
 
@@ -133,8 +143,11 @@ B.~Fais, I.~Keppo, M.~Zeyringer, W.~Usher, H.~Daly, Impact of technology
 \newblock \href {https://doi.org/10/f9gmpd} {\path{doi:10/f9gmpd}}.
 
 \bibitem{usher_value_2015}
-W.~Usher, The {Value} of {Global} {Sensitivity} {Analysis} for {Energy}
-  {System} {Modelling} (2015) 29.
+W.~Usher,
+  \href{https://www.researchgate.net/publication/322721974_The_Value_of_Global_Sensitivity_Analysis_for_Energy_System_Modelling}{The
+  value of global sensitivity analysis for energy system modelling}, in:
+  International Energy Workshop, 2015, p.~29.
+\newline\urlprefix\url{https://www.researchgate.net/publication/322721974_The_Value_of_Global_Sensitivity_Analysis_for_Energy_System_Modelling}
 
 \bibitem{pypsaeur}
 J.~H\"orsch, F.~Hofmann, D.~Schlachtberger, T.~Brown, {PyPSA}-{Eur}: {An} open
@@ -193,11 +206,13 @@ C.~F. Heuberger, E.~S. Rubin, I.~Staffell, N.~Shah, N.~Mac~Dowell, Power
 \newblock \href {https://doi.org/10/gcgs2v} {\path{doi:10/gcgs2v}}.
 
 \bibitem{mattsson_learning_2019}
-N.~Mattsson, Learning by modeling energy systems, Ph.D. thesis (2019).
+N.~Mattsson, \href{https://research.chalmers.se/en/publication/514513}{Learning
+  by modeling energy systems}~PhD thesis (2019).
+\newline\urlprefix\url{https://research.chalmers.se/en/publication/514513}
 
 \bibitem{lisa_learning2022}
 E.~Zeyen, M.~Victoria, T.~Brown, Endogenous learning for green hydrogen in a
-  sector-coupled energy model for europeArXiv:2205.11901 (2022).
+  sector-coupled energy model for {Europe}~arXiv:2205.11901 (2022).
 \newblock \href {https://doi.org/10.48550/arXiv.2205.11901}
   {\path{doi:10.48550/arXiv.2205.11901}}.
 
@@ -209,7 +224,10 @@ S.~Moret, V.~Codina~Gironès, M.~Bierlaire, F.~Maréchal, Characterization of
 
 \bibitem{shirizadeh_how_2019}
 B.~Shirizadeh, Q.~Perrier, P.~Quirion, How sensitive are optimal fully
-  renewable power systems to technology cost uncertainty? (2019) 45.
+  renewable power systems to technology cost uncertainty?, The Energy Journal
+  43~(1) (2022).
+\newblock \href {https://doi.org/10.5547/01956574.43.1.bshi}
+  {\path{doi:10.5547/01956574.43.1.bshi}}.
 
 \bibitem{li_using_2020}
 P.-H. Li, S.~Pye, I.~Keppo, Using clustering algorithms to characterise
@@ -247,17 +265,21 @@ P.~S. Palar, T.~Tsuchiya, G.~T. Parks, Multi-fidelity non-intrusive polynomial
 
 \bibitem{fajraoui_optimal_2017}
 N.~Fajraoui, S.~Marelli, B.~Sudret, On optimal experimental designs for
-  {Sparse} {Polynomial} {Chaos} {Expansions}, arXiv:1703.05312 (Mar. 2017).
+  {Sparse} {Polynomial} {Chaos} {Expansions}~arXiv:1703.05312 (2017).
+\newblock \href {https://doi.org/10.48550/arXiv.1703.05312}
+  {\path{doi:10.48550/arXiv.1703.05312}}.
 
 \bibitem{gratiet_metamodel-based_2015}
-L.~L. Gratiet, S.~Marelli, B.~Sudret, Metamodel-based sensitivity analysis:
-  {Polynomial} chaos expansions and {Gaussian} processes, arXiv:1606.04273
-  (2015) 1--37\href {https://doi.org/10/ggxtbp} {\path{doi:10/ggxtbp}}.
+L.~L. Gratiet, S.~Marelli, B.~Sudret, Metamodel-Based Sensitivity Analysis:
+  Polynomial Chaos Expansions and Gaussian Processes, Springer International
+  Publishing, Cham, 2016, pp. 1--37.
+\newblock \href {https://doi.org/10.1007/978-3-319-11259-6_38-1}
+  {\path{doi:10.1007/978-3-319-11259-6_38-1}}.
 
 \bibitem{muhlpfordt_uncertainty_2020}
 T.~Mühlpfordt, Uncertainty {Quantification} via {Polynomial} {Chaos}
   {Expansion} – {Methods} and {Applications} for {Optimization} of {Power}
-  {Systems} (2020).
+  {Systems}~PhD thesis (2020).
 \newblock \href {https://doi.org/10/ggxtbr} {\path{doi:10/ggxtbr}}.
 
 \bibitem{feinberg_chaospy_2015}
@@ -275,8 +297,10 @@ L.~W.-T. Ng, M.~Eldred, Multifidelity {Uncertainty} {Quantification} {Using}
 \newblock \href {https://doi.org/10/ghknms} {\path{doi:10/ghknms}}.
 
 \bibitem{hosder2007}
-S.~Hosder, R.~Walters, M.~Balch, Efficient Sampling for Non-Intrusive
-  Polynomial Chaos Applications with Multiple Uncertain Input Variables.
+S.~Hosder, R.~Walters, M.~Balch, Efficient sampling for non-intrusive
+  polynomial chaos applications with multiple uncertain input variables, in:
+  48th AIAA/ASME/ASCE/AHS/ASC Structures, Structural Dynamics, and Materials
+  Conference, 2007.
 \newblock \href {https://doi.org/10/ftdc} {\path{doi:10/ftdc}}.
 
 \end{thebibliography}
