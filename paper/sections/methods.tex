@@ -32,10 +32,12 @@ experimental design that efficiently covers the parameter space.
 
 \usubsection{Least-Cost Investment Planning}{sec:leastcost}
 
-The objective of long-term power system planning is to minimise the total
-annual system costs, comprising annualised capital costs $c_\star$ for investments at locations $i$
-in generator capacity $G_{i,r}$ of technology $r$, storage capacity $H_{i,s}$ of technology $s$, and transmission line capacities
-$F_{\ell}$, as well as the variable operating costs $o_\star$ for generator dispatch $g_{i,r,t}$:
+The objective of long-term power system planning is to minimise the total annual
+system costs, comprising annualised capital costs $c_\star$ for investments at
+locations $i$ in generator capacity $G_{i,r}$ of technology $r$, storage
+capacity $H_{i,s}$ of technology $s$, and transmission line capacities
+$F_{\ell}$, as well as the variable operating costs $o_\star$ for generator
+dispatch $g_{i,r,t}$:
 \begin{align}
     \min_{G,H,F,g} \quad \left\{
         \sum_{i,r}   c_{i,r}  \cdot G_{i,r}  +
@@ -46,14 +48,16 @@ $F_{\ell}$, as well as the variable operating costs $o_\star$ for generator disp
     \label{eq:objective}
 \end{align}
 where the snapshots $t$ are weighted by $w_t$ such that their total duration
-adds up to one year. The objective is subject to a set of linear constraints that define limits on
-(i) the capacities of infrastructure from geographical and technical potentials,
-(ii) the availability of variable renewable energy sources for each location and point in time, and
-(iii) linearised multi-period optimal power flow (LOPF) constraints including storage consistency equations,
-which we describe in more detail in the following.
+adds up to one year. The objective is subject to a set of linear constraints
+that define limits on (i) the capacities of infrastructure from geographical and
+technical potentials, (ii) the availability of variable renewable energy sources
+for each location and point in time, and (iii) linearised multi-period optimal
+power flow (LOPF) constraints including storage consistency equations, which we
+describe in more detail in the following.
 
 The capacities of generation, storage and transmission infrastructure are
-limited to their geographical potentials from above and existing infrastructure from below:
+limited to their geographical potentials from above and existing infrastructure
+from below:
 \begin{align}
     \label{eq:firstA}
     \underline{G}_{i,r}  \leq G_{i,r}  \leq \overline{G}_{i,r}  &\qquad\forall i, r \\
@@ -61,14 +65,15 @@ limited to their geographical potentials from above and existing infrastructure 
     \underline{F}_{\ell} \leq F_{\ell} \leq \overline{F}_{\ell} &\qquad\forall \ell
 \end{align}
 
-The dispatch of a renewable generator is constrained by
-its rated capacity and the time- and location-dependent availability $\overline{g}_{i,r,t}$,
-given in per-unit of the generator's capacity:
+The dispatch of a renewable generator is constrained by its rated capacity and
+the time- and location-dependent availability $\overline{g}_{i,r,t}$, given in
+per-unit of the generator's capacity:
 \begin{align}
     0 \leq g_{i,r,t} \leq \overline{g}_{i,r,t} G_{i,r} \qquad\forall i, r, t
 \end{align}
 The dispatch of storage units is described by a charge variable $h_{i,s,t}^+$
-and a discharge variable $h_{i,s,t}^-$, each limited by the power rating $H_{i,s}$.
+and a discharge variable $h_{i,s,t}^-$, each limited by the power rating
+$H_{i,s}$.
 \begin{align}
     0 \leq h_{i,s,t}^+ \leq H_{i,s} &\qquad\forall i, s, t \\
     0 \leq h_{i,s,t}^- \leq H_{i,s} &\qquad\forall i, s, t
@@ -78,9 +83,11 @@ The energy levels $e_{i,s,t}$ of all storage units are linked to the dispatch by
     e_{i,s,t} =\: & \eta_{i,s,0}^{w_t} \cdot e_{i,s,t-1} + w_t \cdot h_{i,s,t}^\text{inflow} - w_t \cdot h_{i,s,t}^\text{spillage} & \quad\forall i, s, t \nonumber \\
     & + \eta_{i,s,+} \cdot w_t \cdot h_{i,s,t}^+ - \eta_{i,s,-}^{-1} \cdot w_t \cdot h_{i,s,t}^-.
 \end{align}
-Storage units can have a standing loss $\eta_{i,s,0}$, a charging efficiency $\eta_{i,s,+}$, a discharging efficiency $\eta_{i,s,-}$,
-natural inflow $h_{i,s,t}^\text{inflow}$ and spillage $h_{i,s,t}^\text{spillage}$.
-The storage energy levels are assumed to be cyclic and are constrained by their energy capacity
+Storage units can have a standing loss $\eta_{i,s,0}$, a charging efficiency
+$\eta_{i,s,+}$, a discharging efficiency $\eta_{i,s,-}$, natural inflow
+$h_{i,s,t}^\text{inflow}$ and spillage $h_{i,s,t}^\text{spillage}$. The storage
+energy levels are assumed to be cyclic and are constrained by their energy
+capacity
 \begin{align}
     e_{i,s,0} = e_{i,s,T} &\qquad\forall i, s \\
     0 \leq e_{i,s,t} \leq \overline{T}_s \cdot H_{i,s} &\qquad\forall i, s, t.
@@ -92,85 +99,84 @@ rating. Owing to the absence of large thermal power plants in our fully
 renewable scenarios, unit commitment constraints regarding the ramping, start-up
 and shut-down of generators are not considered.
 
-Kirchhoff's Current Law (KCL) requires local generators and storage units as well as
-incoming or outgoing flows $f_{\ell,t}$ of incident transmission lines $\ell$
-to balance the inelastic electricity demand $d_{i,t}$ at each location $i$ and snapshot $t$
+Kirchhoff's Current Law (KCL) requires local generators and storage units as
+well as incoming or outgoing flows $f_{\ell,t}$ of incident transmission lines
+$\ell$ to balance the inelastic electricity demand $d_{i,t}$ at each location
+$i$ and snapshot $t$
 \begin{align}
     \sum_r g_{i,r,t} + \sum_s h_{i,s,t} + \sum_\ell K_{i\ell} f_{\ell,t} = d_{i,t} \qquad\forall i,t,
 \end{align}
 where $K_{i\ell}$ is the incidence matrix of the network.
 
-Kichhoff's Voltage Law (KVL) imposes further constraints on the flow of AC lines.
-Using linearised load flow assumptions, the voltage angle difference around every closed cycle in the
-network must add up to zero. We formulate this constraint using a cycle basis $C_{\ell c}$
-of the network graph where the independent cycles $c$ are expressed as
-directed linear combinations of lines $\ell$.\cite{cycleflows}
-This leads to the constraints
+Kichhoff's Voltage Law (KVL) imposes further constraints on the flow of AC
+lines. Using linearised load flow assumptions, the voltage angle difference
+around every closed cycle in the network must add up to zero. We formulate this
+constraint using a cycle basis $C_{\ell c}$ of the network graph where the
+independent cycles $c$ are expressed as directed linear combinations of lines
+$\ell$.\cite{cycleflows} This leads to the constraints
 \begin{align}
     \sum_\ell C_{\ell c} \cdot x_\ell \cdot f_{\ell,t} = 0 \qquad\forall c,t
     \label{eq:kvl}
 \end{align}
-where $x_\ell$ is the series inductive reactance of line $\ell$.
-Controllable HVDC links are not affected by this constraint.
+where $x_\ell$ is the series inductive reactance of line $\ell$. Controllable
+HVDC links are not affected by this constraint.
 
-Finally, all line flows $f_{\ell,t}$ must be operated within their nominal capacities $F_\ell$
+Finally, all line flows $f_{\ell,t}$ must be operated within their nominal
+capacities $F_\ell$
 \begin{align}
     \abs{f_{\ell,t}} \leq \overline{f}_{\ell} F_{\ell} & \qquad\forall \ell, t,
     \label{eq:lastA}
 \end{align}
-where $\overline{f}_\ell$ acts as a per-unit buffer capacity
-to protect against the outage of single circuits.
+where $\overline{f}_\ell$ acts as a per-unit buffer capacity to protect against
+the outage of single circuits.
 
-This problem is implemented in the open-source tool PyPSA\cite{pypsa} and is solved by Gurobi.
-Note, that it assumes perfect foresight for a single reference year based on which capacities are optimised.
-It does not include pathway optimisation, nor aspects of reserve power, or system stability.
-Changes of line expansion to line impedance are ignored.
+This problem is implemented in the open-source tool PyPSA\cite{pypsa} and is
+solved by Gurobi. Note, that it assumes perfect foresight for a single reference
+year based on which capacities are optimised. It does not include pathway
+optimisation, nor aspects of reserve power, or system stability. Changes of line
+expansion to line impedance are ignored.
 
 \usubsection{Finding Near-Optimal Alternatives}{sec:nearoptimal}
 
-Using the least-cost solution as an anchor, we use the
-$\epsilon$-constraint method from multi-objective optimisation
-to find near-optimal feasible solutions.\cite{nearoptimal,mavrotas_effective_2009}
-For notational brevity, let $c^\top x$ denote the linear objective function \cref{eq:objective}
-and $Ax\leq b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA}
-in a space of continuous variables,
-such that the minimised system cost can be represented by
+Using the least-cost solution as an anchor, we use the $\epsilon$-constraint
+method from multi-objective optimisation to find near-optimal feasible
+solutions.\cite{nearoptimal,mavrotas_effective_2009} For notational brevity, let
+$c^\top x$ denote the linear objective function \cref{eq:objective} and $Ax\leq
+b$ the set of linear constraints \crefrange{eq:firstA}{eq:lastA} in a space of
+continuous variables, such that the minimised system cost can be represented by
 \begin{equation}
     C = \min_x\left\{c^\top x \mid Ax\leq b\right\}.
 \end{equation}
 
 % one technology
 
-We then encode the original objective as a constraint
-such that the cost increase is limited to a given $\epsilon$.
-In other words, the feasible space is cut to solutions that
-are at most $\epsilon$ more expensive than the least-cost solution.
-Given this slack, we can formulate alternative search directions in the objective.
-For instance, we can seek to minimise or maximise the sum of solar installations $x_s \subseteq x$ with
+We then encode the original objective as a constraint such that the cost
+increase is limited to a given $\epsilon$. In other words, the feasible space is
+cut to solutions that are at most $\epsilon$ more expensive than the least-cost
+solution. Given this slack, we can formulate alternative search directions in
+the objective. For instance, we can seek to minimise or maximise the sum of
+solar installations $x_s \subseteq x$ with
 \begin{align}
     \label{eq:xs_max}
     \underline{x_s} = \min_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C \:\right\} \\
     \label{eq:xs_min}
     \overline{x_s} = \max_{x_s}\left\{\: 1^\top x_s \mid Ax\leq b,\quad c^\top x\leq (1+\epsilon)\cdot C \:\right\}.
 \end{align}
-To draw a full picture of the boundaries of the near-optimal feasible space,
-we systematically explore the extremes of various technologies:
-we both minimise and maximise the system-wide investments in
-solar, onshore wind, offshore wind, any wind, hydrogen storage, and battery storage
-capacities, as well as the total volume of transmission network expansion.
-Evaluating each of these technology groups for
-different cost deviations $\epsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
+To draw a full picture of the boundaries of the near-optimal feasible space, we
+systematically explore the extremes of various technologies: we both minimise
+and maximise the system-wide investments in solar, onshore wind, offshore wind,
+any wind, hydrogen storage, and battery storage capacities, as well as the total
+volume of transmission network expansion. Evaluating each of these technology
+groups for different cost deviations $\epsilon \in \{1\%,2\%,4\%,6\%,8\%\}$
 allows us to observe how the degree of freedom regarding investment decisions
 rises as the optimality tolerance is increased, both at lower and upper ends.
-The boundaries delineate Pareto frontiers on which no criterion,
-neither reducing system cost nor extremising the capacity of a technology,
-can be improved without depressing the other.
-By arguments of convexity, these extremes even define limits
-within which all near-optimal solutions are contained.
-Moreover, although this scheme primarily studies aggregated capacities,
-the solutions are spatially explicit, and we can inspect for each case
-how the capacities of each technology are distributed within the network.
-
+The boundaries delineate Pareto frontiers on which no criterion, neither
+reducing system cost nor extremising the capacity of a technology, can be
+improved without depressing the other. By arguments of convexity, these extremes
+even define limits within which all near-optimal solutions are contained.
+Moreover, although this scheme primarily studies aggregated capacities, the
+solutions are spatially explicit, and we can inspect for each case how the
+capacities of each technology are distributed within the network.
 
 % two technologies
 
@@ -196,14 +202,6 @@ approach to spanning the space of near-optimal solutions in multiple dimensions
 at a time using a quick hull algorithm was presented by Pedersen et
 al.~\cite{pedersen_modeling_2020}
 
-% ----------------- unused --------------------------
-% extremes of different technologies cannot be realised simultaneously.
-% This is because technologies that are not part of the objective
-% will act to support the active search direction.
-% For instance, lowering wind capacities will be compensated for
-% by higher solar capacities to satisfy the total energy demand.
-% Thus, extremising one technology narrows the flexibility of a substitute technology.
-
 Due to computational constraints, we focus on technologies which are assumed to
 lend themselves to substitution and limit the corresponding analysis to a single
 illustrative cost increase level of $\epsilon=6\%$. The same methodology can be
@@ -218,30 +216,34 @@ range.
 \begin{figure}
     \centering
         \begin{tabular}{cc}
-            \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity: \\
-            \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and 2-hourly \\
+            \footnotesize (a) low-fidelity: & \footnotesize (b) high-fidelity:
+            \\
+            \footnotesize 37 nodes and 4-hourly & \footnotesize 128 nodes and
+            2-hourly \\
             \includegraphics[width=0.49\textwidth]{map37.pdf} &
             \includegraphics[width=0.49\textwidth]{map128.pdf} \\
             \includegraphics[width=0.49\textwidth]{timeseries37.pdf} &
             \includegraphics[width=0.49\textwidth]{timeseries128.pdf} \\
         \end{tabular}
-    \caption[Spatial and temporal resolution of the low and high fidelity model]{Spatial and temporal resolution of the low and high fidelity model.
-    Green lines represent controllable HVDC lines. Red lines represent HVAC lines.
-    Examples for capacity factors for wind and solar are shown for four days in March
-    at the northernmost node in Germany, alongside the normalised load profile.}
+    \caption[Spatial and temporal resolution of the low and high fidelity
+    model]{Spatial and temporal resolution of the low and high fidelity model.
+    Green lines represent controllable HVDC lines. Red lines represent HVAC
+    lines. Examples for capacity factors for wind and solar are shown for four
+    days in March at the northernmost node in Germany, alongside the normalised
+    load profile.}
     \label{fig:pypsaeur}
 \end{figure}
 
 % general
 
-The instances of the coordinated capacity expansion problem
- (see \nameref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model of
- the European power transmission system that combines high spatial and temporal
- resolution.\cite{pypsaeur} Because it only uses open data and every processing
- step is defined in a workflow,\cite{snakemake} we achieve a high level of
- transparency and reproducibility. In the following, we outline the main
- features and configurations, and refer to the supplementary material and Hörsch
- et al.~\cite{pypsaeur} for more details.
+The instances of the coordinated capacity expansion problem (see
+ \nameref{sec:leastcost}) are based on \mbox{PyPSA-Eur}, which is an open model
+ of the European power transmission system that combines high spatial and
+ temporal resolution.\cite{pypsaeur} Because it only uses open data and every
+ processing step is defined in a workflow,\cite{snakemake} we achieve a high
+ level of transparency and reproducibility. In the following, we outline the
+ main features and configurations, and refer to the supplementary material and
+ Hörsch et al.~\cite{pypsaeur} for more details.
 
 \paragraph{Scenario}
 We target a fully renewable electricity system based on variable resources such
@@ -290,13 +292,14 @@ dams, pumped-hydro storage plants are retrieved from
 % renewable generation potentials
 
 \paragraph{Renewable Energy Potentials}
-Eligible areas for developing renewable infrastructure are calculated
-per technology and the grid nodes' Voronoi cells, assuming wind and solar installations always connect to the closest substation.
-How much wind and solar capacity may be built at a location is constrained by
-eligible codes of the CORINE land use database and is further restricted by distance criteria,
-allowed deployment density, and the natural protection areas specified in the NATURA 2000 dataset.
-Moreover, offshore wind farms may not be developed at sea depths exceeding 50 metres,
-as indicated by the GEBCO bathymetry dataset.
+Eligible areas for developing renewable infrastructure are calculated per
+technology and the grid nodes' Voronoi cells, assuming wind and solar
+installations always connect to the closest substation. How much wind and solar
+capacity may be built at a location is constrained by eligible codes of the
+CORINE land use database and is further restricted by distance criteria, allowed
+deployment density, and the natural protection areas specified in the NATURA
+2000 dataset. Moreover, offshore wind farms may not be developed at sea depths
+exceeding 50 metres, as indicated by the GEBCO bathymetry dataset.
 
 % renewable generation and demand time series
 
@@ -318,8 +321,8 @@ population density and to 60\% by gross domestic product.
     \begin{small}
         \begin{tabular}{cccc}
             \toprule
-            Technology & Lower CAPEX & Upper CAPEX & Unit  \\ \midrule
-            Onshore Wind & 800 & 1190 & EUR/kW \\
+            Technology & Lower CAPEX & Upper CAPEX & Unit  \\ \midrule Onshore
+            Wind & 800 & 1190 & EUR/kW \\
             Offshore Wind & 1420 & 1950 & EUR/kW \\ % no connection cost
             Solar & 420 & 620 & EUR/kW \\
             Battery & 316 & 1306 & EUR/kW \\
@@ -327,21 +330,24 @@ population density and to 60\% by gross domestic product.
             % FOM and lifetime may also vary!
         \end{tabular}
     \end{small}
-    \caption[Technology Cost Uncertainty]{Technology cost uncertainty using optimistic and pessimistic assumptions from the Danish Energy Agency.\cite{DEA}}
+    \caption[Technology Cost Uncertainty]{Technology cost uncertainty using
+    optimistic and pessimistic assumptions from the Danish Energy
+    Agency.\cite{DEA}}
     \label{tab:costuncertainty}
 \end{SCtable}
 
 % General
 
 Uncertainty of technology cost projections is driven by two main factors:
-unknown learning rates (i.e.~how quickly costs fall as more capacity is built) and
-unclear deployment rates (i.e.~how much capacity will be built in the future).\cite{gritsevskyi_modeling_2000,yeh_review_2012}
-As modelling technological learning endogeneously is computationally challenging due to the nonconvexity it entails,\cite{heuberger_power_2017,mattsson_learning_2019,lisa_learning2022}
-% While uncertainty about the latter could generally be addressed by modelling endogeneous
-% learning in an approach that includes multiple investment periods,
-% the exponential influence of the learning rate raises the computational complexity immensely
-technology cost uncertainty is typically defined exogenously by an interval within which costs may vary
-and a distribution that specifies which segments are more probable.
+unknown learning rates (i.e.~how quickly costs fall as more capacity is built)
+and unclear deployment rates (i.e.~how much capacity will be built in the
+future).\cite{gritsevskyi_modeling_2000,yeh_review_2012} As modelling
+technological learning endogeneously is computationally challenging due to the
+nonconvexity it
+entails,\cite{heuberger_power_2017,mattsson_learning_2019,lisa_learning2022}
+technology cost uncertainty is typically defined exogenously by an interval
+within which costs may vary and a distribution that specifies which segments are
+more probable.
 
 % Ranges
 
@@ -362,9 +368,9 @@ discount rate, since multiple combinations lead to the same annuity. We built
 the uncertainty ranges presented in \cref{tab:costuncertainty} from the
 optimistic and pessimistic technology cost and lifetime projections for the year
 2050 from the Danish Energy Agency, which correspond to 90\% confidence
-intervals.\cite{DEA} In cases where no uncertainty ranges were provided
-for the year 2050, such as for rooftop PV, projections for the year 2030
-define the upper end of the uncertainty interval.
+intervals.\cite{DEA} In cases where no uncertainty ranges were provided for the
+year 2050, such as for rooftop PV, projections for the year 2030 define the
+upper end of the uncertainty interval.
 
 % Distributions
 
@@ -400,12 +406,12 @@ original model cannot be obtained easily. Surrogate names are also known by
 names such as approximation models, response surface methods, metamodels and
 emulators. In contrast to the full model, they only imitate the input/output
 behaviour for a selection of aggregated outputs, but take much less time to
-compute.\cite{palar_multi-fidelity_2016} Like other machine learning
-techniques, they generalise from a training dataset that comprises only a
-limited number of samples. As surrogate models interpolate gaps in the parameter
-space that are not contained in the sample set, which would otherwise be
-computationally expensive to fill, they are well suited to use cases such as
-parameter space exploration and sensitivity analysis.
+compute.\cite{palar_multi-fidelity_2016} Like other machine learning techniques,
+they generalise from a training dataset that comprises only a limited number of
+samples. As surrogate models interpolate gaps in the parameter space that are
+not contained in the sample set, which would otherwise be computationally
+expensive to fill, they are well suited to use cases such as parameter space
+exploration and sensitivity analysis.
 
 % this paper
 
@@ -422,50 +428,51 @@ from an abundance of alternatives is based on polynomial chaos expansion (PCE).
 \cite{sudret_global_2008,fajraoui_optimal_2017,gratiet_metamodel-based_2015} We
 select this approach because the resulting approximations allow efficient
 analytical statistical evaluation\cite{sudret_global_2008} and can conveniently
-combine training data from variously detailed models.\cite{palar_multi-fidelity_2016}
+combine training data from variously detailed
+models.\cite{palar_multi-fidelity_2016}
 
 % general idea
 
-The general idea of surrogate models based on PCE is to
-represent uncertain model outputs as a linear combination of orthogonal basis functions
-of the random input variables weighted by deterministic coefficients.\cite{muhlpfordt_uncertainty_2020}
-It is a Hilbert space technique that works in principle analogously to decomposing a periodic signal into its Fourier components.\cite{muhlpfordt_uncertainty_2020}
-Building the surrogate model consists of the following steps:
-(i) sampling a set of cost projections from the parameter space,
-(ii) solving the least-cost or near-optimal investment planning problem for each sample,
-(iii) selecting an expansion of orthogonal polynomials within the parameter space,
-(iv) performing a regression to calculate the polynomial coefficients, and ultimately
-(v) using the model approximation for statistical analysis.
-In the following, we formalise this approach mathematically,
-which we implemented using the \textit{chaospy} toolbox,\cite{feinberg_chaospy_2015}
-and elaborate on individual aspects in more detail.
+The general idea of surrogate models based on PCE is to represent uncertain
+model outputs as a linear combination of orthogonal basis functions of the
+random input variables weighted by deterministic
+coefficients.\cite{muhlpfordt_uncertainty_2020} It is a Hilbert space technique
+that works in principle analogously to decomposing a periodic signal into its
+Fourier components.\cite{muhlpfordt_uncertainty_2020} Building the surrogate
+model consists of the following steps: (i) sampling a set of cost projections
+from the parameter space, (ii) solving the least-cost or near-optimal investment
+planning problem for each sample, (iii) selecting an expansion of orthogonal
+polynomials within the parameter space, (iv) performing a regression to
+calculate the polynomial coefficients, and ultimately (v) using the model
+approximation for statistical analysis. In the following, we formalise this
+approach mathematically, which we implemented using the \textit{chaospy}
+toolbox,\cite{feinberg_chaospy_2015} and elaborate on individual aspects in more
+detail.
 
 We start by defining the vector of random input variables as
 \begin{equation}
     \x = \{\mathsf{x}_1, \dots , \mathsf{x}_m\}
 \end{equation}
-that represents the $m$ uncertain cost projections.
-Further, we let
+that represents the $m$ uncertain cost projections. Further, we let
 \begin{equation}
     \mathsf{y} = f(\x)
 \end{equation}
-describe how the uncertainty of inputs $\x$ propagates
-through the computationally intensive model $f$
-(i.e.~the solving of a large capacity expansion problem)
-to the outputs $\mathsf{y} \in \mathbb{R}$.
-% For simplicity, we limit the subsequent explanation to a scalar output,
-% but it is straightforward to expand the theory to vectorised outputs.
+describe how the uncertainty of inputs $\x$ propagates through the
+computationally intensive model $f$ (i.e.~the solving of a large capacity
+expansion problem) to the outputs $\mathsf{y} \in \mathbb{R}$.
 
 We can represent the computational model $f$ with its polynomial chaos expansion
 \begin{equation}
     \mathsf{y} = f(\x) = \sum_{\ba \,\in\, \mathbb{N}^m} r_{\ba} \psi_{\ba}(\x),
     \label{eq:pce}
 \end{equation}
-where $\psi_\ba$ denotes multivariate orthogonal polynomials that form
-a Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial coefficients.\cite{sudret_global_2008} The multiindex $\ba = \{\alpha_1,\dots,\alpha_m\}$
-denotes the degree of the polynomial $\psi_\ba$ in each of the $m$ random input variables $\mathsf{x}_i$.
-As \cref{eq:pce} features an infinite number of unknown coefficients,
-it is common practice to approximate by truncating the expansion to get a finite number of coefficients
+where $\psi_\ba$ denotes multivariate orthogonal polynomials that form a
+Hilbertian basis and $r_\ba \in \mathbb{R}$ are the corresponding polynomial
+coefficients.\cite{sudret_global_2008} The multiindex $\ba =
+\{\alpha_1,\dots,\alpha_m\}$ denotes the degree of the polynomial $\psi_\ba$ in
+each of the $m$ random input variables $\mathsf{x}_i$. As \cref{eq:pce} features
+an infinite number of unknown coefficients, it is common practice to approximate
+by truncating the expansion to get a finite number of coefficients
 \begin{equation}
     f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} r_\ba \psi_\ba(\x).
 \end{equation}
@@ -477,11 +484,10 @@ than a user-defined $p$ are selected. We can write this as a set of indices
     \label{eq:ca}
     \cA^{m,p} = \left\{\ba \in \mathbb{N}^m \,:\, \abs{\ba} \leq p\right\},
 \end{equation}
-where $\abs{\ba} = \sum_{i=1}^m \alpha_i$.
-Given the joint distribution of cost uncertainties of $\x$ and a maximum degree,
-a suitable collection of orthogonal polynomials can be constructed
-using a three terms recurrence algorithm.\cite{feinberg_chaospy_2015}
-The cardinality of the truncated PCE,
+where $\abs{\ba} = \sum_{i=1}^m \alpha_i$. Given the joint distribution of cost
+uncertainties of $\x$ and a maximum degree, a suitable collection of orthogonal
+polynomials can be constructed using a three terms recurrence
+algorithm.\cite{feinberg_chaospy_2015} The cardinality of the truncated PCE,
 \begin{equation}
     q = \card \cA^{m,p} = \left(\begin{matrix}
         m+p \\
@@ -491,15 +497,15 @@ The cardinality of the truncated PCE,
 \end{equation}
 indicates the number of unknown polynomial coefficients.
 
-We determine these coefficients by a regression based on
-a set of cost parameter samples
-and the corresponding outputs,
+We determine these coefficients by a regression based on a set of cost parameter
+samples and the corresponding outputs,
 \begin{equation}
     \mathcal{X} = \set{ \bm x^{(1)},\dots,\bm x^{(n)} } \quad\text{and}\quad
     \mathcal{Y} = \set{ f\left(\bm x^{(1)}\right),\dots,f\left(\bm x^{(n)}\right) }.
 \end{equation}
-Using this training dataset, we minimise the least-square residual of the polynomial approximation across all observations.
-We add an extra $L_1$ regularisation term, % LASSO regression
+Using this training dataset, we minimise the least-square residual of the
+polynomial approximation across all observations. We add an extra $L_1$
+regularisation term, % LASSO regression
 that induces a preference for fewer non-zero coefficients, and solve
 \begin{equation}
     \hat{\bm{r}} = \argmin_{\bm{r} \,\in\, \mathbb{R}^q} \left[ \frac{1}{n} \sum_{i=1}^n \left(
@@ -507,11 +513,11 @@ that induces a preference for fewer non-zero coefficients, and solve
         \right)^2  + \lambda \norm{\bm{r}}_1 \right],
         \label{eq:regression}
     \end{equation}
-where we set the regularisation penalty to $\lambda=0.005$.
-This results in a sparse PCE that has proven to
-improve approximations in high-dimensional uncertainty spaces
-and to reduce the required number of samples for comparable approximation errors.\cite{gratiet_metamodel-based_2015}
-Knowing the optimised regression coefficients, we can now assemble the complete surrogate model
+where we set the regularisation penalty to $\lambda=0.005$. This results in a
+sparse PCE that has proven to improve approximations in high-dimensional
+uncertainty spaces and to reduce the required number of samples for comparable
+approximation errors.\cite{gratiet_metamodel-based_2015} Knowing the optimised
+regression coefficients, we can now assemble the complete surrogate model
 \begin{equation}
     \mathsf{y} = f(\x) \approx f'(\x) = \sum_{\ba \,\in\, \cA^{m,p}} \hat{r}_\ba \psi_\ba (\x).
 \end{equation}
@@ -526,22 +532,24 @@ prohibitively time-consuming. On the other hand, relying only on samples from a
 low-fidelity model may be too inaccurate.\cite{ng_multifidelity_2012} For
 example, an investment model that features only a single node per country will
 underestimate transmission bottlenecks and regionally uneven resource or demand
-distribution. In the section on \nameref{sec:inputs} we already alluded to using two models with
-varying spatial and temporal resolution in this paper. We integrate both in a
-multi-fidelity approach,\cite{ng_multifidelity_2012,palar_multi-fidelity_2016}
-and demonstrate how we can simultaneously avail of high coverage of the
-parameter space by sampling the simpler model many times, and the high
-spatio-temporal detail yielded by fewer more complex model runs.
+distribution. In the section on \nameref{sec:inputs} we already alluded to using
+two models with varying spatial and temporal resolution in this paper. We
+integrate both in a multi-fidelity
+approach,\cite{ng_multifidelity_2012,palar_multi-fidelity_2016} and demonstrate
+how we can simultaneously avail of high coverage of the parameter space by
+sampling the simpler model many times, and the high spatio-temporal detail
+yielded by fewer more complex model runs.
 
 % method
 
-The idea of the multi-fidelity approach is to build a corrective surrogate model $f_\Delta'(\x)$ for the
-error of the low-fidelity model $f_\ell$ compared to the high-fidelity model $f_h$
+The idea of the multi-fidelity approach is to build a corrective surrogate model
+$f_\Delta'(\x)$ for the error of the low-fidelity model $f_\ell$ compared to the
+high-fidelity model $f_h$
 \begin{equation}
     f_\Delta(\x) = f_h(\x) - f_\ell(\x),
 \end{equation}
-and add it to a surrogate model of the low-fidelity model to approximate the behaviour of the
-high-fidelity model
+and add it to a surrogate model of the low-fidelity model to approximate the
+behaviour of the high-fidelity model
 \begin{equation}
     f_h'(\x) = f_\ell'(\x) + f_\Delta'(\x).
 \end{equation}
@@ -556,11 +564,11 @@ samples, e.g.
     \mathcal{X}_h = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}} \quad\text{and}\quad
     \mathcal{X}_\ell = \set{ \bm{x}^{(1)}, \dots, \bm{x}^{(n_h)}, \dots, \bm{x}^{(n_\ell)}},
 \end{equation}
-which we can easily guarantee by using deterministic low-discrepancy series
-in the experimental design (see \nameref{sec:sampling}).
-With $p_\Delta < p_\ell$ and consequently $\cA_\Delta \subset \cA_\ell$,
-the multi-fidelity surrogate model can be written as a combination of low-fidelity
-and corrective polynomial coefficients
+which we can easily guarantee by using deterministic low-discrepancy series in
+the experimental design (see \nameref{sec:sampling}). With $p_\Delta < p_\ell$
+and consequently $\cA_\Delta \subset \cA_\ell$, the multi-fidelity surrogate
+model can be written as a combination of low-fidelity and corrective polynomial
+coefficients
 \begin{equation}
     f_h' (\x) = \sum_{\ba\,\in\,\cA_\ell^{m,p_\ell} \,\cap\, \cA_\Delta^{m,p_\Delta}}
     \left(
@@ -572,69 +580,64 @@ and corrective polynomial coefficients
 
 % this paper
 
-In this work, we apply a multi-fidelity surrogate model that considers
-effects up to order three observed in the low-fidelity model. These are then corrected with linear terms derived from insights from the high-fidelity model.
-We justify this choice by experimentation in the \nameref{sec:validation},
-by testing against other typical choices between orders one to five.\cite{gratiet_metamodel-based_2015}
-Given the polynomial expansion order, the remaining question is how many samples are necessary to attain an acceptable approximation.
+In this work, we apply a multi-fidelity surrogate model that considers effects
+up to order three observed in the low-fidelity model. These are then corrected
+with linear terms derived from insights from the high-fidelity model. We justify
+this choice by experimentation in the \nameref{sec:validation}, by testing
+against other typical choices between orders one to
+five.\cite{gratiet_metamodel-based_2015} Given the polynomial expansion order,
+the remaining question is how many samples are necessary to attain an acceptable
+approximation.
 
 \usubsection{Experimental Design for Surrogate Modelling}{sec:sampling}
 
-% competition/benchmark: \cite{trondle_trade-offs_2020}
-% - high fidelity: 10 samples, 400 nodes, 4-hourly;
-% - low fidelity: 150 samples, 25 nodes, 4-hourly; no DC power flow
-% uncertain parameters
-%12 in \cite{trondle_trade-offs_2020}
-%36 in \cite{pilpola_analyzing_2020}
-%5 in \cite{shirizadeh_how_2019}
-
 % general
 
-The experimental design covers strategies to find sufficiently high coverage
-of the parameter space at low computational cost.\cite{fajraoui_optimal_2017,usher_value_2015}
-It deals with how many samples are drawn and what sampling method is used.
+The experimental design covers strategies to find sufficiently high coverage of
+the parameter space at low computational
+cost.\cite{fajraoui_optimal_2017,usher_value_2015} It deals with how many
+samples are drawn and what sampling method is used.
 
 % sampling method
 
-Traditional Monte-Carlo sampling with pseudo-random numbers is known to
-possess slow convergence properties, % 1 / \sqrt{n}
-especially in high-dimensional parameter spaces.
-So-called low-discrepancy series can greatly improve on random sampling.
-Because they are designed to avoid forming large gaps and clusters,
-these deterministic sequences efficiently sample from the parameter space.\cite{fajraoui_optimal_2017}
-Thus, we choose to draw our samples from a low-discrepancy Halton sequence.
+Traditional Monte-Carlo sampling with pseudo-random numbers is known to possess
+slow convergence properties, % 1 / \sqrt{n}
+especially in high-dimensional parameter spaces. So-called low-discrepancy
+series can greatly improve on random sampling. Because they are designed to
+avoid forming large gaps and clusters, these deterministic sequences efficiently
+sample from the parameter space.\cite{fajraoui_optimal_2017} Thus, we choose to
+draw our samples from a low-discrepancy Halton sequence.
 
 % how many samples
 
-For the question about how many samples should be drawn,
-we resort to the oversampling ratio (OSR) as a guideline.
-The OSR is defined as the ratio between the number of samples
-and the number of unknown coefficients.\cite{palar_multi-fidelity_2016}
-The literature recommends values between two and three.\cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
-In other words, for a sufficiently accurate approximation,
-there should be significantly more samples than unknown coefficients.
-If the OSR is lower, the regression is prone to the risk of overfitting.
-On the other hand, a high OSR may lead to a very coarse approximation.\cite{palar_multi-fidelity_2016}
+For the question about how many samples should be drawn, we resort to the
+oversampling ratio (OSR) as a guideline. The OSR is defined as the ratio between
+the number of samples and the number of unknown
+coefficients.\cite{palar_multi-fidelity_2016} The literature recommends values
+between two and
+three.\cite{hosder2007,palar_multi-fidelity_2016,fajraoui_optimal_2017,gratiet_metamodel-based_2015}
+In other words, for a sufficiently accurate approximation, there should be
+significantly more samples than unknown coefficients. If the OSR is lower, the
+regression is prone to the risk of overfitting. On the other hand, a high OSR
+may lead to a very coarse approximation.\cite{palar_multi-fidelity_2016}
 
-According to \cref{eq:cardinality}, targeting an OSR of two
-and considering the five uncertain technology cost parameters (\cref{tab:costuncertainty}),
-approximating linear effects would require at least 12 samples, whereas cubic relations
-would already need 112 samples. Even 504 samples would be necessary to model the dynamics of order 5.
-To investigate the quality of different PCE orders
-and retain a validation dataset,
-we draw 500 samples for the low-fidelity model.
-Due to the computational burden carried by the high-fidelity models,
-we settle on a linear correction in advance, such that
-15 samples for the high-fidelity model are acceptable.
-In combination with 101 least-cost and near-optimal optimisation
-runs for each sample, this setup results in a total number of
-50,500 runs of the low-fidelity model and
-1,515 runs of the high-fidelity model.
-On average a single high-fidelity model run took 20 GB of memory and 5 hours to solve.
-Each low-fidelity model run on average consumed 3 GB of memory and completed within 5 minutes.
-This setup profits tremendously from parallelisation as it involves
-numerous independent optimisation runs.
-Moreover, it would have been infeasible to carry out without high-performance computing.
+According to \cref{eq:cardinality}, targeting an OSR of two and considering the
+five uncertain technology cost parameters (\cref{tab:costuncertainty}),
+approximating linear effects would require at least 12 samples, whereas cubic
+relations would already need 112 samples. Even 504 samples would be necessary to
+model the dynamics of order 5. To investigate the quality of different PCE
+orders and retain a validation dataset, we draw 500 samples for the low-fidelity
+model. Due to the computational burden carried by the high-fidelity models, we
+settle on a linear correction in advance, such that 15 samples for the
+high-fidelity model are acceptable. In combination with 101 least-cost and
+near-optimal optimisation runs for each sample, this setup results in a total
+number of 50,500 runs of the low-fidelity model and 1,515 runs of the
+high-fidelity model. On average a single high-fidelity model run took 20 GB of
+memory and 5 hours to solve. Each low-fidelity model run on average consumed 3
+GB of memory and completed within 5 minutes. This setup profits tremendously
+from parallelisation as it involves numerous independent optimisation runs.
+Moreover, it would have been infeasible to carry out without high-performance
+computing.
 
 \usubsection{Validation of the Surrogate Models}{sec:validation}
 
@@ -644,64 +647,63 @@ Moreover, it would have been infeasible to carry out without high-performance co
             \centering
             \caption{number of samples}
             \label{fig:error:samples}
-            \includegraphics[height=.6\textwidth]{error/error-r2-vs-samples-order-3-sklearn.pdf} \\
-            \includegraphics[height=.6\textwidth]{error/error-mape-vs-samples-order-3-sklearn.pdf} \\
-            \includegraphics[height=.6\textwidth]{error/error-mae-vs-samples-order-3-sklearn.pdf} \\
+            \includegraphics[height=.6\textwidth]{error/error-r2-vs-samples-order-3-sklearn.pdf}
+            \\
+            \includegraphics[height=.6\textwidth]{error/error-mape-vs-samples-order-3-sklearn.pdf}
+            \\
+            \includegraphics[height=.6\textwidth]{error/error-mae-vs-samples-order-3-sklearn.pdf}
+            \\
             \includegraphics[height=.6\textwidth]{error/error-rmse-vs-samples-order-3-sklearn.pdf}
         \end{subfigure}
         \begin{subfigure}[t]{.48\textwidth}
             \centering
             \caption{polynomial order}
             \label{fig:error:poly}
-            \includegraphics[height=.6\textwidth]{error/error-r2-vs-order-sklearn.pdf} \\
-            \includegraphics[height=.6\textwidth]{error/error-mape-vs-order-sklearn.pdf} \\
-            \includegraphics[height=.6\textwidth]{error/error-mae-vs-order-sklearn.pdf} \\
+            \includegraphics[height=.6\textwidth]{error/error-r2-vs-order-sklearn.pdf}
+            \\
+            \includegraphics[height=.6\textwidth]{error/error-mape-vs-order-sklearn.pdf}
+            \\
+            \includegraphics[height=.6\textwidth]{error/error-mae-vs-order-sklearn.pdf}
+            \\
             \includegraphics[height=.6\textwidth]{error/error-rmse-vs-order-sklearn.pdf}
         \end{subfigure}
     % }
-    \caption[Cross-validation errors]{Cross-validation errors by output for varying sample sizes and polynomial orders
-    of least-cost low-fidelity surrogate models.}
+    \caption[Cross-validation errors]{Cross-validation errors by output for
+    varying sample sizes and polynomial orders of least-cost low-fidelity
+    surrogate models.}
     \label{fig:error}
 \end{figure}
 
-We justify the use of surrogate modelling by cross-validation.
-Out of the 500 low-fidelity samples,
-100 samples are not used in the regression.
-This validation dataset is unknown to the surrogate model and is
-consulted to assess the approximation's quality.
-Because the high-fidelity sample size is limited and
-approximating near-optimal solutions is not assumed to fundamentally differ,
-we base the validation on low-fidelity least-cost solutions only.
-We experimentally evaluate the approximation errors between predicted and observed data
-for different combinations of polynomial order and sample size
-to decide on a suitable parameterisation.
-We present the coefficient of determination (R$^2$)
-for the variance captured,
-the mean absolute (percentage) errors (MAE/MAPE) for absolute and relative deviations,
-and the root mean squared error (RMSE).
+We justify the use of surrogate modelling by cross-validation. Out of the 500
+low-fidelity samples, 100 samples are not used in the regression. This
+validation dataset is unknown to the surrogate model and is consulted to assess
+the approximation's quality. Because the high-fidelity sample size is limited
+and approximating near-optimal solutions is not assumed to fundamentally differ,
+we base the validation on low-fidelity least-cost solutions only. We
+experimentally evaluate the approximation errors between predicted and observed
+data for different combinations of polynomial order and sample size to decide on
+a suitable parameterisation. We present the coefficient of determination (R$^2$)
+for the variance captured, the mean absolute (percentage) errors (MAE/MAPE) for
+absolute and relative deviations, and the root mean squared error (RMSE).
 
-Regarding the number of samples required, \cref{fig:error:samples}
-foremost illustrates that, given enough samples, we achieve
-average relative errors of less than 4\% for most output variables.
-This is comparable to the cross-validation errors from Tröndle et al.~\cite{trondle_trade-offs_2020}
-at rates below 5\%.
-Only for offshore wind and battery storage, we observe larger errors.
-However, this can be explained by a distortion of the relative measure
-when these technologies are hardly built for some cost projections.
-On the contrary, the prediction of total system costs is remarkably accurate.
-\cref{fig:error:samples} also demonstrates that for a polynomial order of 3,
-we gain no significant improvement with more than 200 samples.
-In fact, thanks to the regularisation term used in the regression,
-we already attain acceptable levels of accuracy with as few as 50 samples.
-Moreover, the high R$^2$ values underline that the surrogate model can explain
-most of the output variance.
+Regarding the number of samples required, \cref{fig:error:samples} foremost
+illustrates that, given enough samples, we achieve average relative errors of
+less than 4\% for most output variables. This is comparable to the
+cross-validation errors from Tröndle et al.~\cite{trondle_trade-offs_2020} at
+rates below 5\%. Only for offshore wind and battery storage, we observe larger
+errors. However, this can be explained by a distortion of the relative measure
+when these technologies are hardly built for some cost projections. On the
+contrary, the prediction of total system costs is remarkably accurate.
+\cref{fig:error:samples} also demonstrates that for a polynomial order of 3, we
+gain no significant improvement with more than 200 samples. In fact, thanks to
+the regularisation term used in the regression, we already attain acceptable
+levels of accuracy with as few as 50 samples. Moreover, the high R$^2$ values
+underline that the surrogate model can explain most of the output variance.
 
-Regarding the polynomial order, \cref{fig:error:poly} shows that
-an order of 2 and below may be too simple to capture the
-interaction between different parameters. On the other hand,
-an order of 4 and above yields no improvement and,
-were it not for the moderating regularisation term,
-would even result in a loss of generalisation properties due to overfitting.
-As higher-order approximations require significantly more samples,
-an order of 3 appears to be a suitable compromise
-to limit the computational burden.
+Regarding the polynomial order, \cref{fig:error:poly} shows that an order of 2
+and below may be too simple to capture the interaction between different
+parameters. On the other hand, an order of 4 and above yields no improvement
+and, were it not for the moderating regularisation term, would even result in a
+loss of generalisation properties due to overfitting. As higher-order
+approximations require significantly more samples, an order of 3 appears to be a
+suitable compromise to limit the computational burden.

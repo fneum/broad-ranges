@@ -2,8 +2,7 @@
 
 \journal{iScience}
 
-\widowpenalty10000
-\clubpenalty10000
+\widowpenalty10000 \clubpenalty10000
 
 %% `Elsevier LaTeX' style
 \bibliographystyle{elsarticle-num}
@@ -17,9 +16,7 @@
 % \renewcommand*\familydefault{\sfdefault} % biolinum
 % \usepackage[margin=3.5cm]{geometry}
 
-% \usepackage[latin1]{inputenc}
-% \usepackage{amsfonts}
-% \usepackage{amssymb}
+% \usepackage[latin1]{inputenc} \usepackage{amsfonts} \usepackage{amssymb}
 
 \usepackage{amsmath}
 \usepackage{bbold}
@@ -41,37 +38,26 @@
 
 \graphicspath{{../notebooks/2021-11-graphics/}}
 
-% \usepackage[
-% 	type={CC},
-% 	modifier={by},
-% 	version={4.0},
-% ]{doclicense}
+% \usepackage[ type={CC}, modifier={by}, version={4.0}, ]{doclicense}
 
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\set}[1]{\left\{#1\right\}}
-\DeclareMathOperator*{\argmin}{\arg\!\min}
-\def\cL{\mathcal{L}}
-\def\cN{\mathcal{N}}
-\def\cT{\mathcal{T}}
-\def\cM{\mathcal{M}}
-\def\cA{\mathcal{A}}
-\def\ba{{\bm{\alpha}}}
-\def\card{\text{card}\,}
+\DeclareMathOperator*{\argmin}{\arg\!\min} \def\cL{\mathcal{L}}
+\def\cN{\mathcal{N}} \def\cT{\mathcal{T}} \def\cM{\mathcal{M}}
+\def\cA{\mathcal{A}} \def\ba{{\bm{\alpha}}} \def\card{\text{card}\,}
 \def\x{\boldsymbol{\mathsf{x}}}
 
 
 \newcommand{\usection}[2]{
 	\section*{#1}
 	\label{#2}
-	\addcontentsline{toc}{section}{\nameref{#2}}
-}
+	\addcontentsline{toc}{section}{\nameref{#2}} }
 
 \newcommand{\usubsection}[2]{
 	\subsection*{#1}
 	\label{#2}
-	\addcontentsline{toc}{subsection}{\nameref{#2}}
-}
+	\addcontentsline{toc}{subsection}{\nameref{#2}} }
 
 \usepackage[prependcaption,textsize=scriptsize]{todonotes}
 
@@ -88,7 +74,8 @@
 	\title{Broad Ranges of Investment Configurations for Renewable Power
 	Systems, Robust to Cost Uncertainty and Near-Optimality}
 
-	\author[tubaddress,kitaddress]{Fabian Neumann\,\orcidlink{0000-0001-8551-1480}\corref{correspondingauthor}}
+	\author[tubaddress,kitaddress]{Fabian
+	Neumann\,\orcidlink{0000-0001-8551-1480}\corref{correspondingauthor}}
 	\ead{f.neumann@tu-berlin.de}
 	\author[tubaddress,kitaddress]{Tom Brown\,\orcidlink{0000-0001-5898-1911}}
 	\cortext[correspondingauthor]{Corresponding author}
@@ -100,21 +87,18 @@
 	\end{abstract}
 
 	\begin{keyword}
-		renewable power system, capacity expansion planning, modelling-to-generate-alternatives, uncertainty quantification, global sensitivity analysis, multi-objective optimisation
+		renewable power system, capacity expansion planning,
+		modelling-to-generate-alternatives, uncertainty quantification, global
+		sensitivity analysis, multi-objective optimisation
 	\end{keyword}
 
 \end{frontmatter}
 
 % \linenumbers
 
-% \addcontentsline{toc}{section}{Highlights}
-% \section*{Highlights}
+% \addcontentsline{toc}{section}{Highlights} \section*{Highlights}
 
-% \begin{itemize}
-% 	\item none
-% 	\item none
-% 	\item none
-% \end{itemize}
+% \begin{itemize} \item none \item none \item none \end{itemize}
 
 \newpage
 
@@ -131,11 +115,16 @@
 \section*{Highlights}
 
 \begin{itemize}
-	\item uses open electricity system model PyPSA-Eur to explore near-optimal trade-offs
-	\item wide range of options to design renewable power systems within 8\% of optimum
-	\item many of these options are robust to uncertain technology cost developments
-	\item few boundary conditions exist: some long-term storage and network expansion
-	\item degrees of freedom can help policymakers to circumvent public acceptance issues
+	\item uses open electricity system model PyPSA-Eur to explore near-optimal
+	trade-offs
+	\item wide range of options to design renewable power systems within 8\% of
+	optimum
+	\item many of these options are robust to uncertain technology cost
+	developments
+	\item few boundary conditions exist: some long-term storage and network
+	expansion
+	\item degrees of freedom can help policymakers to circumvent public
+	acceptance issues
 \end{itemize}
 
 % \restoregeometry
@@ -170,13 +159,15 @@ authors.
 
 \section*{License}
 
-\href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0
-International License (CC-BY-4.0)}
+\href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution
+4.0 International License (CC-BY-4.0)}
 
 \section*{Author Contributions}
 
-\textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation, Software, Validation, Formal analysis, Visualization, Writing -- Original Draft, Writing -- Review \& Editing
-\textbf{Tom Brown:} Conceptualization, Writing -- Review \& Editing, Supervision, Project administration, Funding acquisition
+\textbf{Fabian Neumann:} Conceptualization, Methodology, Investigation,
+Software, Validation, Formal analysis, Visualization, Writing -- Original Draft,
+Writing -- Review \& Editing \textbf{Tom Brown:} Conceptualization, Writing --
+Review \& Editing, Supervision, Project administration, Funding acquisition
 
 \section*{Declaration of Interests}
 
@@ -190,8 +181,6 @@ The authors declare no competing interests.
 \newpage
 \tableofcontents
 
-% \begin{appendix}
-% 	\input{sections/appendix.tex}
-% \end{appendix}
+% \begin{appendix} \input{sections/appendix.tex} \end{appendix}
 
 \end{document}
