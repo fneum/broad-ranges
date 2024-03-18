@@ -100,9 +100,9 @@ if __name__ == "__main__":
     # clip marginal cost
     threshold = 0.05
     n.generators.loc[n.generators.marginal_cost <= threshold, "marginal_cost"] = 0.0
-    n.storage_units.loc[
-        n.storage_units.marginal_cost <= threshold, "marginal_cost"
-    ] = 0.0
+    n.storage_units.loc[n.storage_units.marginal_cost <= threshold, "marginal_cost"] = (
+        0.0
+    )
 
     n = solve_network(
         n,
